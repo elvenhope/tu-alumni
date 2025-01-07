@@ -1,7 +1,7 @@
 import localFont from "next/font/local";
 
 export const camingoDosProBlack = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosPro-Black.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosPro-Black.otf",
 	weight: "900",
 	style: "normal",
 	display: "swap",
@@ -9,7 +9,7 @@ export const camingoDosProBlack = localFont({
 
 
 export const camingoDosProBlackItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosPro-BlackItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosPro-BlackItalic.otf",
 	weight: "900",
 	style: "italic",
 	display: "swap",
@@ -17,7 +17,7 @@ export const camingoDosProBlackItalic = localFont({
 
 
 export const camingoDosProBold = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosPro-Bold.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosPro-Bold.otf",
 	weight: "700",
 	style: "normal",
 	display: "swap",
@@ -25,7 +25,7 @@ export const camingoDosProBold = localFont({
 
 
 export const camingoDosProBoldItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosPro-BoldItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosPro-BoldItalic.otf",
 	weight: "700",
 	style: "italic",
 	display: "swap",
@@ -33,7 +33,7 @@ export const camingoDosProBoldItalic = localFont({
 
 
 export const camingoDosProCdExtraBold = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraBold.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraBold.otf",
 	weight: "800",
 	style: "normal",
 	display: "swap",
@@ -41,7 +41,7 @@ export const camingoDosProCdExtraBold = localFont({
 
 
 export const camingoDosProCdExtraBoldItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraBoldItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraBoldItalic.otf",
 	weight: "800",
 	style: "italic",
 	display: "swap",
@@ -49,7 +49,7 @@ export const camingoDosProCdExtraBoldItalic = localFont({
 
 
 export const camingoDosProCdExtraLight = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraLight.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraLight.otf",
 	weight: "200",
 	style: "normal",
 	display: "swap",
@@ -57,7 +57,7 @@ export const camingoDosProCdExtraLight = localFont({
 
 
 export const camingoDosProCdExtraLightItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraLightItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-ExtraLightItalic.otf",
 	weight: "200",
 	style: "italic",
 	display: "swap",
@@ -65,7 +65,7 @@ export const camingoDosProCdExtraLightItalic = localFont({
 
 
 export const camingoDosProCdLight = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-Light.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-Light.otf",
 	weight: "300",
 	style: "normal",
 	display: "swap",
@@ -73,7 +73,7 @@ export const camingoDosProCdLight = localFont({
 
 
 export const camingoDosProCdLightItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-LightItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-LightItalic.otf",
 	weight: "300",
 	style: "italic",
 	display: "swap",
@@ -81,7 +81,7 @@ export const camingoDosProCdLightItalic = localFont({
 
 
 export const camingoDosProCdRegular = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-Regular.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-Regular.otf",
 	weight: "400",
 	style: "normal",
 	display: "swap",
@@ -89,7 +89,7 @@ export const camingoDosProCdRegular = localFont({
 
 
 export const camingoDosProCdRegularItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-RegularItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-RegularItalic.otf",
 	weight: "400",
 	style: "italic",
 	display: "swap",
@@ -97,7 +97,7 @@ export const camingoDosProCdRegularItalic = localFont({
 
 
 export const camingoDosProCdSemiBold = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-SemiBold.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-SemiBold.otf",
 	weight: "600",
 	style: "normal",
 	display: "swap",
@@ -105,7 +105,7 @@ export const camingoDosProCdSemiBold = localFont({
 
 
 export const camingoDosProCdSemiBoldItalic = localFont({
-	src: "../public/fonts/camingodos-pro-cd/CamingoDosProCd-SemiBoldItalic.otf",
+	src: "../../public/fonts/camingodos-pro-cd/CamingoDosProCd-SemiBoldItalic.otf",
 	weight: "600",
 	style: "italic",
 	display: "swap",

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { camingoDosProCdRegular } from "@/components/fonts";
+import "@/src/app/globals.css";
+import { camingoDosProCdRegular } from "@/src/components/fonts";
 import { getSession } from "next-auth/react";
-import Providers from "./providers";
+import Providers from "@/src/app/providers";
+import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -11,17 +12,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
 	children,
+	params: { locale },
 }: Readonly<{
 	children: React.ReactNode;
+	params: { locale: string };
 }>) {
 	const session = await getSession();
 
 	return (
-		<html lang="en">
+		<html lang={locale}>
 			<body className={`${camingoDosProCdRegular.className}`}>
-				<Providers session={session}>
-					{children}
-				</Providers>
+				<Providers session={session}>{children}</Providers>
 			</body>
 		</html>
 	);

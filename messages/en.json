@@ -1,0 +1,10 @@
+{
+	"header": {
+		"home": "Home",
+		"about": "About Us",
+		"events": "events",
+		"news": "news",
+		"chat": "chat",
+		"log-in": "Log In"
+	}
+}
