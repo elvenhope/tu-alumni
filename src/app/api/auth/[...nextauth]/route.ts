@@ -47,13 +47,29 @@ const handler = NextAuth({
 	callbacks: {
 		async session({ session, token }) {
 			// Include the user's role in the session
-			session.user.role = token.role;
+			if(token) {
+				session.user.id = token.id;
+				session.user.role = token.role;
+				session.expires = new Date(token.exp * 1000).toISOString();
+			}
+			
 			return session;
 		},
-		async jwt({ token, user }) {
-			if (user) token.role = user.role; // Pass role to the token
+		async jwt({ token, user, account }) {
+			if (user && account) {
+				token.id = user.id; // Pass id to the token
+				token.role = user.role; // Pass role to the token
+				// Set session duration based on "rememberMe" flag
+				token.rememberMe = account.rememberMe;
+				token.exp = account.rememberMe
+					? Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 // 30 days
+					: Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
+			}
 			return token;
 		},
+	},
+	pages: {
+		signIn: "/login",
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 });

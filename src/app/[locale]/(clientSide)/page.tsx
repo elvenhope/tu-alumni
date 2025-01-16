@@ -1,13 +1,180 @@
 'use client'
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { signIn, signOut } from "next-auth/react";
+import style from "@/styles/clientSide/HomePage.module.scss";
+import heroImage from "@/assets/images/heroImage.png";
+import Image from "next/image";
+import { camingoDosProCdExtraBold, camingoDosProCdSemiBold } from "@/src/components/fonts";
+import { useTranslations } from "next-intl";
+import boardIcon from "@/assets/images/boardIcon.svg";
+import hatIcon from "@/assets/images/hatIcon.svg";
+import peopleIcon from "@/assets/images/peopleIcon.svg";
+import { HomePageContent } from "@/src/app/types";
 
-export default function page() {
+export default function Page() {
+	const t = useTranslations("homePage");
+	const [content, setContent] = useState<HomePageContent>({ headlines: [], events: [] });
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await fetch("/api/content", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ pageName: "Home" }),
+			});
+			const data = await response.json();
+			setContent(data.data);
+		};
+
+		fetchData();
+	}, []);
+
 	return (
 		<>
-			<button onClick={() => signIn()}>Sign in</button>
-			<button onClick={() => signOut()}>Sign out</button>
+			<div className={style.container}>
+				<div className={style.textSection}>
+					<p className={camingoDosProCdExtraBold.className}>
+						{t("welcomeMsg")}
+					</p>
+				</div>
+				<div className={style.imageSection}>
+					<Image
+						src={heroImage}
+						alt="logo"
+						fill={true}
+						style={{
+							objectFit: "cover", // cover, contain, none
+						}}
+					/>
+				</div>
+			</div>
+			<div className={style.aboutUsSection}>
+				<p
+					className={
+						style.aboutUsSection_header +
+						" " +
+						camingoDosProCdExtraBold.className
+					}
+				>
+					{t("aboutUS")}
+				</p>
+				<div className={style.bulletPoints}>
+					<div className={style.point}>
+						<Image
+							src={hatIcon}
+							width={115}
+							height={115}
+							alt="hat icon"
+						/>
+						<div className={style.pointText}>
+							<p>{t("point1")}</p>
+						</div>
+					</div>
+					<div className={style.point}>
+						<Image
+							src={peopleIcon}
+							width={115}
+							height={115}
+							alt="hat icon"
+						/>
+						<div className={style.pointText}>
+							<p>{t("point2")}</p>
+						</div>
+					</div>
+					<div className={style.point}>
+						<Image
+							src={boardIcon}
+							width={115}
+							height={115}
+							alt="hat icon"
+						/>
+						<div className={style.pointText}>
+							<p>{t("point3")}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div className={style.headlineSection}>
+				{content.headlines.length > 0
+					? content.headlines.map((headlineObject, index) => {
+							return (
+								<div key={index} className={style.headline}>
+									<p
+										className={
+											camingoDosProCdSemiBold.className +
+											" " +
+											style.headlineTitle
+										}
+									>
+										{headlineObject.headline}
+									</p>
+									<p className={style.headlineAuthor}>
+										{headlineObject.author}
+									</p>
+									<p className={style.headlineDescription}>
+										{headlineObject.description}
+									</p>
+								</div>
+							);
+					  })
+					: null}
+			</div>
+			<div className={style.eventSection}>
+				{content.events.length > 0
+					? content.events.map((eventObject, index) => {
+							return (
+								<div key={index} className={style.event}>
+									<div className={style.eventImageContainer}>
+										<div className={style.eventImage}>
+											<Image
+												src={eventObject.image}
+												alt="event image"
+												fill={true}
+												style={{
+													objectFit: "cover", // cover, contain, none
+												}}
+											/>
+										</div>
+										<div
+											className={
+												style.eventDate +
+												" " +
+												camingoDosProCdSemiBold.className
+											}
+										>
+											<p>
+												{String(
+													eventObject.day
+												).padStart(2, "0")}{" "}
+												/{" "}
+												{String(
+													eventObject.month
+												).padStart(2, "0")}
+											</p>
+										</div>
+									</div>
+									<div className={style.eventContent}>
+										<p
+											className={
+												camingoDosProCdSemiBold.className +
+												" " +
+												style.eventTitle
+											}
+										>
+											{eventObject.headline}
+										</p>
+										<p className={style.eventDescription}>
+											{eventObject.description}
+										</p>
+									</div>
+								</div>
+							);
+					  })
+					: null}
+			</div>
 		</>
 	);
 }

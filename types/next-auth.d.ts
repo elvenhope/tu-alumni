@@ -3,7 +3,9 @@ import NextAuth from "next-auth"
 declare module "next-auth/jwt" {
 	/** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
 	interface JWT {
-		role: string
+		id: string,
+		role: string,
+		exp: number,
 	}
 }
 
@@ -59,5 +61,8 @@ declare module "next-auth" {
 			whereCanYouFindMe: string,
 			hashtags: Array<string>,
 		}
+	}
+	interface Account {
+		rememberMe: boolean;
 	}
 }

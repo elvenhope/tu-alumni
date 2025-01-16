@@ -6,5 +6,29 @@
 		"news": "news",
 		"chat": "chat",
 		"log-in": "Log In"
+	},
+	"footer": {
+		"message1": "Have you graduated Business University Turiba?",
+		"emailPlaceholder": "Enter your email",
+		"joinUs": "Join Us!",
+		"information": "Information",
+		"aboutUs": "About Us",
+		"events": "events",
+		"media": "media",
+		"news": "news",
+		"privacyPolicy": "Privacy Policy",
+		"forClubMembers": "For Club Members",
+		"memberProfile": "Member Profile",
+		"chat": "Chat",
+		"giftAndDiscounts": "Gifts and Discounts",
+		"contactUs": "Contact Us",
+		"termsAndConditions": "Terms and Conditions"
+	},
+	"homePage": {
+		"welcomeMsg": "Welcome To The Alumni Club",
+		"aboutUS": "About Us",
+		"point1": "We are a group of former students who have graduated from the same school.",
+		"point2": "We are a group of former students who have graduated from the same school.",
+		"point3": "We are a group of former students who have graduated from the same school."
 	}
 }

@@ -6,5 +6,29 @@
 		"news": "Jaunumi",
 		"chat": "Čats",
 		"log-in": "Pieslēgties"
+	},
+	"footer": {
+		"message1": "Vai esat absolvējis Biznesa augstskolu Turība?",
+		"emailPlaceholder": "Ievadiet savu e-pastu",
+		"joinUs": "Pievienojies mums!",
+		"information": "Informācija",
+		"aboutUs": "Par mums",
+		"events": "Pasākumi",
+		"media": "Mediji",
+		"news": "Ziņas",
+		"privacyPolicy": "Privātuma politika",
+		"forClubMembers": "Kluba biedriem",
+		"memberProfile": "Biedra profils",
+		"chat": "Čats",
+		"giftAndDiscounts": "Dāvanas un atlaides",
+		"contactUs": "Sazinieties ar mums",
+		"termsAndConditions": "Noteikumi un nosacījumi"
+	},
+	"homePage": {
+		"welcomeMsg": "Laipni lūdzam absolventu klubā",
+		"aboutUS": "Par mums",
+		"point1": "Mēs esam bijušo studentu grupa, kas ir absolvējuši to pašu skolu.",
+		"point2": "Mēs esam bijušo studentu grupa, kas ir absolvējuši to pašu skolu.",
+		"point3": "Mēs esam bijušo studentu grupa, kas ir absolvējuši to pašu skolu."
 	}
 }

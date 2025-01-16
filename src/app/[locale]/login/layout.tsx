@@ -1,14 +1,11 @@
 import { getSession } from "next-auth/react";
 import React from "react";
-import ClientHeader from "@/src/components/clientSide/ClientHeader";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import ClientFooter from "@/src/components/clientSide/ClientFooter";
 
-
-async function ClientSideLayout({
+async function LoginPageLayout({
 	children,
 	params: { locale },
 }: Readonly<{
@@ -26,11 +23,9 @@ async function ClientSideLayout({
 
 	return (
 		<NextIntlClientProvider messages={messages} locale={locale}>
-			<ClientHeader />
 			{children}
-			<ClientFooter />
 		</NextIntlClientProvider>
 	);
 }
 
-export default ClientSideLayout;
+export default LoginPageLayout;

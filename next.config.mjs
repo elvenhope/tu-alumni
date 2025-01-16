@@ -5,6 +5,9 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
 	reactStrictMode: true,
+	images: {
+		domains: ["picsum.photos"], // Add the domain here
+	},
 	/* config options here */
 };
 
