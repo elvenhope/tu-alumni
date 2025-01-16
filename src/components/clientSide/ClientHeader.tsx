@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import style from "@/styles/clientSide/ClientHeader.module.scss";
 import Image from "next/image";
 import logoWhiteEN from "@/assets/images/whiteLogoEN.png";
@@ -9,6 +9,7 @@ import { camingoDosProCdSemiBold } from "@/src/components/fonts";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, Link } from "@/src/i18n/routing";
 import { stack as Menu } from "react-burger-menu";
+import { useSession } from "next-auth/react";
 
 function ClientHeader() {
 	const t = useTranslations("header");
@@ -16,6 +17,8 @@ function ClientHeader() {
 	const lvLocale = "lv";
 	const locale = useLocale();
 	const pathname = usePathname();
+	const { data: session, status } = useSession();
+	const showChat = status === "authenticated";
 
 	return (
 		<header className={style.header}>
@@ -40,7 +43,7 @@ function ClientHeader() {
 						<Link href={pathname} locale={lvLocale}>
 							LV
 						</Link>
-						<span style={{color: "white"}}>|</span>
+						<span style={{ color: "white" }}>|</span>
 						<Link href={pathname} locale={enLocale}>
 							ENG
 						</Link>
@@ -49,7 +52,7 @@ function ClientHeader() {
 					<Link href="/">{t("about")}</Link>
 					<Link href="/">{t("events")}</Link>
 					<Link href="/">{t("news")}</Link>
-					<Link href="/">{t("chat")}</Link>
+					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}
 					<Link href="/login">{t("log-in")}</Link>
 				</Menu>
 			</div>
@@ -72,7 +75,7 @@ function ClientHeader() {
 					<Link href="/">{t("about")}</Link>
 					<Link href="/">{t("events")}</Link>
 					<Link href="/">{t("news")}</Link>
-					<Link href="/">{t("chat")}</Link>
+					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}
 					<Link href="/login">{t("log-in")}</Link>
 				</div>
 			</div>
