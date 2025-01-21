@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import style from "@/styles/clientSide/ClientHeader.module.scss";
+import style from "@/src/styles/clientSide/ClientHeader.module.scss";
+import burgerStyle from "@/src/styles/misc/burgerMenu.module.scss";
 import Image from "next/image";
 import logoWhiteEN from "@/assets/images/whiteLogoEN.png";
 import logoWhiteLV from "@/assets/images/whiteLogoLV.png";
@@ -31,12 +32,12 @@ function ClientHeader() {
 			</div>
 			<div className={style.mobileDiv}>
 				<Menu
-					burgerButtonClassName={style.bmBurgerButton}
-					burgerBarClassName={style.bmBurgerBars}
-					crossClassName={style.bmCross}
-					menuClassName={style.bmMenu}
-					overlayClassName={style.bmOverlay}
-					itemListClassName={style.bmItemList}
+					burgerButtonClassName={burgerStyle.bmBurgerButton}
+					burgerBarClassName={burgerStyle.bmBurgerBars}
+					crossClassName={burgerStyle.bmCross}
+					menuClassName={burgerStyle.bmMenu}
+					overlayClassName={burgerStyle.bmOverlay}
+					itemListClassName={burgerStyle.bmItemList}
 					right={true}
 				>
 					<div className={style.languageSwitcher}>
@@ -52,8 +53,10 @@ function ClientHeader() {
 					<Link href="/">{t("about")}</Link>
 					<Link href="/">{t("events")}</Link>
 					<Link href="/">{t("news")}</Link>
-					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}
-					<Link href="/login">{t("log-in")}</Link>
+					{showChat ? <Link href="/">{t("chat")}</Link> : null}
+					{!showChat ? (
+						<Link href="/login">{t("log-in")}</Link>
+					) : null}
 				</Menu>
 			</div>
 			<div
@@ -76,7 +79,7 @@ function ClientHeader() {
 					<Link href="/">{t("events")}</Link>
 					<Link href="/">{t("news")}</Link>
 					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}
-					<Link href="/login">{t("log-in")}</Link>
+					{!showChat ? <Link href="/login">{t("log-in")}</Link> : null}
 				</div>
 			</div>
 		</header>

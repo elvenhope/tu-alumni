@@ -1,7 +1,11 @@
-import { Headline, Event } from "@/src/app/types";
+import connectToDB from "@/src/lib/connectToDB";
+import eventModel from "@/src/models/eventModel";
+import headingModel from "@/src/models/headingModel";
+import { Headline, Event } from "@/src/types/types";
 
 export async function POST(request: Request): Promise<Response> {
 	try {
+		await connectToDB();
 		// Parse the request body
 		const body = await request.json();
 
@@ -15,19 +19,9 @@ export async function POST(request: Request): Promise<Response> {
 		}
 
 		// Mock data generation
-		const headlines: Headline[] = Array.from({ length: 5 }, (_, index) => ({
-			headline: `${pageName} - Headline ${index + 1}`,
-			author: `Author ${index + 1}`,
-			description: `${pageName} - Description Nullam vel nunc eget enim volutpat pretium. Nullam orci dolor, hendrerit in aliquet varius, facilisis non diam. Fusce tristique mauris vel augue aliquam fringilla. Nulla gravida felis sem, non porttitor metus efficitur a. Duis ultrices malesuada augue mollis congue. Curabitur id neque eget diam maximus maximus ac nec risus. Interdum et malesuada fames ac ante ipsum primis in faucibus. ${index + 1}`,
-		}));
+		const headlines: Headline[] = await headingModel.find({}).limit(5);
 
-		const events: Event[] = Array.from({ length: 4 }, (_, index) => ({
-			headline: `${pageName} - Headline ${index + 1}`,
-			description: `${pageName} - Description Nullam vel nunc eget enim volutpat pretium. Nullam orci dolor, hendrerit in aliquet varius, facilisis non diam. Fusce tristique mauris vel augue aliquam fringilla. Nulla gravida felis sem, non porttitor metus efficitur a. Duis ultrices malesuada augue mollis congue. Curabitur id neque eget diam maximus maximus ac nec risus. Interdum et malesuada fames ac ante ipsum primis in faucibus. ${index + 1}`,
-			day: 1,
-			month: 1,
-			image: "https://picsum.photos/600/400",
-		}));
+		const events: Event[] = await eventModel.find({}).limit(4);
 
 		const data = { headlines, events };
 

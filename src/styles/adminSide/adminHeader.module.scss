@@ -1,0 +1,27 @@
+.header {
+	background-color: #233774;
+	padding: 10px;
+}
+
+.logoDiv {
+	position: relative;
+	max-height: 114px;
+	height: 100%;
+	width: 100%;
+	max-width: 346px;
+	aspect-ratio: 3 / 1;
+	margin-left: 30px;
+}
+
+.languageSwitcher {
+	margin-bottom: 50px;
+}
+
+.signOutBtn {
+	margin-top: 30px;
+	color: white;
+	border: 1px solid #7481a8;
+	background-color: #7481a8;
+	padding: 10px;
+	border-radius: 10px;
+}

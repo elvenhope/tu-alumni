@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { signIn, signOut } from "next-auth/react";
-import style from "@/styles/clientSide/HomePage.module.scss";
+import style from "@/src/styles/clientSide/HomePage.module.scss";
 import heroImage from "@/assets/images/heroImage.png";
 import Image from "next/image";
 import { camingoDosProCdExtraBold, camingoDosProCdSemiBold } from "@/src/components/fonts";
@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import boardIcon from "@/assets/images/boardIcon.svg";
 import hatIcon from "@/assets/images/hatIcon.svg";
 import peopleIcon from "@/assets/images/peopleIcon.svg";
-import { HomePageContent } from "@/src/app/types";
+import { HomePageContent } from "@/src/types/types";
 
 export default function Page() {
 	const t = useTranslations("homePage");

@@ -1,7 +1,8 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from 'next-auth/middleware';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { getToken } from 'next-auth/jwt';
 
 const publicPages = [
 	'/',
@@ -26,7 +27,7 @@ const authMiddleware = withAuth(
 	}
 );
 
-export default function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
 	const publicPathnameRegex = RegExp(
 		`^(/(${routing.locales.join('|')}))?(${publicPages
 			.flatMap((p) => (p === '/' ? ['', '/'] : p))
@@ -34,6 +35,32 @@ export default function middleware(req: NextRequest) {
 		'i'
 	);
 	const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
+
+	const { pathname } = req.nextUrl;
+
+	// Match locale prefixes using the routing configuration
+	const localeRegex = new RegExp(`^/(${routing.locales.join('|')})(/|$)`, 'i');
+	const match = pathname.match(localeRegex);
+
+	let locale = null;
+	let adjustedPathname = pathname;
+
+	if (match) {
+		locale = match[1]; // Extract the locale
+		adjustedPathname = pathname.replace(localeRegex, '/'); // Remove the locale prefix
+	}
+
+
+	//Add new middlewares and such here
+	// Use `getToken` to check for a valid session
+	const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+	// Redirect signed-in users away from the login page
+	if (token && adjustedPathname === "/login") {
+		return NextResponse.redirect(new URL('/', req.url));
+	}
+
+
 
 	if (isPublicPage) {
 		return intlMiddleware(req);

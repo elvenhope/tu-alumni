@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import style from "@/styles/clientSide/LoginPage.module.scss";
+import style from "@/src/styles/clientSide/LoginPage.module.scss";
 import Image from "next/image";
 import loginImage from "@/assets/images/loginImage.png";
 import blueLogoEN from "@/assets/images/blueLogoEN.png";
@@ -10,11 +10,18 @@ import * as Yup from "yup";
 import { useLocale } from "next-intl";
 import { camingoDosProCdSemiBold } from "@/src/components/fonts";
 import { Link } from "@/src/i18n/routing";
+import { signIn } from "next-auth/react";
+
+interface formValues {
+	email: string;
+	password: string;
+	rememberMe: boolean;
+}
 
 function LoginPage() {
 	const locale = useLocale();
 
-	const initialValues = {
+	const initialValues: formValues = {
 		email: "",
 		password: "",
 		rememberMe: false,
@@ -50,12 +57,22 @@ function LoginPage() {
 		);
 
 		return (
-			<div className={style.header}>
-				<div className={style.headerImage}>
-					{locale === "lv" ? imageLV : imageEN}
+			<Link href={"/"}>
+				<div className={style.header}>
+					<div className={style.headerImage}>
+						{locale === "lv" ? imageLV : imageEN}
+					</div>
 				</div>
-			</div>
+			</Link>
 		);
+	}
+
+	function triggerSignIn(values: formValues) {
+		signIn("credentials", {
+			email: values.email,
+			password: values.password,
+			rememberMe: values.rememberMe,
+		});
 	}
 
 	return (
@@ -73,7 +90,7 @@ function LoginPage() {
 					initialValues={initialValues}
 					validationSchema={signInSchema}
 					onSubmit={(values) => {
-						console.log(values);
+						triggerSignIn(values);
 					}}
 				>
 					{(formik) => {

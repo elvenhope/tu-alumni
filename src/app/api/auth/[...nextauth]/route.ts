@@ -7,7 +7,8 @@ const handler = NextAuth({
 			name: "Credentials",
 			credentials: {
 				email: { label: "email", type: "email", placeholder: "jsmith@email.com" },
-				password: { label: "Password", type: "password" }
+				password: { label: "Password", type: "password" },
+				rememberMe: { label: "Remember Me", type: "checkbox" },
 			},
 			async authorize(credentials, req) {
 				// Replace this with your DB call
@@ -15,7 +16,7 @@ const handler = NextAuth({
 				const user = {
 					"id": "12345",
 					"firstName": "John",
-					"lastnName": "Doe",
+					"lastName": "Doe",
 					"password": "123",
 					"role": "admin",
 					"phoneNumber": "+1234567890",
@@ -50,6 +51,7 @@ const handler = NextAuth({
 			if(token) {
 				session.user.id = token.id;
 				session.user.role = token.role;
+				session.user.firstName = token.firstName;
 				session.expires = new Date(token.exp * 1000).toISOString();
 			}
 			
@@ -59,6 +61,7 @@ const handler = NextAuth({
 			if (user && account) {
 				token.id = user.id; // Pass id to the token
 				token.role = user.role; // Pass role to the token
+				token.firstName = user.firstName;
 				// Set session duration based on "rememberMe" flag
 				token.rememberMe = account.rememberMe;
 				token.exp = account.rememberMe

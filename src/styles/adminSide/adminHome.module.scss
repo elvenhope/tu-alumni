@@ -1,0 +1,65 @@
+.form {
+	display: flex;
+	flex-direction: column;
+
+	div {
+		display: flex;
+		margin-bottom: 20px;
+
+		label {
+			max-width: 90px;
+			width: 100%;
+		}
+
+		input, textarea {
+			padding: 10px;
+			width: 100%;
+		}
+	}
+}
+
+.selector {
+	margin-bottom: 20px;
+}
+
+
+.content {
+	padding: 20px;
+
+	.selections {
+		max-width: 500px;
+		margin:auto
+	}
+}
+
+.curImageContainer {
+	position: relative;
+	max-width: 400px;
+	width: 100%;
+	aspect-ratio: 1;
+}
+
+
+.button_default {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 6px 14px;
+	font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+	border-radius: 6px;
+	border: none;
+
+	color: #fff;
+	background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+	background-origin: border-box;
+	box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	margin-bottom: 20px;
+}
+
+.button_default:focus {
+	box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+	outline: 0;
+}

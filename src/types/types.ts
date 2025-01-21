@@ -1,10 +1,12 @@
 export interface Headline {
+	id?: string,
 	headline: string;
 	author: string;
 	description: string;
 }
 
 export interface Event {
+	id?: string,
 	day: number;
 	month: number;
 	headline: string;

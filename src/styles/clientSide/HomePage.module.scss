@@ -124,19 +124,23 @@
 }
 
 .eventSection {
-	display: flex;
-	justify-content: space-evenly;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	gap: 40px;
 	background-color: #00587E;
+	/* background-color: black; */
 	padding: 140px 50px;
 
 	.event {
 		position: relative;
+		display: flex;
+		flex-direction: column;
 
 		.eventImageContainer {
 			position: relative;
-			max-height: 300px;
-			overflow: hidden;
+			flex: 1;
+			/* max-height: 300px;
+			overflow: hidden; */
 			
 			.eventImage {
 				position: relative;
@@ -168,6 +172,9 @@
 			padding: 20px;
 			background-color: #FFFFFF;
 			color: #00587E;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
 
 			.eventTitle {
 				font-size: 33px;
@@ -229,6 +236,6 @@
 		}
 	}
 	.eventSection {
-		flex-direction: column;
+		grid-template-columns: 1fr;
 	}
 }
