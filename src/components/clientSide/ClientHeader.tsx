@@ -21,6 +21,12 @@ function ClientHeader() {
 	const { data: session, status } = useSession();
 	const showChat = status === "authenticated";
 
+	useEffect(() => {
+		console.log(session);
+		console.log(status);
+	}, [session])
+
+
 	return (
 		<header className={style.header}>
 			<div className={style.logoDiv}>
