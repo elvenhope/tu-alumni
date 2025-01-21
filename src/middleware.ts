@@ -50,8 +50,6 @@ export default async function middleware(req: NextRequest) {
 		adjustedPathname = pathname.replace(localeRegex, '/'); // Remove the locale prefix
 	}
 
-
-	//Add new middlewares and such here
 	// Use `getToken` to check for a valid session
 	const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
@@ -60,7 +58,12 @@ export default async function middleware(req: NextRequest) {
 		return NextResponse.redirect(new URL('/', req.url));
 	}
 
-
+	// Redirect non-admin users trying to access /admin
+	if (adjustedPathname.startsWith('/admin')) {
+		if (!token || token.role !== 'admin') {
+			return NextResponse.redirect(new URL('/', req.url));
+		}
+	}
 
 	if (isPublicPage) {
 		return intlMiddleware(req);
