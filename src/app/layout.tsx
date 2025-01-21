@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@/src/app/globals.css";
 import { camingoDosProCdRegular } from "@/src/components/fonts";
-import { getSession } from "next-auth/react";
 import Providers from "@/src/app/providers";
 import { getMessages } from "next-intl/server";
 
@@ -17,12 +16,12 @@ export default async function RootLayout({
 	children: React.ReactNode;
 	params: { locale: string };
 }>) {
-	const session = await getSession();
+	
 
 	return (
 		<html lang={locale}>
 			<body className={`${camingoDosProCdRegular.className}`}>
-				<Providers session={session}>{children}</Providers>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);
