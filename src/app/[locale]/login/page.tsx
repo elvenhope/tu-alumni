@@ -8,7 +8,7 @@ import blueLogoLV from "@/assets/images/blueLogoLV.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useLocale } from "next-intl";
-import { camingoDosProCdSemiBold } from "@/src/components/fonts";
+import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { Link } from "@/src/i18n/routing";
 import { signIn } from "next-auth/react";
 

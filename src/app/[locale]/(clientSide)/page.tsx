@@ -5,7 +5,7 @@ import { signIn, signOut } from "next-auth/react";
 import style from "@/src/styles/clientSide/HomePage.module.scss";
 import heroImage from "@/assets/images/heroImage.png";
 import Image from "next/image";
-import { camingoDosProCdExtraBold, camingoDosProCdSemiBold } from "@/src/components/fonts";
+import { camingoDosProCdExtraBold, camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useTranslations } from "next-intl";
 import boardIcon from "@/assets/images/boardIcon.svg";
 import hatIcon from "@/assets/images/hatIcon.svg";
@@ -114,9 +114,12 @@ export default function Page() {
 									<p className={style.headlineAuthor}>
 										{headlineObject.author}
 									</p>
-									<p className={style.headlineDescription}>
-										{headlineObject.description}
-									</p>
+									<div
+										className={style.headlineDescription}
+										dangerouslySetInnerHTML={{
+											__html: headlineObject.description,
+										}}
+									/>
 								</div>
 							);
 					  })
@@ -166,9 +169,13 @@ export default function Page() {
 										>
 											{eventObject.headline}
 										</p>
-										<p className={style.eventDescription}>
-											{eventObject.description}
-										</p>
+										<div
+											className={style.eventDescription}
+											dangerouslySetInnerHTML={{
+												__html: eventObject.description,
+											}}
+										>
+										</div>
 									</div>
 								</div>
 							);

@@ -6,7 +6,7 @@ import burgerStyle from "@/src/styles/misc/burgerMenu.module.scss";
 import Image from "next/image";
 import logoWhiteEN from "@/assets/images/whiteLogoEN.png";
 import logoWhiteLV from "@/assets/images/whiteLogoLV.png";
-import { camingoDosProCdSemiBold } from "@/src/components/fonts";
+import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, Link } from "@/src/i18n/routing";
 import { stack as Menu } from "react-burger-menu";

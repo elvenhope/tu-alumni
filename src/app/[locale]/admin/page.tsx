@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { SingleValue } from "react-select";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
 import Select from "react-select";
-import headingModel from "@/src/models/headingModel";
 import Image from "next/image";
 import { Bounce, toast } from "react-toastify";
+import DescriptionEditor from "@/src/components/misc/descriptionEditor";
 
 export default function AdminPage() {
 	const { data: session } = useSession();
@@ -120,7 +120,7 @@ export default function AdminPage() {
 		const tmpHeadline = {
 			headline: "Untitled",
 			author: "Unknown",
-			description: "Description",
+			description: "",
 		};
 
 		setHeadlineSelectOptions((prevOptions) => [
@@ -134,7 +134,7 @@ export default function AdminPage() {
 	function addEvent() {
 		const tmpEvent = {
 			headline: "Untitled",
-			description: "Description",
+			description: "",
 			month: 1,
 			day: 1,
 			image: "",
@@ -291,7 +291,7 @@ export default function AdminPage() {
 		}
 	}
 
-	function HeadlineEditor() {
+	function HeadlineEditor(curHeadline: Headline) {
 		const handleInputChange = (field: keyof Headline, value: string) => {
 			setSelectedHeadline((prev) => {
 				// Ensure `prev` exists; if not, initialize it with default values
@@ -316,7 +316,7 @@ export default function AdminPage() {
 						<input
 							name="headline_headline"
 							type="text"
-							value={selectedHeadline?.headline || ""}
+							value={curHeadline.headline || ""}
 							onChange={(e) =>
 								handleInputChange("headline", e.target.value)
 							}
@@ -327,25 +327,20 @@ export default function AdminPage() {
 						<input
 							name="headline_author"
 							type="text"
-							value={selectedHeadline?.author || ""}
+							value={curHeadline.author || ""}
 							onChange={(e) =>
 								handleInputChange("author", e.target.value)
 							}
 						/>
 					</div>
 					<div>
-						<label htmlFor="headline_description">
-							Description:
-						</label>
-						<textarea
-							name="headline_description"
-							value={selectedHeadline?.description || ""}
-							onChange={(e) =>
-								handleInputChange("description", e.target.value)
-							}
+						<DescriptionEditor
+							description={curHeadline.description}
+							onUpdateDescription={(value) => {
+								handleInputChange("description", value);
+							}}
 						/>
 					</div>
-
 					<button
 						type="button"
 						onClick={saveHeadline}
@@ -358,7 +353,7 @@ export default function AdminPage() {
 		);
 	}
 
-	function EventEditor() {
+	function EventEditor(curEvent: Event) {
 		const handleInputChange = (
 			field: keyof Omit<Event, "image">,
 			value: string | number
@@ -415,12 +410,12 @@ export default function AdminPage() {
 			<div className={style.formDiv}>
 				<h2>Edit Event</h2>
 				<form className={style.form}>
-					{selectedEvent?.image ? (
+					{curEvent?.image ? (
 						<div>
 							<label htmlFor="event_day">Current Image:</label>
 							<div className={style.curImageContainer}>
 								<Image
-									src={selectedEvent?.image}
+									src={curEvent?.image}
 									fill={true}
 									alt={"Current Image"}
 								/>
@@ -434,7 +429,7 @@ export default function AdminPage() {
 							type="number"
 							min="1"
 							max="31"
-							value={selectedEvent?.day || ""}
+							value={curEvent?.day || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"day",
@@ -450,7 +445,7 @@ export default function AdminPage() {
 							type="number"
 							min="1"
 							max="12"
-							value={selectedEvent?.month || ""}
+							value={curEvent?.month || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"month",
@@ -464,20 +459,18 @@ export default function AdminPage() {
 						<input
 							name="event_headline"
 							type="text"
-							value={selectedEvent?.headline || ""}
+							value={curEvent?.headline || ""}
 							onChange={(e) =>
 								handleInputChange("headline", e.target.value)
 							}
 						/>
 					</div>
 					<div>
-						<label htmlFor="event_description">Description:</label>
-						<textarea
-							name="event_description"
-							value={selectedEvent?.description || ""}
-							onChange={(e) =>
-								handleInputChange("description", e.target.value)
-							}
+						<DescriptionEditor
+							description={curEvent.description}
+							onUpdateDescription={(value) => {
+								handleInputChange("description", value);
+							}}
 						/>
 					</div>
 					<div>
@@ -524,7 +517,7 @@ export default function AdminPage() {
 					)}
 					placeholder="Select a headline"
 				/>
-				{selectedHeadline ? HeadlineEditor() : null}
+				{selectedHeadline ? HeadlineEditor(selectedHeadline) : null}
 			</>
 		);
 	}
@@ -545,7 +538,7 @@ export default function AdminPage() {
 					)}
 					placeholder="Select an Event"
 				/>
-				{selectedEvent ? EventEditor() : null}
+				{selectedEvent ? EventEditor(selectedEvent) : null}
 			</>
 		);
 	}

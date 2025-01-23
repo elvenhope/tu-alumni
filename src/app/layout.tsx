@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/src/app/globals.css";
-import { camingoDosProCdRegular } from "@/src/components/fonts";
+import { camingoDosProCdRegular } from "@/src/components/misc/fonts";
 import Providers from "@/src/app/providers";
 import { getMessages } from "next-intl/server";
 

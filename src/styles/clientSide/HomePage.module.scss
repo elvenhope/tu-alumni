@@ -93,6 +93,9 @@
 			max-height: 100%;
 			height: 100%;
 			-webkit-box-orient: vertical;
+			& > p {
+				margin: 0;
+			}
 		}
 	}
 
@@ -178,7 +181,8 @@
 
 			.eventTitle {
 				font-size: 33px;
-				margin: 0;
+				margin-bottom: 20px;
+				margin-top: 0;
 			}
 
 			.eventDescription {
@@ -190,6 +194,9 @@
 				max-height: 100%;
 				height: 100%;
 				-webkit-box-orient: vertical;
+				& > p {
+					margin: 0;
+				}
 			}
 		}
 	}
