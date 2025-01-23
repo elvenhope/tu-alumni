@@ -9,6 +9,7 @@ import Select from "react-select";
 import Image from "next/image";
 import { Bounce, toast } from "react-toastify";
 import DescriptionEditor from "@/src/components/misc/descriptionEditor";
+import { error } from "console";
 
 export default function AdminPage() {
 	const { data: session } = useSession();
@@ -111,6 +112,32 @@ export default function AdminPage() {
 		setSelectedEvent(newValue?.value);
 	}
 
+	async function removeHeadline() {
+		const requestObject = {
+			id: selectedHeadline?.id,
+		};
+
+		try {
+			const updatedHeadline = await fetch(`/api/admin/headings`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(requestObject),
+			});
+
+			if (!updatedHeadline.ok) {
+				throw new Error(
+					`Failed to delete headline: ${updatedHeadline.statusText}`
+				);
+			}
+		} catch (e) {
+			console.log(e);
+		} finally {
+			window.location.reload();
+		}
+	}
+
 	function addHeadline() {
 		// const newHeader = await new headingModel({
 		// 	heading: "Untitled",
@@ -129,6 +156,32 @@ export default function AdminPage() {
 		]);
 
 		setSelectedHeadline(tmpHeadline);
+	}
+
+	async function removeEvent() {
+		const requestObject = {
+			id: selectedEvent?.id,
+		};
+
+		try {
+			const updatedEvent = await fetch(`/api/admin/events`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(requestObject),
+			});
+
+			if (!updatedEvent.ok) {
+				throw new Error(
+					`Failed to delete headline: ${updatedEvent.statusText}`
+				);
+			}
+		} catch (e) {
+			console.log(e);
+		} finally {
+			window.location.reload();
+		}
 	}
 
 	function addEvent() {
@@ -410,7 +463,7 @@ export default function AdminPage() {
 			}
 		};
 
-		if(!selectedEvent) {
+		if (!selectedEvent) {
 			return "Something went wrong. Code 108!";
 		}
 
@@ -516,6 +569,14 @@ export default function AdminPage() {
 					>
 						Add a headline
 					</button>
+					{selectedHeadline?.id ? (
+						<button
+							onClick={removeHeadline}
+							className={style.button_red}
+						>
+							Remove a headline
+						</button>
+					) : null}
 				</div>
 				<Select
 					options={headlineSelectOptions}
@@ -537,6 +598,14 @@ export default function AdminPage() {
 					<button onClick={addEvent} className={style.button_default}>
 						Add an event
 					</button>
+					{selectedEvent?.id ? (
+						<button
+							onClick={removeEvent}
+							className={style.button_red}
+						>
+							Remove an event
+						</button>
+					) : null}
 				</div>
 				<Select
 					options={eventSelectOptions}

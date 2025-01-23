@@ -77,3 +77,42 @@ export async function PUT(req: Request) {
 		);
 	}
 }
+
+// Handle DELETE requests to delete a event by `id`
+export async function DELETE(req: Request) {
+	try {
+		await connectToDB();
+
+		// Parse the request body
+		const { id } = await req.json();
+
+		// Validate required field
+		if (!id) {
+			return NextResponse.json(
+				{ error: "Missing required field: id" },
+				{ status: 400 }
+			);
+		}
+
+		// Use findOneAndDelete to find and delete the document by `id`
+		const deletedEvent = await eventModel.findOneAndDelete({ id });
+
+		if (!deletedEvent) {
+			return NextResponse.json(
+				{ error: "Event not found" },
+				{ status: 404 }
+			);
+		}
+
+		return NextResponse.json(
+			{ message: "Event deleted successfully", deletedEvent },
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.error("Error deleting event:", error);
+		return NextResponse.json(
+			{ error: "Internal Server Error" },
+			{ status: 500 }
+		);
+	}
+}

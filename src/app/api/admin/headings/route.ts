@@ -80,3 +80,42 @@ export async function PUT(req: Request) {
 		);
 	}
 }
+
+// Handle DELETE requests to delete a headline by `id`
+export async function DELETE(req: Request) {
+	try {
+		await connectToDB();
+
+		// Parse the request body
+		const { id } = await req.json();
+
+		// Validate required field
+		if (!id) {
+			return NextResponse.json(
+				{ error: "Missing required field: id" },
+				{ status: 400 }
+			);
+		}
+
+		// Use findOneAndDelete to find and delete the document by `id`
+		const deletedHeadline = await headingModel.findOneAndDelete({ id });
+
+		if (!deletedHeadline) {
+			return NextResponse.json(
+				{ error: "Headline not found" },
+				{ status: 404 }
+			);
+		}
+
+		return NextResponse.json(
+			{ message: "Headline deleted successfully", deletedHeadline },
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.error("Error deleting headline:", error);
+		return NextResponse.json(
+			{ error: "Internal Server Error" },
+			{ status: 500 }
+		);
+	}
+}
