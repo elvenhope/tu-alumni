@@ -291,7 +291,7 @@ export default function AdminPage() {
 		}
 	}
 
-	function HeadlineEditor(curHeadline: Headline) {
+	function HeadlineEditor() {
 		const handleInputChange = (field: keyof Headline, value: string) => {
 			setSelectedHeadline((prev) => {
 				// Ensure `prev` exists; if not, initialize it with default values
@@ -307,6 +307,10 @@ export default function AdminPage() {
 			});
 		};
 
+		if (!selectedHeadline) {
+			return "Something went wrong. Code 107!";
+		}
+
 		return (
 			<div className={style.formDiv}>
 				<h2>Edit Headline</h2>
@@ -316,7 +320,7 @@ export default function AdminPage() {
 						<input
 							name="headline_headline"
 							type="text"
-							value={curHeadline.headline || ""}
+							value={selectedHeadline.headline || ""}
 							onChange={(e) =>
 								handleInputChange("headline", e.target.value)
 							}
@@ -327,7 +331,7 @@ export default function AdminPage() {
 						<input
 							name="headline_author"
 							type="text"
-							value={curHeadline.author || ""}
+							value={selectedHeadline.author || ""}
 							onChange={(e) =>
 								handleInputChange("author", e.target.value)
 							}
@@ -335,7 +339,7 @@ export default function AdminPage() {
 					</div>
 					<div>
 						<DescriptionEditor
-							description={curHeadline.description}
+							description={selectedHeadline.description}
 							onUpdateDescription={(value) => {
 								handleInputChange("description", value);
 							}}
@@ -353,7 +357,7 @@ export default function AdminPage() {
 		);
 	}
 
-	function EventEditor(curEvent: Event) {
+	function EventEditor() {
 		const handleInputChange = (
 			field: keyof Omit<Event, "image">,
 			value: string | number
@@ -406,16 +410,20 @@ export default function AdminPage() {
 			}
 		};
 
+		if(!selectedEvent) {
+			return "Something went wrong. Code 108!";
+		}
+
 		return (
 			<div className={style.formDiv}>
 				<h2>Edit Event</h2>
 				<form className={style.form}>
-					{curEvent?.image ? (
+					{selectedEvent?.image ? (
 						<div>
 							<label htmlFor="event_day">Current Image:</label>
 							<div className={style.curImageContainer}>
 								<Image
-									src={curEvent?.image}
+									src={selectedEvent?.image}
 									fill={true}
 									alt={"Current Image"}
 								/>
@@ -429,7 +437,7 @@ export default function AdminPage() {
 							type="number"
 							min="1"
 							max="31"
-							value={curEvent?.day || ""}
+							value={selectedEvent?.day || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"day",
@@ -445,7 +453,7 @@ export default function AdminPage() {
 							type="number"
 							min="1"
 							max="12"
-							value={curEvent?.month || ""}
+							value={selectedEvent?.month || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"month",
@@ -459,7 +467,7 @@ export default function AdminPage() {
 						<input
 							name="event_headline"
 							type="text"
-							value={curEvent?.headline || ""}
+							value={selectedEvent?.headline || ""}
 							onChange={(e) =>
 								handleInputChange("headline", e.target.value)
 							}
@@ -467,7 +475,7 @@ export default function AdminPage() {
 					</div>
 					<div>
 						<DescriptionEditor
-							description={curEvent.description}
+							description={selectedEvent.description}
 							onUpdateDescription={(value) => {
 								handleInputChange("description", value);
 							}}
@@ -517,7 +525,7 @@ export default function AdminPage() {
 					)}
 					placeholder="Select a headline"
 				/>
-				{selectedHeadline ? HeadlineEditor(selectedHeadline) : null}
+				{selectedHeadline ? HeadlineEditor() : null}
 			</>
 		);
 	}
@@ -538,7 +546,7 @@ export default function AdminPage() {
 					)}
 					placeholder="Select an Event"
 				/>
-				{selectedEvent ? EventEditor(selectedEvent) : null}
+				{selectedEvent ? EventEditor() : null}
 			</>
 		);
 	}

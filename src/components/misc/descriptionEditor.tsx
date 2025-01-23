@@ -27,7 +27,7 @@ const DescriptionEditor: React.FC<DescriptionEditorProps> = ({
 	useEffect(() => {
 		setContent(description);
 		editor?.commands.setContent(description);
-	}, []);
+	}, [description]);
 
 	return (
 		<div className={style.descriptionEditor}>
