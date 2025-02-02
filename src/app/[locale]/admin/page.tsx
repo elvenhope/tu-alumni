@@ -2,7 +2,7 @@
 
 import { Headline, Event } from "@/src/types/types";
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import { SingleValue } from "react-select";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
 import Select from "react-select";
@@ -148,6 +148,7 @@ export default function AdminPage() {
 			headline: "Untitled",
 			author: "Unknown",
 			description: "",
+			active: false,
 		};
 
 		setHeadlineSelectOptions((prevOptions) => [
@@ -191,6 +192,7 @@ export default function AdminPage() {
 			month: 1,
 			day: 1,
 			image: "",
+			active: false,
 		};
 
 		setEventSelectOptions((prevOptions) => [
@@ -214,6 +216,7 @@ export default function AdminPage() {
 					headline: selectedHeadline.headline,
 					author: selectedHeadline.author,
 					description: selectedHeadline.description,
+					active: selectedHeadline.active,
 				};
 				// If ID exists, update the existing headline
 				const updatedHeadline = await fetch(`/api/admin/headings`, {
@@ -278,6 +281,7 @@ export default function AdminPage() {
 					month: selectedEvent.month,
 					day: selectedEvent.day,
 					image: selectedEvent.image,
+					active: selectedEvent.active,
 				};
 				// If ID exists, update the existing headline
 				const updatedEvent = await fetch(`/api/admin/events`, {
@@ -345,7 +349,7 @@ export default function AdminPage() {
 	}
 
 	function HeadlineEditor() {
-		const handleInputChange = (field: keyof Headline, value: string) => {
+		const handleInputChange = (field: keyof Headline, value: string | boolean) => {
 			setSelectedHeadline((prev) => {
 				// Ensure `prev` exists; if not, initialize it with default values
 				return prev
@@ -355,6 +359,7 @@ export default function AdminPage() {
 							headline: "",
 							author: "",
 							description: "",
+							active: false,
 							[field]: value,
 					  };
 			});
@@ -376,6 +381,17 @@ export default function AdminPage() {
 							value={selectedHeadline.headline || ""}
 							onChange={(e) =>
 								handleInputChange("headline", e.target.value)
+							}
+						/>
+					</div>
+					<div>
+						<label htmlFor="active">Active:</label>
+						<input
+							id="active"
+							type="checkbox"
+							checked={selectedHeadline.active}
+							onChange={(e) =>
+								handleInputChange("active", e.target.checked)
 							}
 						/>
 					</div>
@@ -413,7 +429,7 @@ export default function AdminPage() {
 	function EventEditor() {
 		const handleInputChange = (
 			field: keyof Omit<Event, "image">,
-			value: string | number
+			value: string | number | boolean
 		) => {
 			setSelectedEvent((prev) => {
 				return prev
@@ -425,6 +441,7 @@ export default function AdminPage() {
 							headline: "",
 							description: "",
 							image: "",
+							active: false,
 							[field]: value,
 					  };
 			});
@@ -457,6 +474,7 @@ export default function AdminPage() {
 								month: 1,
 								headline: "",
 								description: "",
+								active: false,
 								image: uploadedImageObject.url,
 						  };
 				});
@@ -532,6 +550,17 @@ export default function AdminPage() {
 							onUpdateDescription={(value) => {
 								handleInputChange("description", value);
 							}}
+						/>
+					</div>
+					<div>
+						<label htmlFor="active">Active:</label>
+						<input
+							id="active"
+							type="checkbox"
+							checked={selectedEvent.active}
+							onChange={(e) =>
+								handleInputChange("active", e.target.checked)
+							}
 						/>
 					</div>
 					<div>

@@ -3,6 +3,7 @@ import connectToDB from "@/src/lib/connectToDB";
 import { v4 as uuidv4 } from "uuid";
 import eventModel from "@/src/models/eventModel";
 import { Event } from "@/src/types/types";
+import addFieldIfMissing from "@/src/lib/addFieldIfMissing";
 
 // Handle GET requests to fetch all events
 export async function GET() {
@@ -44,21 +45,23 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
 	try {
 		await connectToDB();
-		const { id, day, month, headline, description, image }: Event =
+		const { id, day, month, headline, description, image, active }: Event =
 			await req.json();
 
 		// Validate required fields
-		if (!id || !day || !month || !headline || !description || !image) {
+		if (!id || !day || !month || !headline || !description || !image || active === null) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
 			);
 		}
 
+		await addFieldIfMissing(eventModel, id, "active", false);
+
 		// Use findOneAndUpdate to find a document by `id` and update it
 		const updatedEvent = await eventModel.findOneAndUpdate(
 			{ id }, // Find the document with the matching `id`
-			{ day, month, headline, description, image }, // Update fields
+			{ day, month, headline, description, image, active }, // Update fields
 		);
 
 		if (!updatedEvent) {

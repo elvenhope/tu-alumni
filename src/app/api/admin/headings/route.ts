@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDB from "@/src/lib/connectToDB";
 import headingModel from "@/src/models/headingModel";
 import { v4 as uuidv4 } from "uuid";
+import addFieldIfMissing from "@/src/lib/addFieldIfMissing";
 
 // Handle GET requests to fetch all headlines
 export async function GET() {
@@ -31,7 +32,8 @@ export async function POST(req: Request) {
 			id: body.id,
 			headline: body.headline,
 			author: body.author,
-			description: body.description
+			description: body.description,
+			active: body.active,
 		});
 		return NextResponse.json(newHeadline, { status: 201 });
 	} catch (error) {
@@ -48,20 +50,22 @@ export async function PUT(req: Request) {
 	try {
 		await connectToDB();
 		// Parse the request body
-		const { id, headline, author, description } = await req.json();
+		const { id, headline, author, description, active } = await req.json();
 
 		// Validate required fields
-		if (!id || !headline || !author || !description) {
+		if (!id || !headline || !author || !description || active === undefined) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
 			);
 		}
 
+		await addFieldIfMissing(headingModel, id, "active", false);
+
 		// Use findOneAndUpdate to find a document by `id` and update it
 		const updatedHeadline = await headingModel.findOneAndUpdate(
 			{ id }, // Find the document with the matching `id`
-			{ headline, author, description }, // Update fields
+			{ headline, author, description, active }, // Update fields
 		);
 
 		if (!updatedHeadline) {

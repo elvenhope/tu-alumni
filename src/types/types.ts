@@ -3,6 +3,7 @@ export interface Headline {
 	headline: string;
 	author: string;
 	description: string;
+	active: boolean;
 }
 
 export interface Event {
@@ -12,6 +13,7 @@ export interface Event {
 	headline: string;
 	description: string;
 	image: string;
+	active: boolean;
 }
 
 export interface HomePageContent {

@@ -19,9 +19,9 @@ export async function POST(request: Request): Promise<Response> {
 		}
 
 		// Mock data generation
-		const headlines: Headline[] = await headingModel.find({}).limit(5);
+		const headlines: Headline[] = await headingModel.find({ active: true }).limit(5);
 
-		const events: Event[] = await eventModel.find({}).limit(4);
+		const events: Event[] = await eventModel.find({ active: true }).limit(4);
 
 		const data = { headlines, events };
 
