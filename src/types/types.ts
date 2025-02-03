@@ -16,7 +16,15 @@ export interface Event {
 	active: boolean;
 }
 
+export interface BulletPoint {
+	id?: string,
+	description: string;
+	image: string;
+	active: boolean;
+}
+
 export interface HomePageContent {
 	headlines: Headline[];
 	events: Event[];
+	bulletPoints: BulletPoint[];
 }

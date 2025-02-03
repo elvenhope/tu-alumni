@@ -14,7 +14,7 @@ import { HomePageContent } from "@/src/types/types";
 
 export default function Page() {
 	const t = useTranslations("homePage");
-	const [content, setContent] = useState<HomePageContent>({ headlines: [], events: [] });
+	const [content, setContent] = useState<HomePageContent>({ headlines: [], events: [], bulletPoints: [] });
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -62,39 +62,23 @@ export default function Page() {
 					{t("aboutUS")}
 				</p>
 				<div className={style.bulletPoints}>
-					<div className={style.point}>
-						<Image
-							src={hatIcon}
-							width={115}
-							height={115}
-							alt="hat icon"
-						/>
-						<div className={style.pointText}>
-							<p>{t("point1")}</p>
+					{content.bulletPoints.map((point) => (
+						<div key={point.id} className={style.point}>
+							<Image
+								src={point.image}
+								width={115}
+								height={115}
+								alt="bullet point icon"
+							/>
+							<div
+								className={style.pointText}
+								dangerouslySetInnerHTML={{
+									__html: point.description,
+								}}
+							>
+							</div>
 						</div>
-					</div>
-					<div className={style.point}>
-						<Image
-							src={peopleIcon}
-							width={115}
-							height={115}
-							alt="hat icon"
-						/>
-						<div className={style.pointText}>
-							<p>{t("point2")}</p>
-						</div>
-					</div>
-					<div className={style.point}>
-						<Image
-							src={boardIcon}
-							width={115}
-							height={115}
-							alt="hat icon"
-						/>
-						<div className={style.pointText}>
-							<p>{t("point3")}</p>
-						</div>
-					</div>
+					))}
 				</div>
 			</div>
 			<div className={style.headlineSection}>
@@ -171,11 +155,7 @@ export default function Page() {
 										</p>
 										<div
 											className={style.eventDescription}
-											dangerouslySetInnerHTML={{
-												__html: eventObject.description,
-											}}
-										>
-										</div>
+										></div>
 									</div>
 								</div>
 							);

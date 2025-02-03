@@ -1,7 +1,8 @@
 import connectToDB from "@/src/lib/connectToDB";
+import bulletModel from "@/src/models/bulletModel";
 import eventModel from "@/src/models/eventModel";
 import headingModel from "@/src/models/headingModel";
-import { Headline, Event } from "@/src/types/types";
+import { Headline, Event, BulletPoint } from "@/src/types/types";
 
 export async function POST(request: Request): Promise<Response> {
 	try {
@@ -23,7 +24,9 @@ export async function POST(request: Request): Promise<Response> {
 
 		const events: Event[] = await eventModel.find({ active: true }).limit(4);
 
-		const data = { headlines, events };
+		const bulletPoints: BulletPoint[] = await bulletModel.find({ active: true }).limit(3);
+
+		const data = { headlines, events, bulletPoints };
 
 		// Return the response
 		return new Response(
