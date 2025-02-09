@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "tu-alumni-450412",
+  "private_key_id": "70d171817744295907ea3d59f03aabe87418d74e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCQIs77dmarsIoI\n19P1tEyCJcD2dwn7/CFEGLDnyq+fynRSWPbh0U2whhTiTSfznlZKWwrpyKtgKKaV\nI337oZY+WrzjH/QeJVmrcuMhqcjgzp2OfPGZt1pten5emm27A1jsTUHr1VvIpjzT\ne60DtS0fUXhvuKNgqscZtscwQ9XDrkRImp9SPu2ErF39zIzJh0iuhZrahkpdM5od\nL0H68+QLxJajknFwBYPTG542ROL6HzffimMUlJR9JnInQBvpv0kwG3OPSoybtuRV\nl7dQb2/rUXREruwdObiSr5glhr3XKMIq8Tr8oWjyKm1lBbQZ8Tl34Nh8ZStqUOKp\nISbQh+WvAgMBAAECggEABuZ7tUMuWCLcAN9gSN+IWCS5j7MUOcmQyCNMeNRVwxcc\nqYKT0yzDhONuZYUfGAUpCWdBZv7R4YkgrHwmAGF0gWizqUXy2GyeVdxqrkZkFQsf\nNN6bbGoAPMSD/0ByZ2UaITnzoXg17C21NMSzfD10uw6Z7vNOcwbKAFulPpTIy5Te\nUBgsNrYEARul0EeuYj3fdDaeiwr/NxkwgJ/KOeJ2n18dewg30K4EFKbzzHsWTCdD\nsIOBC8jipf8pO2FRFdMugGBflcuiaT8D1PFpUojPX11phNRbZBKWeWayK6TizSMW\n5wMMatDJ7pYl1n8qhBTcDgB85KiblncycXpg6WV4hQKBgQDCvCcszSvSOTTt5md0\nZ2N3dFd2ulO4DJgzM5xmUmtv9iNDlLMLbiZKG+iG1Bdl2A/Pt4iRMn/IEmhJGIpO\ntRDRQ0LZYmUqYI+k2BT63S43GSBqbIwsLgQQcMxwQRFn8AcrIoC6zS+rAArgzZLK\n9f/M0LFcgU0XwByn0WuFq/3+OwKBgQC9e3CbctHa3dVG5HscttAq+STmbYEVl1tC\n3PwA7rAl7mewzBJynzLBjifA+zdB4F9Mwkjsf/hzPqgxat2+lsas1XrQQherWURz\nwSHIAAik9YoGmgMnr7tDM7OfJ5CCvJbLxmS3Woy6sTWBCMg3PwBiwDDB73eFcPFf\nDk9m0le7HQKBgQCkev3v1oBr+UveoVzCsk0OaaMysmDiNSkdHju9JWJ/1/ujKmcs\ngWYv9HCr6Vq1+BAq14+vbGMH35xcGTFBF6jTyCcfq/9dEuBhUO4vkkBl44BAw9yF\nuHxQUqYrLpqAGvpDEcp/fa4Elm2Zwal6atwb6C3Wv5QZOng5uyZBaquHXwKBgGpY\nU3ULVjiOdFsbdPVCrUbRGiKxptclYbT/Lfif/gDr8wpJHrlyHByB2lH3LKYudY4x\nJJiHojucGO3TWqzTFqJ+FjW4QmyK515IMNt9GVzr6hGWctrdSC6JX/CdVf/qNIAd\n0v0NNxq4xpyq/yPymhbSYwsViXE9WFrPP0UoHNEJAoGAcpgL5b//llfJOHQkE6wg\nwEhXPvz/lYzBpWd1uNhaZVSK1pjdLxUKirREvXw8FE3BNtp4vPF0hldusHhnZf88\nTerdK0AmbIJF18480ayeDzrfNlrPPDyzg3OTF5mHEa1gY3/cQVPIucm95TCL8q1f\nSVkUXKu+KIkI68pkLhl3xrk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "tu-alumni-image-getter@tu-alumni-450412.iam.gserviceaccount.com",
+  "client_id": "106956178738440639625",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tu-alumni-image-getter%40tu-alumni-450412.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
