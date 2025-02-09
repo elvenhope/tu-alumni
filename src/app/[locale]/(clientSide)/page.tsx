@@ -155,6 +155,9 @@ export default function Page() {
 										</p>
 										<div
 											className={style.eventDescription}
+											dangerouslySetInnerHTML={{
+												__html: eventObject.description,
+											}}
 										></div>
 									</div>
 								</div>

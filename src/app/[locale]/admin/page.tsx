@@ -9,31 +9,21 @@ import Select from "react-select";
 import Image from "next/image";
 import { Bounce, toast } from "react-toastify";
 import DescriptionEditor from "@/src/components/misc/descriptionEditor";
-import { error } from "console";
+import EventEditor from "@/src/components/adminSide/adminHome/EventEditor";
+import HeadlineEditor from "@/src/components/adminSide/adminHome/HeadlineEditor";
+import BulletPointEditor from "@/src/components/adminSide/adminHome/BulletPointEditor";
 
 export default function AdminPage() {
 	const { data: session } = useSession();
 
-	const [selectedCategory, setSelectedCategory] = useState<string>();
+	const [events, setEvents] = useState<Array<Event>>([]);
 
 	const [headlines, setHeadlines] = useState<Array<Headline>>([]);
-	const [selectedHeadline, setSelectedHeadline] = useState<Headline>();
-	const [headlineSelectOptions, setHeadlineSelectOptions] = useState<
-		Array<{ value: Headline; label: string }>
-	>([]);
-
-	const [events, setEvents] = useState<Array<Event>>([]);
-	const [selectedEvent, setSelectedEvent] = useState<Event>();
-	const [eventSelectOptions, setEventSelectOptions] = useState<
-		Array<{ value: Event; label: string }>
-	>([]);
 
 	const [bulletPoints, setBulletPoints] = useState<Array<BulletPoint>>([]);
-	const [selectedBulletPoint, setSelectedBulletPoint] =
-		useState<BulletPoint>();
-	const [bulletPointSelectOptions, setBulletPointSelectOptions] = useState<
-		Array<{ value: BulletPoint; label: string }>
-	>([]);
+
+	const [selectedCategory, setSelectedCategory] = useState<string>();
+
 
 	useEffect(() => {
 		const fetchInfo = async () => {
@@ -48,12 +38,6 @@ export default function AdminPage() {
 				const headingsData: Headline[] = await headingsResponse.json();
 				setHeadlines(headingsData);
 
-				// Set initial options for headlines
-				const headingsInitialOptions = headingsData.map((headline) => ({
-					value: headline,
-					label: headline.headline,
-				}));
-				setHeadlineSelectOptions(headingsInitialOptions);
 
 				const eventsResponse = await fetch("/api/admin/events");
 				if (!eventsResponse.ok) {
@@ -64,13 +48,6 @@ export default function AdminPage() {
 
 				const eventsData: Event[] = await eventsResponse.json();
 				setEvents(eventsData);
-
-				// Set initial options for headlines
-				const eventInitialOptions = eventsData.map((event) => ({
-					value: event,
-					label: event.headline,
-				}));
-				setEventSelectOptions(eventInitialOptions);
 
 				// Inside your existing useEffect
 				const bulletPointsResponse = await fetch(
@@ -85,15 +62,6 @@ export default function AdminPage() {
 				const bulletPointsData: BulletPoint[] =
 					await bulletPointsResponse.json();
 				setBulletPoints(bulletPointsData);
-
-				// Set initial options for bullet points
-				const bulletPointsInitialOptions = bulletPointsData.map(
-					(bulletPoint) => ({
-						value: bulletPoint,
-						label: bulletPoint.description,
-					})
-				);
-				setBulletPointSelectOptions(bulletPointsInitialOptions);
 			} catch (err) {
 				console.log(err);
 			}
@@ -106,11 +74,6 @@ export default function AdminPage() {
 		{ value: "Headlines", label: "Headlines" },
 		{ value: "Events", label: "Events" },
 		{ value: "BulletPoints", label: "Bullet Points" },
-	];
-
-	const numberOfOptionsPerCategory = [
-		{ category: "Headlines", number: 5 },
-		{ category: "Events", number: 4 },
 	];
 
 	if (!session) {
@@ -131,826 +94,32 @@ export default function AdminPage() {
 		setSelectedCategory(newValue?.value);
 	}
 
-	function newHeadlineSelected(
-		newValue: SingleValue<{ value: Headline; label: string }>
-	) {
-		setSelectedHeadline(newValue?.value);
+	function initialOptionsEvents():  Array<{ value: Event; label: string }>  {
+		const returnObject = events.map((event) => ({
+			value: event,
+			label: event.headline,
+		}));
+		
+		return returnObject;
 	}
 
-	function newEventSelected(
-		newValue: SingleValue<{ value: Event; label: string }>
-	) {
-		setSelectedEvent(newValue?.value);
+	function initialOptionsHeadlines(): Array<{ value: Headline; label: string }> {
+		const returnObject = headlines.map((headline) => ({
+			value: headline,
+			label: headline.headline,
+		}));
+
+		return returnObject;
 	}
 
-	async function removeHeadline() {
-		const requestObject = {
-			id: selectedHeadline?.id,
-		};
+	function initialOptionsBulletPoints(): Array<{ value: BulletPoint; label: string }> {
+		const returnObject = bulletPoints.map((point) => ({
+			value: point,
+			label: point.description,
+		}));
 
-		try {
-			const updatedHeadline = await fetch(`/api/admin/headings`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(requestObject),
-			});
-
-			if (!updatedHeadline.ok) {
-				throw new Error(
-					`Failed to delete headline: ${updatedHeadline.statusText}`
-				);
-			}
-		} catch (e) {
-			console.log(e);
-		} finally {
-			window.location.reload();
-		}
+		return returnObject;
 	}
-
-	function addHeadline() {
-		// const newHeader = await new headingModel({
-		// 	heading: "Untitled",
-		// 	author: "Author not set",
-		// 	description: "New Description"
-		// });
-		const tmpHeadline = {
-			headline: "Untitled",
-			author: "Unknown",
-			description: "",
-			active: false,
-		};
-
-		setHeadlineSelectOptions((prevOptions) => [
-			...prevOptions,
-			{ value: tmpHeadline, label: tmpHeadline.headline },
-		]);
-
-		setSelectedHeadline(tmpHeadline);
-	}
-
-	async function removeEvent() {
-		const requestObject = {
-			id: selectedEvent?.id,
-		};
-
-		try {
-			const updatedEvent = await fetch(`/api/admin/events`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(requestObject),
-			});
-
-			if (!updatedEvent.ok) {
-				throw new Error(
-					`Failed to delete headline: ${updatedEvent.statusText}`
-				);
-			}
-		} catch (e) {
-			console.log(e);
-		} finally {
-			window.location.reload();
-		}
-	}
-
-	function addEvent() {
-		const tmpEvent = {
-			headline: "Untitled",
-			description: "",
-			month: 1,
-			day: 1,
-			image: "",
-			active: false,
-		};
-
-		setEventSelectOptions((prevOptions) => [
-			...prevOptions,
-			{ value: tmpEvent, label: tmpEvent.headline },
-		]);
-
-		setSelectedEvent(tmpEvent);
-	}
-
-	async function saveHeadline() {
-		if (!selectedHeadline) {
-			console.error("No headline selected");
-			return;
-		}
-
-		try {
-			if (selectedHeadline.id) {
-				const headerObject = {
-					id: selectedHeadline.id,
-					headline: selectedHeadline.headline,
-					author: selectedHeadline.author,
-					description: selectedHeadline.description,
-					active: selectedHeadline.active,
-				};
-				// If ID exists, update the existing headline
-				const updatedHeadline = await fetch(`/api/admin/headings`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(headerObject),
-				});
-
-				if (!updatedHeadline.ok) {
-					throw new Error(
-						`Failed to update headline: ${updatedHeadline.statusText}`
-					);
-				}
-
-				console.log("Headline updated successfully");
-			} else {
-				const headerObject = {
-					headline: selectedHeadline.headline,
-					author: selectedHeadline.author,
-					description: selectedHeadline.description,
-				};
-				// If no ID, create a new headline
-				const newHeadline = await fetch(`/api/admin/headings`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(headerObject),
-				});
-
-				if (!newHeadline.ok) {
-					throw new Error(
-						`Failed to create headline: ${newHeadline.statusText}`
-					);
-				}
-
-				const data = await newHeadline.json();
-				console.log("Headline created successfully:", data);
-				setSelectedHeadline(data); // Update the selected headline with the newly created one
-			}
-		} catch (error) {
-			console.error("Error saving headline:", error);
-		} finally {
-			window.location.reload();
-		}
-	}
-
-	async function saveEvent() {
-		if (!selectedEvent) {
-			console.error("No headline selected");
-			return;
-		}
-
-		try {
-			if (selectedEvent.id) {
-				const eventObject = {
-					id: selectedEvent.id,
-					headline: selectedEvent.headline,
-					description: selectedEvent.description,
-					month: selectedEvent.month,
-					day: selectedEvent.day,
-					image: selectedEvent.image,
-					active: selectedEvent.active,
-				};
-				// If ID exists, update the existing headline
-				const updatedEvent = await fetch(`/api/admin/events`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(eventObject),
-				});
-
-				if (!updatedEvent.ok) {
-					throw new Error(
-						`Failed to update headline: ${updatedEvent.statusText}`
-					);
-				}
-
-				console.log("Headline updated successfully");
-			} else {
-				if (!selectedEvent.image) {
-					toast.error("Image is required for new events!", {
-						position: "bottom-right",
-						autoClose: 5000,
-						hideProgressBar: false,
-						closeOnClick: false,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: "light",
-						transition: Bounce,
-					});
-				}
-				{
-					const eventObject = {
-						headline: selectedEvent.headline,
-						description: selectedEvent.description,
-						month: selectedEvent.month,
-						day: selectedEvent.day,
-						image: selectedEvent.image,
-					};
-					// If no ID, create a new headline
-					const newEvent = await fetch(`/api/admin/events`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(eventObject),
-					});
-
-					if (!newEvent.ok) {
-						throw new Error(
-							`Failed to create headline: ${newEvent.statusText}`
-						);
-					}
-
-					const data = await newEvent.json();
-					console.log("Headline created successfully:", data);
-					setSelectedEvent(data); // Update the selected headline with the newly created one
-				}
-			}
-		} catch (error) {
-			console.error("Error saving headline:", error);
-		} finally {
-			window.location.reload();
-		}
-	}
-
-	function HeadlineEditor() {
-		const handleInputChange = (field: keyof Headline, value: string | boolean) => {
-			setSelectedHeadline((prev) => {
-				// Ensure `prev` exists; if not, initialize it with default values
-				return prev
-					? { ...prev, [field]: value }
-					: {
-							id: "",
-							headline: "",
-							author: "",
-							description: "",
-							active: false,
-							[field]: value,
-					  };
-			});
-		};
-
-		if (!selectedHeadline) {
-			return "Something went wrong. Code 107!";
-		}
-
-		return (
-			<div className={style.formDiv}>
-				<h2>Edit Headline</h2>
-				<form className={style.form}>
-					<div>
-						<label htmlFor="headline_headline">Headline:</label>
-						<input
-							name="headline_headline"
-							type="text"
-							value={selectedHeadline.headline || ""}
-							onChange={(e) =>
-								handleInputChange("headline", e.target.value)
-							}
-						/>
-					</div>
-					<div>
-						<label htmlFor="active">Active:</label>
-						<input
-							id="active"
-							type="checkbox"
-							checked={selectedHeadline.active}
-							onChange={(e) =>
-								handleInputChange("active", e.target.checked)
-							}
-						/>
-					</div>
-					<div>
-						<label htmlFor="headline_author">Author:</label>
-						<input
-							name="headline_author"
-							type="text"
-							value={selectedHeadline.author || ""}
-							onChange={(e) =>
-								handleInputChange("author", e.target.value)
-							}
-						/>
-					</div>
-					<div>
-						<DescriptionEditor
-							description={selectedHeadline.description}
-							onUpdateDescription={(value) => {
-								handleInputChange("description", value);
-							}}
-						/>
-					</div>
-					<button
-						type="button"
-						onClick={saveHeadline}
-						className={style.button_default}
-					>
-						Save
-					</button>
-				</form>
-			</div>
-		);
-	}
-
-	function EventEditor() {
-		const handleInputChange = (
-			field: keyof Omit<Event, "image">,
-			value: string | number | boolean
-		) => {
-			setSelectedEvent((prev) => {
-				return prev
-					? { ...prev, [field]: value }
-					: {
-							id: "",
-							day: 1,
-							month: 1,
-							headline: "",
-							description: "",
-							image: "",
-							active: false,
-							[field]: value,
-					  };
-			});
-		};
-
-		const handleFileChange = async (file: File | null) => {
-			if (file) {
-				const formData = new FormData();
-				formData.append("file", file);
-
-				// Make the POST request to the upload API
-				const response = await fetch("/api/upload", {
-					method: "POST",
-					body: formData,
-				});
-
-				if (!response.ok) {
-					throw new Error("Failed to upload file");
-				}
-
-				// Extract the uploaded image URL from the response
-				const uploadedImageObject = await response.json();
-
-				setSelectedEvent((prev) => {
-					return prev
-						? { ...prev, image: uploadedImageObject.url }
-						: {
-								id: "",
-								day: 1,
-								month: 1,
-								headline: "",
-								description: "",
-								active: false,
-								image: uploadedImageObject.url,
-						  };
-				});
-			}
-		};
-
-		if (!selectedEvent) {
-			return "Something went wrong. Code 108!";
-		}
-
-		return (
-			<div className={style.formDiv}>
-				<h2>Edit Event</h2>
-				<form className={style.form}>
-					{selectedEvent?.image ? (
-						<div>
-							<label htmlFor="event_day">Current Image:</label>
-							<div className={style.curImageContainer}>
-								<Image
-									src={selectedEvent?.image}
-									fill={true}
-									alt={"Current Image"}
-								/>
-							</div>
-						</div>
-					) : null}
-					<div>
-						<label htmlFor="event_day">Day:</label>
-						<input
-							name="event_day"
-							type="number"
-							min="1"
-							max="31"
-							value={selectedEvent?.day || ""}
-							onChange={(e) =>
-								handleInputChange(
-									"day",
-									parseInt(e.target.value, 10)
-								)
-							}
-						/>
-					</div>
-					<div>
-						<label htmlFor="event_month">Month:</label>
-						<input
-							name="event_month"
-							type="number"
-							min="1"
-							max="12"
-							value={selectedEvent?.month || ""}
-							onChange={(e) =>
-								handleInputChange(
-									"month",
-									parseInt(e.target.value, 10)
-								)
-							}
-						/>
-					</div>
-					<div>
-						<label htmlFor="event_headline">Headline:</label>
-						<input
-							name="event_headline"
-							type="text"
-							value={selectedEvent?.headline || ""}
-							onChange={(e) =>
-								handleInputChange("headline", e.target.value)
-							}
-						/>
-					</div>
-					<div>
-						<DescriptionEditor
-							description={selectedEvent.description}
-							onUpdateDescription={(value) => {
-								handleInputChange("description", value);
-							}}
-						/>
-					</div>
-					<div>
-						<label htmlFor="active">Active:</label>
-						<input
-							id="active"
-							type="checkbox"
-							checked={selectedEvent.active}
-							onChange={(e) =>
-								handleInputChange("active", e.target.checked)
-							}
-						/>
-					</div>
-					<div>
-						<label htmlFor="event_image">Image:</label>
-						<input
-							name="event_image"
-							type="file"
-							accept="image/png, image/jpeg, image/jpg, image/webp"
-							onChange={(e) =>
-								handleFileChange(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-					</div>
-					<button
-						type="button"
-						onClick={saveEvent}
-						className={style.button_default}
-					>
-						Save
-					</button>
-				</form>
-			</div>
-		);
-	}
-
-	function displayHeadlineEditor() {
-		return (
-			<>
-				<div className={style.editorHeader}>
-					<button
-						onClick={addHeadline}
-						className={style.button_default}
-					>
-						Add a headline
-					</button>
-					{selectedHeadline?.id ? (
-						<button
-							onClick={removeHeadline}
-							className={style.button_red}
-						>
-							Remove a headline
-						</button>
-					) : null}
-				</div>
-				<Select
-					options={headlineSelectOptions}
-					onChange={newHeadlineSelected}
-					value={headlineSelectOptions.find(
-						(option) => option.value === selectedHeadline
-					)}
-					placeholder="Select a headline"
-				/>
-				{selectedHeadline ? HeadlineEditor() : null}
-			</>
-		);
-	}
-
-	function displayEventEditor() {
-		return (
-			<>
-				<div className={style.editorHeader}>
-					<button onClick={addEvent} className={style.button_default}>
-						Add an event
-					</button>
-					{selectedEvent?.id ? (
-						<button
-							onClick={removeEvent}
-							className={style.button_red}
-						>
-							Remove an event
-						</button>
-					) : null}
-				</div>
-				<Select
-					options={eventSelectOptions}
-					onChange={newEventSelected}
-					value={eventSelectOptions.find(
-						(option) => option.value === selectedEvent
-					)}
-					placeholder="Select an Event"
-				/>
-				{selectedEvent ? EventEditor() : null}
-			</>
-		);
-	}
-
-
-
-	function newBulletPointSelected(
-		newValue: SingleValue<{ value: BulletPoint; label: string }>
-	) {
-		setSelectedBulletPoint(newValue?.value);
-	}
-
-	async function removeBulletPoint() {
-		const requestObject = {
-			id: selectedBulletPoint?.id,
-		};
-
-		try {
-			const response = await fetch(`/api/admin/bulletpoints`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(requestObject),
-			});
-
-			if (!response.ok) {
-				throw new Error(
-					`Failed to delete bullet point: ${response.statusText}`
-				);
-			}
-		} catch (e) {
-			console.log(e);
-		} finally {
-			window.location.reload();
-		}
-	}
-
-	function addBulletPoint() {
-		const tmpBulletPoint = {
-			description: "",
-			image: "",
-			active: false,
-		};
-
-		setBulletPointSelectOptions((prevOptions) => [
-			...prevOptions,
-			{ value: tmpBulletPoint, label: "New Bullet Point" },
-		]);
-
-		setSelectedBulletPoint(tmpBulletPoint);
-	}
-
-	async function saveBulletPoint() {
-		if (!selectedBulletPoint) {
-			console.error("No bullet point selected");
-			return;
-		}
-
-		try {
-			if (selectedBulletPoint.id) {
-				const bulletPointObject = {
-					id: selectedBulletPoint.id,
-					description: selectedBulletPoint.description,
-					image: selectedBulletPoint.image,
-					active: selectedBulletPoint.active,
-				};
-				const updatedBulletPoint = await fetch(
-					`/api/admin/bulletpoints`,
-					{
-						method: "PUT",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(bulletPointObject),
-					}
-				);
-
-				if (!updatedBulletPoint.ok) {
-					throw new Error(
-						`Failed to update bullet point: ${updatedBulletPoint.statusText}`
-					);
-				}
-			} else {
-				if (!selectedBulletPoint.image) {
-					toast.error("Image is required for new bullet points!", {
-						position: "bottom-right",
-						autoClose: 5000,
-						hideProgressBar: false,
-						closeOnClick: false,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: "light",
-						transition: Bounce,
-					});
-					return;
-				}
-
-				const bulletPointObject = {
-					description: selectedBulletPoint.description,
-					image: selectedBulletPoint.image,
-					active: selectedBulletPoint.active,
-				};
-
-				const newBulletPoint = await fetch(`/api/admin/bulletpoints`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(bulletPointObject),
-				});
-
-				if (!newBulletPoint.ok) {
-					throw new Error(
-						`Failed to create bullet point: ${newBulletPoint.statusText}`
-					);
-				}
-
-				const data = await newBulletPoint.json();
-				setSelectedBulletPoint(data);
-			}
-		} catch (error) {
-			console.error("Error saving bullet point:", error);
-		} finally {
-			window.location.reload();
-		}
-	}
-
-	function BulletPointEditor() {
-		const handleInputChange = (
-			field: keyof BulletPoint,
-			value: string | boolean
-		) => {
-			setSelectedBulletPoint((prev) => {
-				return prev
-					? { ...prev, [field]: value }
-					: {
-							id: "",
-							description: "",
-							image: "",
-							active: false,
-							[field]: value,
-					  };
-			});
-		};
-
-		const handleFileChange = async (file: File | null) => {
-			if (file) {
-				const formData = new FormData();
-				formData.append("file", file);
-
-				// Make the POST request to the upload API
-				const response = await fetch("/api/upload", {
-					method: "POST",
-					body: formData,
-				});
-
-				if (!response.ok) {
-					throw new Error("Failed to upload file");
-				}
-
-				// Extract the uploaded image URL from the response
-				const uploadedImageObject = await response.json();
-
-				setSelectedBulletPoint((prev) => {
-					return prev
-						? { ...prev, image: uploadedImageObject.url }
-						: {
-								id: "",
-								description: "",
-								active: false,
-								image: uploadedImageObject.url,
-						  };
-				});
-			}
-		};
-
-		if (!selectedBulletPoint) {
-			return "Something went wrong. Code 109!";
-		}
-
-		return (
-			<div className={style.formDiv}>
-				<h2>Edit Bullet Point</h2>
-				<form className={style.form}>
-					{selectedBulletPoint?.image ? (
-						<div>
-							<label>Current Image:</label>
-							<div className={style.curImageContainer}>
-								<Image
-									src={selectedBulletPoint?.image}
-									fill={true}
-									alt={"Current Image"}
-								/>
-							</div>
-						</div>
-					) : null}
-					<div>
-						<DescriptionEditor
-							description={selectedBulletPoint.description}
-							onUpdateDescription={(value) => {
-								handleInputChange("description", value);
-							}}
-						/>
-					</div>
-					<div>
-						<label htmlFor="active">Active:</label>
-						<input
-							id="active"
-							type="checkbox"
-							checked={selectedBulletPoint.active}
-							onChange={(e) =>
-								handleInputChange("active", e.target.checked)
-							}
-						/>
-					</div>
-					<div>
-						<label htmlFor="bullet_image">Image:</label>
-						<input
-							name="bullet_image"
-							type="file"
-							accept="image/png, image/jpeg, image/jpg, image/webp"
-							onChange={(e) =>
-								handleFileChange(
-									e.target.files ? e.target.files[0] : null
-								)
-							}
-						/>
-					</div>
-					<button
-						type="button"
-						onClick={saveBulletPoint}
-						className={style.button_default}
-					>
-						Save
-					</button>
-				</form>
-			</div>
-		);
-	}
-
-	function displayBulletPointEditor() {
-		return (
-			<>
-				<div className={style.editorHeader}>
-					<button
-						onClick={addBulletPoint}
-						className={style.button_default}
-					>
-						Add a bullet point
-					</button>
-					{selectedBulletPoint?.id ? (
-						<button
-							onClick={removeBulletPoint}
-							className={style.button_red}
-						>
-							Remove bullet point
-						</button>
-					) : null}
-				</div>
-				<Select
-					options={bulletPointSelectOptions}
-					onChange={newBulletPointSelected}
-					value={bulletPointSelectOptions.find(
-						(option) => option.value === selectedBulletPoint
-					)}
-					placeholder="Select a bullet point"
-				/>
-				{selectedBulletPoint ? BulletPointEditor() : null}
-			</>
-		);
-	}
-
-
 
 	return (
 		<>
@@ -968,13 +137,13 @@ export default function AdminPage() {
 						className={style.selector}
 					/>
 					{selectedCategory === "Headlines"
-						? displayHeadlineEditor()
+						? <HeadlineEditor selectOptions={initialOptionsHeadlines()} />
 						: null}
 					{selectedCategory === "Events"
-						? displayEventEditor()
+						? <EventEditor selectOptions={initialOptionsEvents()}/>
 						: null}
 					{selectedCategory === "BulletPoints"
-						? displayBulletPointEditor()
+						? <BulletPointEditor selectOptions={initialOptionsBulletPoints()} />
 						: null}
 				</div>
 			</div>
