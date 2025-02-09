@@ -1,21 +1,26 @@
-import { getSession } from "next-auth/react";
 import React from "react";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import AdminHeader from "@/src/components/adminSide/adminHeader";
+import { redirect } from "next/navigation";
+import { auth } from "@/src/lib/auth";
 
-async function ClientSideLayout({
+async function AdminSideLayout({
 	children,
 	params: { locale },
 }: Readonly<{
 	children: React.ReactNode;
 	params: { locale: string };
 }>) {
-	const session = await getSession();
+	const session = await auth();
 
 	const messages = await getMessages();
+
+	if(!session || session?.user?.role !== "admin") {
+		redirect("/");
+	}
 
 	// Ensure that the incoming `locale` is valid
 	if (!routing.locales.includes(locale as "en" | "lv")) {
@@ -30,4 +35,4 @@ async function ClientSideLayout({
 	);
 }
 
-export default ClientSideLayout;
+export default AdminSideLayout;
