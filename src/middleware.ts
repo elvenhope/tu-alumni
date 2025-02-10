@@ -6,7 +6,8 @@ import { getToken } from 'next-auth/jwt';
 
 const publicPages = [
 	'/',
-	'/login'
+	'/login',
+	'/about_us'
 	// (/secret requires auth)
 ];
 
