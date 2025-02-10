@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
 import { Bounce, toast } from "react-toastify";
-import GalleryEditor from "@/src/components/adminSide/adminAboutUs/galleryEditor";
+import GalleryEditor from "@/src/components/adminSide/adminAboutUs/GalleryEditor";
 
 function Page() {
 	const [mainArticle, setMainArticle] = useState<Article>();
