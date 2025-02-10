@@ -50,7 +50,7 @@ function ClientHeader() {
 						</Link>
 					</div>
 					<Link href="/">{t("home")}</Link>
-					<Link href="/">{t("about")}</Link>
+					<Link href="/about_us">{t("about")}</Link>
 					<Link href="/">{t("events")}</Link>
 					<Link href="/">{t("news")}</Link>
 					{showChat ? <Link href="/">{t("chat")}</Link> : null}
@@ -75,7 +75,7 @@ function ClientHeader() {
 				</div>
 				<div className={style.navLinks}>
 					<Link href="/">{t("home")}</Link>
-					<Link href="/">{t("about")}</Link>
+					<Link href="/about_us">{t("about")}</Link>
 					<Link href="/">{t("events")}</Link>
 					<Link href="/">{t("news")}</Link>
 					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}

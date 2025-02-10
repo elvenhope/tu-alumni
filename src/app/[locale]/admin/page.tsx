@@ -12,7 +12,9 @@ export default function AdminPage() {
 
 	const pagesList = [
 		{ value: "/admin/homepage", label: "Homepage" },
-	]
+		{ value: "/admin/articles", label: "Articles" },
+		{ value: "/admin/about_us", label: "About Us" },
+	];
 
 	return (
 		<>

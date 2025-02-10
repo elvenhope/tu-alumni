@@ -36,7 +36,7 @@ function EventEditor({selectOptions}: props) {
 
 			if (!updatedEvent.ok) {
 				throw new Error(
-					`Failed to delete headline: ${updatedEvent.statusText}`
+					`Failed to delete Event: ${updatedEvent.statusText}`
 				);
 			}
 		} catch (e) {
@@ -64,7 +64,7 @@ function EventEditor({selectOptions}: props) {
 	}
 	async function saveEvent() {
 		if (!selectedEvent) {
-			console.error("No headline selected");
+			console.error("No Event selected");
 			return;
 		}
 
@@ -79,7 +79,7 @@ function EventEditor({selectOptions}: props) {
 					image: selectedEvent.image,
 					active: selectedEvent.active,
 				};
-				// If ID exists, update the existing headline
+				// If ID exists, update the existing Event
 				const updatedEvent = await fetch(`/api/admin/events`, {
 					method: "PUT",
 					headers: {
@@ -90,11 +90,11 @@ function EventEditor({selectOptions}: props) {
 
 				if (!updatedEvent.ok) {
 					throw new Error(
-						`Failed to update headline: ${updatedEvent.statusText}`
+						`Failed to update Event: ${updatedEvent.statusText}`
 					);
 				}
 
-				console.log("Headline updated successfully");
+				console.log("Event updated successfully");
 			} else {
 				if (!selectedEvent.image) {
 					toast.error("Image is required for new events!", {
@@ -118,7 +118,7 @@ function EventEditor({selectOptions}: props) {
 						image: selectedEvent.image,
 						active: selectedEvent.active,
 					};
-					// If no ID, create a new headline
+					// If no ID, create a new Event
 					const newEvent = await fetch(`/api/admin/events`, {
 						method: "POST",
 						headers: {
@@ -129,17 +129,17 @@ function EventEditor({selectOptions}: props) {
 
 					if (!newEvent.ok) {
 						throw new Error(
-							`Failed to create headline: ${newEvent.statusText}`
+							`Failed to create Event: ${newEvent.statusText}`
 						);
 					}
 
 					const data = await newEvent.json();
-					console.log("Headline created successfully:", data);
-					setSelectedEvent(data); // Update the selected headline with the newly created one
+					console.log("Event created successfully:", data);
+					setSelectedEvent(data); // Update the selected Event with the newly created one
 				}
 			}
 		} catch (error) {
-			console.error("Error saving headline:", error);
+			console.error("Error saving Event:", error);
 		} finally {
 			window.location.reload();
 		}
@@ -252,9 +252,9 @@ function EventEditor({selectOptions}: props) {
 						/>
 					</div>
 					<div>
-						<label htmlFor="event_headline">Headline:</label>
+						<label htmlFor="event_Event">Event:</label>
 						<input
-							name="event_headline"
+							name="event_Event"
 							type="text"
 							value={selectedEvent?.headline || ""}
 							onChange={(e) =>
@@ -322,6 +322,7 @@ function EventEditor({selectOptions}: props) {
 					) : null}
 				</div>
 				<Select
+					instanceId={"event-category-selector"}
 					options={eventSelectOptions}
 					onChange={newEventSelected}
 					value={eventSelectOptions.find(

@@ -14,7 +14,6 @@ export const uploadImage = async (
 		const formData = new FormData();
 		const key = process.env.IMG_BB_KEY;
 		if(key) {
-			console.log(key);
 			formData.append("key", key);
 		}
 		formData.append("image", image);

@@ -1,8 +1,11 @@
 import connectToDB from "@/src/lib/connectToDB";
+import articleModel from "@/src/models/articleModel";
 import bulletModel from "@/src/models/bulletModel";
 import eventModel from "@/src/models/eventModel";
+import galleryModel from "@/src/models/galleryModel";
 import headingModel from "@/src/models/headingModel";
 import { Headline, Event, BulletPoint } from "@/src/types/types";
+import { fetchImagesFromCollection } from "@/src/app/api/getImage/route";
 
 export async function POST(request: Request): Promise<Response> {
 	try {
@@ -19,20 +22,44 @@ export async function POST(request: Request): Promise<Response> {
 			);
 		}
 
-		// Mock data generation
-		const headlines: Headline[] = await headingModel.find({ active: true }).limit(5);
 
-		const events: Event[] = await eventModel.find({ active: true }).limit(4);
+		if (pageName == "Home") {
+			const headlines: Headline[] = await headingModel.find({ active: true }).limit(5);
 
-		const bulletPoints: BulletPoint[] = await bulletModel.find({ active: true }).limit(3);
+			const events: Event[] = await eventModel.find({ active: true }).limit(4);
 
-		const data = { headlines, events, bulletPoints };
+			const bulletPoints: BulletPoint[] = await bulletModel.find({ active: true }).limit(3);
 
-		// Return the response
-		return new Response(
-			JSON.stringify({ data }),
-			{ status: 200, headers: { "Content-Type": "application/json" } }
-		);
+			const data = { headlines, events, bulletPoints };
+
+			// Return the response
+			return new Response(
+				JSON.stringify({ data }),
+				{ status: 200, headers: { "Content-Type": "application/json" } }
+			);
+		} else if (pageName == "About Us") {
+			const mainArticle = await articleModel.findOne({ aboutUs: true });
+			
+			const galleries = await galleryModel.find({ active: true }).limit(5);
+
+			const galleryImages = await Promise.all(
+				galleries.map(async (gallery) => ({
+					storageName: gallery.storageName, // Assuming each gallery object has storageName
+					images: await fetchImagesFromCollection(gallery.storageName),
+				}))
+			);
+
+			const data = { mainArticle, galleries, galleryImages };
+			return new Response(
+				JSON.stringify({ data }),
+				{ status: 200, headers: { "Content-Type": "application/json" } }
+			);
+		} else {
+			return new Response(
+				JSON.stringify({ error: "Invalid page name" }),
+				{ status: 200, headers: { "Content-Type": "application/json" } }
+			);
+		}
 	} catch (error) {
 		console.error("Error handling POST request:", error);
 		return new Response(

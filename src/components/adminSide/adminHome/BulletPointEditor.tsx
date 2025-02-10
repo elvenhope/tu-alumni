@@ -272,6 +272,7 @@ function BulletPointEditor({ selectOptions }: props) {
 					) : null}
 				</div>
 				<Select
+					instanceId={"bullet-point-selector"}
 					options={bulletPointSelectOptions}
 					onChange={newBulletPointSelected}
 					value={bulletPointSelectOptions.find(

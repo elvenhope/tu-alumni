@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
 	reactStrictMode: true,
 	images: {
-		domains: ["picsum.photos", "i.ibb.co"], // Add the domain here
+		domains: ["picsum.photos", "i.ibb.co", "drive.google.com"], // Add the domain here
 	},
 	/* config options here */
 };

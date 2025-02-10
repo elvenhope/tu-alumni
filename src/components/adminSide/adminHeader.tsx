@@ -20,6 +20,7 @@ function AdminHeader() {
 
 	return (
 		<header className={style.header}>
+			<Link href="/admin">
 			<div className={style.logoDiv}>
 				<Image
 					src={locale === "lv" ? logoWhiteLV : logoWhiteEN}
@@ -27,6 +28,7 @@ function AdminHeader() {
 					fill={true}
 				/>
 			</div>
+			</Link>
 			<Menu
 				burgerButtonClassName={burgerStyles.bmBurgerButton}
 				burgerBarClassName={burgerStyles.bmBurgerBars}
@@ -46,7 +48,7 @@ function AdminHeader() {
 					</Link>
 				</div>
 				<Link href="/">{t("home")}</Link>
-				<Link href="/">{t("about")}</Link>
+				<Link href="/about_us">{t("about")}</Link>
 				<Link href="/">{t("events")}</Link>
 				<Link href="/">{t("news")}</Link>
 				<Link href="/">{t("chat")}</Link>

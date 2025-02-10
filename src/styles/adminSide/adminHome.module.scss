@@ -25,6 +25,7 @@
 .editorHeader {
 	display: flex;
 	gap: 10px;
+	margin-top: 20px;
 }
 
 
@@ -32,16 +33,19 @@
 	padding: 20px;
 
 	.selections {
-		max-width: 500px;
+		max-width: 700px;
 		margin:auto
 	}
 }
 
 .curImageContainer {
 	position: relative;
-	max-width: 400px;
+	max-width: 500px;
 	width: 100%;
 	aspect-ratio: 1;
+	img {
+		object-fit: contain;
+	}
 }
 
 

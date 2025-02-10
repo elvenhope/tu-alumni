@@ -1,7 +1,6 @@
 "use client";
 
 import { Headline, Event, BulletPoint } from "@/src/types/types";
-import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { SingleValue } from "react-select";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
@@ -11,8 +10,6 @@ import HeadlineEditor from "@/src/components/adminSide/adminHome/HeadlineEditor"
 import BulletPointEditor from "@/src/components/adminSide/adminHome/BulletPointEditor";
 
 export default function AdminPage() {
-	const { data: session } = useSession();
-
 	const [events, setEvents] = useState<Array<Event>>([]);
 
 	const [headlines, setHeadlines] = useState<Array<Headline>>([]);
@@ -73,15 +70,6 @@ export default function AdminPage() {
 		{ value: "BulletPoints", label: "Bullet Points" },
 	];
 
-	if (!session) {
-		return <p>Access Denied</p>;
-	}
-
-	if (session.user.role !== "admin") {
-		return <p>Access Denied</p>;
-	}
-
-
 	function newCategorySelected(
 		newValue: SingleValue<{ value: string; label: string }>
 	) {
@@ -121,6 +109,7 @@ export default function AdminPage() {
 				<h1>Editing Homepage</h1>
 				<div className={style.selections}>
 					<Select
+						instanceId={"homepage-category-selector"}
 						options={categorySelector}
 						onChange={newCategorySelected}
 						value={categorySelector.find(
@@ -129,15 +118,19 @@ export default function AdminPage() {
 						placeholder="Select a category"
 						className={style.selector}
 					/>
-					{selectedCategory === "Headlines"
-						? <HeadlineEditor selectOptions={initialOptionsHeadlines()} />
-						: null}
-					{selectedCategory === "Events"
-						? <EventEditor selectOptions={initialOptionsEvents()}/>
-						: null}
-					{selectedCategory === "BulletPoints"
-						? <BulletPointEditor selectOptions={initialOptionsBulletPoints()} />
-						: null}
+					{selectedCategory === "Headlines" ? (
+						<HeadlineEditor
+							selectOptions={initialOptionsHeadlines()}
+						/>
+					) : null}
+					{selectedCategory === "Events" ? (
+						<EventEditor selectOptions={initialOptionsEvents()} />
+					) : null}
+					{selectedCategory === "BulletPoints" ? (
+						<BulletPointEditor
+							selectOptions={initialOptionsBulletPoints()}
+						/>
+					) : null}
 				</div>
 			</div>
 		</>

@@ -232,6 +232,7 @@ function HeadlineEditor({ selectOptions }: props) {
 					) : null}
 				</div>
 				<Select
+					instanceId={"headline-selector"}
 					options={headlineSelectOptions}
 					onChange={newHeadlineSelected}
 					value={headlineSelectOptions.find(
