@@ -244,5 +244,9 @@
 	}
 	.eventSection {
 		grid-template-columns: 1fr;
+		padding: 140px 0;
+		.event {
+			width: calc(100% - 20px);
+		}
 	}
 }
