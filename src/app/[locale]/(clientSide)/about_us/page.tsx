@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { AboutUsContent } from "@/src/types/types";
 import { useTranslations } from "next-intl";
@@ -11,6 +11,7 @@ function Page() {
 	const [content, setContent] = useState<AboutUsContent>();
 	const [selectedGallery, setSelectedGallery] = useState<string>();
 	const [imagesToDisplay, setImagesToDisplay] = useState<string[]>();
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -23,6 +24,7 @@ function Page() {
 			});
 			const data = await response.json();
 			setContent(data.data);
+			setLoading(false);
 		};
 
 		fetchData();
@@ -30,13 +32,12 @@ function Page() {
 
 	useEffect(() => {
 		if (!selectedGallery) return;
-		const imageObject = content?.galleryImages.find((gallery) => gallery.storageName === selectedGallery);
+		const imageObject = content?.galleryImages.find(
+			(gallery) => gallery.storageName === selectedGallery
+		);
 		console.log(imageObject);
 		setImagesToDisplay(imageObject?.images.map((image) => image.url));
-
 	}, [selectedGallery]);
-
-
 
 	function displayMainArticle() {
 		if (!content) return null;
@@ -44,7 +45,12 @@ function Page() {
 			<div className={style.mainArticleContainer}>
 				<div className={style.mainArticleImage}>
 					<div>
-						<Image src={content.mainArticle.image} fill={true} style={{objectFit: "contain"}} alt="About Us Image"/>
+						<Image
+							src={content.mainArticle.image}
+							fill={true}
+							style={{ objectFit: "contain" }}
+							alt="About Us Image"
+						/>
 					</div>
 				</div>
 				<div className={style.mainArticleText}>
@@ -60,11 +66,15 @@ function Page() {
 	}
 
 	function displayGalleries() {
-		if(!content) return null;
+		if (!content) return null;
 		return (
 			<div className={style.galleryContainer}>
 				{content.galleries.map((gallery) => (
-					<div key={gallery.id} className={style.gallery} onClick={() => setSelectedGallery(gallery.storageName)}>
+					<div
+						key={gallery.id}
+						className={style.gallery}
+						onClick={() => setSelectedGallery(gallery.storageName)}
+					>
 						<div className={style.galleryImage}>
 							<Image
 								src={gallery.thumbnail}
@@ -91,20 +101,36 @@ function Page() {
 		);
 	}
 
+	function LoadingSpinner() {
+		return (
+			<div className={style.loadingContainer}>
+				<div className={style.spinner}></div>
+			</div>
+		);
+	}
 
 	return (
 		<>
-			<div className={style.container}>
-				{displayMainArticle()}
-				{displayGalleries()}
-				<div className={style.galleryImagesContainer}>
-					{imagesToDisplay?.map((image, index) => (
-						<div key={index} className={style.galleryImage}>
-							<Image src={image} fill={true} style={{ objectFit: "contain" }} alt="Gallery Image"/>
-						</div>
-					))}
+			{loading ? (
+				LoadingSpinner()
+			) : (
+				<div className={style.container}>
+					{displayMainArticle()}
+					{displayGalleries()}
+					<div className={style.galleryImagesContainer}>
+						{imagesToDisplay?.map((image, index) => (
+							<div key={index} className={style.galleryImage}>
+								<Image
+									src={image}
+									fill={true}
+									style={{ objectFit: "contain" }}
+									alt="Gallery Image"
+								/>
+							</div>
+						))}
+					</div>
 				</div>
-			</div>
+			)}
 		</>
 	);
 }
