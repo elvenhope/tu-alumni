@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
 
-const folderId = "1jQY3QB0FgETBO-imlbcGjcqFp09RanpF"; // Root folder ID
+const folderId = process.env.GOOGLE_DRIVE_ROOT_FOLDER; // Root folder ID
 
 export async function fetchImagesFromCollection(collectionName: string) {
 	const auth = new google.auth.GoogleAuth({
