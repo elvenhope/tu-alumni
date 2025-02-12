@@ -196,6 +196,7 @@
 				-webkit-box-orient: vertical;
 				& > p {
 					margin: 0;
+					word-break: break-word;
 				}
 			}
 		}
@@ -247,6 +248,7 @@
 		padding: 140px 0;
 		.event {
 			width: calc(100% - 20px);
+			margin: auto;
 		}
 	}
 }
