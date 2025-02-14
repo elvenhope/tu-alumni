@@ -10,6 +10,7 @@ export interface Event {
 	id?: string,
 	day: number;
 	month: number;
+	year: number;
 	headline: string;
 	description: string;
 	image: string;
@@ -67,4 +68,8 @@ export interface AboutUsContent {
 	mainArticle: Article;
 	galleries: Gallery[];
 	galleryImages: GalleryImagesObject[];
+}
+
+export interface EventsPageContent {
+	events: Event[];
 }

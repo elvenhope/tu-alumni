@@ -14,6 +14,7 @@ export default function AdminPage() {
 		{ value: "/admin/homepage", label: "Homepage" },
 		{ value: "/admin/articles", label: "Articles" },
 		{ value: "/admin/about_us", label: "About Us" },
+		{ value: "/admin/events", label: "Events" },
 	];
 
 	return (

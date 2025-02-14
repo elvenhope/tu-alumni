@@ -33,5 +33,9 @@
 	},
 	"aboutUs": {
 		
+	},
+	"events": {
+		"headerText": "Gaidāmie pasākumi",
+		"noEvents": "Nav gaidāmu notikumu"
 	}
 }

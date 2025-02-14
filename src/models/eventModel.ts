@@ -7,8 +7,9 @@ const eventSchema = new mongoose.Schema({
 	description: { type: String, required: true },
 	month: { type: Number, required: true },
 	day: { type: Number, require: true },
+	year: { type: Number, require: true},
 	image: { type: String, require: true },
 	active: { type: Boolean, required: true },
-})
+}, {strict: false})
 
 export default mongoose.models.Event || mongoose.model<Event>("Event", eventSchema);

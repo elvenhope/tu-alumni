@@ -4,6 +4,7 @@ import { AboutUsContent } from "@/src/types/types";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/AboutUsPage.module.scss";
+import loadingSpinnerStyle from "@/src/styles/misc/loadingSpinner.module.scss";
 import Image from "next/image";
 
 function Page() {
@@ -149,8 +150,8 @@ function Page() {
 
 	function LoadingSpinner() {
 		return (
-			<div className={style.loadingContainer}>
-				<div className={style.spinner}></div>
+			<div className={loadingSpinnerStyle.loadingContainer}>
+				<div className={loadingSpinnerStyle.spinner}></div>
 			</div>
 		);
 	}

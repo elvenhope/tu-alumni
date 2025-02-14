@@ -22,7 +22,7 @@ function Page() {
 				const articlesResponse = await fetch("/api/admin/articles");
 				if (!articlesResponse.ok) {
 					throw new Error(
-						`Failed to fetch galleries: ${articlesResponse.statusText}`
+						`Failed to fetch articles: ${articlesResponse.statusText}`
 					);
 				}
 

@@ -1,0 +1,64 @@
+.calendarDiv {
+	cursor: pointer;
+	position: relative;
+}
+
+.calendarOverlay {
+	position: absolute;
+	top: 70px;
+	right: 0;
+	background: white;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border-radius: 20px;
+	padding: 16px;
+	z-index: 1000;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.daysGrid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	// gap: 4px;
+	border-top: 1px solid #ddd;
+}
+
+.day,
+.empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	border-bottom: 1px solid #000000;
+	min-height: 40px;
+}
+
+.eventDay {
+	color: white;
+	background-image: url("/images/eventBackground.svg");
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+
+.sunday {
+	color: red;
+}
+
+.legend {
+	display: flex;
+	.legendItem {
+		width: 30.4px;
+		text-align: center;
+	}
+	div:last-child {
+		color: red;
+	}
+}

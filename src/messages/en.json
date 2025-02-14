@@ -33,5 +33,9 @@
 	},
 	"aboutUs": {
 
+	},
+	"events": {
+		"headerText": "Upcoming Events",
+		"noEvents": "No upcoming Events"
 	}
 }

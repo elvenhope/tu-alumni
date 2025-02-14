@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import { toast, Bounce } from "react-toastify";
 import DescriptionEditor from "@/src/components/misc/descriptionEditor";
@@ -14,6 +14,11 @@ function EventEditor({selectOptions}: props) {
 	const [selectedEvent, setSelectedEvent] = useState<Event>();
 	const [eventSelectOptions, setEventSelectOptions] =
 		useState<Array<{ value: Event; label: string }>>(selectOptions);
+
+
+	useEffect(() => {
+		setEventSelectOptions(selectOptions);
+	}, [selectOptions])	
 
 	function newEventSelected(
 		newValue: SingleValue<{ value: Event; label: string }>
@@ -51,6 +56,7 @@ function EventEditor({selectOptions}: props) {
 			description: "",
 			month: 1,
 			day: 1,
+			year: 2025,
 			image: "",
 			active: false,
 		};
@@ -76,6 +82,7 @@ function EventEditor({selectOptions}: props) {
 					description: selectedEvent.description,
 					month: selectedEvent.month,
 					day: selectedEvent.day,
+					year: selectedEvent.year,
 					image: selectedEvent.image,
 					active: selectedEvent.active,
 				};
@@ -115,6 +122,7 @@ function EventEditor({selectOptions}: props) {
 						description: selectedEvent.description,
 						month: selectedEvent.month,
 						day: selectedEvent.day,
+						year: selectedEvent.year,
 						image: selectedEvent.image,
 						active: selectedEvent.active,
 					};
@@ -156,6 +164,7 @@ function EventEditor({selectOptions}: props) {
 							id: "",
 							day: 1,
 							month: 1,
+							year: 2025,
 							headline: "",
 							description: "",
 							image: "",
@@ -190,6 +199,7 @@ function EventEditor({selectOptions}: props) {
 								id: "",
 								day: 1,
 								month: 1,
+								year: 2025,
 								headline: "",
 								description: "",
 								active: false,
@@ -246,6 +256,20 @@ function EventEditor({selectOptions}: props) {
 							onChange={(e) =>
 								handleInputChange(
 									"month",
+									parseInt(e.target.value, 10)
+								)
+							}
+						/>
+					</div>
+					<div>
+						<label htmlFor="event_year">Year:</label>
+						<input
+							name="event_year"
+							type="number"
+							value={selectedEvent?.year || ""}
+							onChange={(e) =>
+								handleInputChange(
+									"year",
 									parseInt(e.target.value, 10)
 								)
 							}

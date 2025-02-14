@@ -49,7 +49,7 @@ function AdminHeader() {
 				</div>
 				<Link href="/">{t("home")}</Link>
 				<Link href="/about_us">{t("about")}</Link>
-				<Link href="/">{t("events")}</Link>
+				<Link href="/events">{t("events")}</Link>
 				<Link href="/">{t("news")}</Link>
 				<Link href="/">{t("chat")}</Link>
 				<button className={style.signOutBtn} onClick={() => signOut()}>Sign out</button>

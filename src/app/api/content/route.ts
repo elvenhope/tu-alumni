@@ -6,6 +6,18 @@ import galleryModel from "@/src/models/galleryModel";
 import headingModel from "@/src/models/headingModel";
 import { Headline, Event, BulletPoint } from "@/src/types/types";
 import { fetchImagesFromCollection } from "@/src/app/api/getImage/route";
+import { format, parseISO, differenceInDays } from 'date-fns';
+
+function sortEventsByDate(events: Event[]): Event[] {
+	return events.sort((a, b) => {
+		const dateA = new Date(a.year, a.month - 1, a.day);
+		const dateB = new Date(b.year, b.month - 1, b.day);
+
+		// Compare the dates
+		return dateA.getTime() - dateB.getTime();
+	})
+}
+
 
 export async function POST(request: Request): Promise<Response> {
 	try {
@@ -26,7 +38,23 @@ export async function POST(request: Request): Promise<Response> {
 		if (pageName == "Home") {
 			const headlines: Headline[] = await headingModel.find({ active: true }).limit(5);
 
-			const events: Event[] = await eventModel.find({ active: true }).limit(4);
+			const today = new Date();
+			const events: Event[] = await eventModel.find({
+				active: true,
+				$or: [
+					{ year: { $gt: today.getFullYear() } },
+					{
+						year: today.getFullYear(),
+						$or: [
+							{ month: { $gt: today.getMonth() + 1 } },
+							{
+								month: today.getMonth() + 1,
+								day: { $gt: today.getDate() }
+							}
+						]
+					}
+				]
+			}).limit(4);
 
 			const bulletPoints: BulletPoint[] = await bulletModel.find({ active: true }).limit(3);
 
@@ -50,6 +78,32 @@ export async function POST(request: Request): Promise<Response> {
 			);
 
 			const data = { mainArticle, galleries, galleryImages };
+			return new Response(
+				JSON.stringify({ data }),
+				{ status: 200, headers: { "Content-Type": "application/json" } }
+			);
+		} else if (pageName == "Events") {
+			const today = new Date();
+			const events: Event[] = await eventModel.find({
+				active: true,
+				$or: [
+					{ year: { $gt: today.getFullYear() } },
+					{
+						year: today.getFullYear(),
+						$or: [
+							{ month: { $gt: today.getMonth() + 1 } },
+							{
+								month: today.getMonth() + 1,
+								day: { $gt: today.getDate() }
+							}
+						]
+					}
+				]
+			});
+
+			const sortedEvents = sortEventsByDate(events).slice(0,20);
+			
+			const data = { events: sortedEvents };
 			return new Response(
 				JSON.stringify({ data }),
 				{ status: 200, headers: { "Content-Type": "application/json" } }
