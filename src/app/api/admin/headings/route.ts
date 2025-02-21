@@ -60,7 +60,7 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		await addFieldIfMissing(headingModel, id, "active", false);
+		//await addFieldIfMissing(headingModel, id, "active", false);
 
 		// Use findOneAndUpdate to find a document by `id` and update it
 		const updatedHeadline = await headingModel.findOneAndUpdate(

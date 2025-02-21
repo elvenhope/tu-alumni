@@ -77,9 +77,20 @@
 	.eventDescription {
 		overflow: hidden;
 
+		a {
+			text-decoration: none;
+			color: #233774;
+			font-size: 20px;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
 		h1 {
 			color: #233774;
 			margin-top: 0;
+			margin-bottom: 10px;
 		}
 
 		.description {
@@ -90,6 +101,7 @@
 			-webkit-line-clamp: 7;
 			overflow: hidden;
 			max-height: 100%;
+			margin-top: 10px;
 			-webkit-box-orient: vertical;
 
 			&>p {

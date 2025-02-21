@@ -49,7 +49,7 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		await addFieldIfMissing(bulletModel, id, "active", false);
+		//await addFieldIfMissing(bulletModel, id, "active", false);
 
 		const updatedBulletPoint = await bulletModel.findOneAndUpdate(
 			{ id },

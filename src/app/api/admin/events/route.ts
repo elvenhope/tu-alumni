@@ -45,24 +45,21 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
 	try {
 		await connectToDB();
-		const { id, day, month, year, headline, description, image, active }: Event =
+		const { id, day, month, year, headline, description, image, active, registrationLink }: Event =
 			await req.json();
 
 		// Validate required fields
-		if (!id || !day || !month || !year || !headline || !description || !image || active === null) {
+		if (!id || !day || !month || !year || !headline || !registrationLink || !description || !image || active === null) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
 			);
 		}
 
-		await addFieldIfMissing(eventModel, id, "active", false);
-		await addFieldIfMissing(eventModel, id, "year", 2025);
-
 		// Use findOneAndUpdate to find a document by `id` and update it
 		const updatedEvent = await eventModel.findOneAndUpdate(
 			{ id }, // Find the document with the matching `id`
-			{ day, month, year, headline, description, image, active }, // Update fields
+			{ day, month, year, headline, registrationLink, description, image, active }, // Update fields
 		);
 
 		if (!updatedEvent) {

@@ -54,6 +54,7 @@ function EventEditor({selectOptions}: props) {
 		const tmpEvent = {
 			headline: "Untitled",
 			description: "",
+			registrationLink: "",
 			month: 1,
 			day: 1,
 			year: 2025,
@@ -85,6 +86,7 @@ function EventEditor({selectOptions}: props) {
 					year: selectedEvent.year,
 					image: selectedEvent.image,
 					active: selectedEvent.active,
+					registrationLink: selectedEvent.registrationLink
 				};
 				// If ID exists, update the existing Event
 				const updatedEvent = await fetch(`/api/admin/events`, {
@@ -125,6 +127,7 @@ function EventEditor({selectOptions}: props) {
 						year: selectedEvent.year,
 						image: selectedEvent.image,
 						active: selectedEvent.active,
+						registrationLink: selectedEvent.registrationLink
 					};
 					// If no ID, create a new Event
 					const newEvent = await fetch(`/api/admin/events`, {
@@ -169,6 +172,7 @@ function EventEditor({selectOptions}: props) {
 							description: "",
 							image: "",
 							active: false,
+							registrationLink: "",
 							[field]: value,
 					  };
 			});
@@ -202,6 +206,7 @@ function EventEditor({selectOptions}: props) {
 								year: 2025,
 								headline: "",
 								description: "",
+								registrationLink: "",
 								active: false,
 								image: uploadedImageObject.url,
 						  };
@@ -283,6 +288,17 @@ function EventEditor({selectOptions}: props) {
 							value={selectedEvent?.headline || ""}
 							onChange={(e) =>
 								handleInputChange("headline", e.target.value)
+							}
+						/>
+					</div>
+					<div>
+						<label htmlFor="event_regLink">Registration Link:</label>
+						<input
+							name="event_regLink"
+							type="text"
+							value={selectedEvent?.registrationLink || ""}
+							onChange={(e) =>
+								handleInputChange("registrationLink", e.target.value)
 							}
 						/>
 					</div>

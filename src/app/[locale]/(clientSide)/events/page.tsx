@@ -9,6 +9,7 @@ import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { IoCalendarOutline } from "react-icons/io5";
 import CalendarOverlay from "@/src/components/clientSide/eventPage/CalendarOverlay";
+import { Link } from "@/src/i18n/routing";
 
 function Page() {
 	const t = useTranslations("events");
@@ -51,7 +52,6 @@ function Page() {
 	}
 
 	function dateSelected(date: Date) {
-
 		const eventsOnTheDate = events?.filter(
 			(e) =>
 				e.day === date.getDate() &&
@@ -59,11 +59,19 @@ function Page() {
 				e.year === date.getFullYear()
 		);
 
-		setDisplayedEvents(eventsOnTheDate)
+		setDisplayedEvents(eventsOnTheDate);
 	}
 
 	function resetDisplayedEvents() {
-		setDisplayedEvents(events)
+		setDisplayedEvents(events);
+	}
+
+	function generateUrlName(headline: string): string {
+		return headline
+			.toLowerCase() // Convert to lowercase
+			.trim() // Remove leading and trailing spaces
+			.replace(/[^a-z0-9\s-]/g, "") // Remove special characters except spaces and hyphens
+			.replace(/\s+/g, "-"); // Replace spaces with hyphens
 	}
 
 	function eventDesign(event: Event, index: number) {
@@ -72,7 +80,6 @@ function Page() {
 			event.month - 1,
 			event.day
 		).toLocaleString(locale, { month: "short" });
-
 
 		return (
 			<div className={style.event} key={index}>
@@ -96,9 +103,21 @@ function Page() {
 					/>
 				</div>
 				<div className={style.eventDescription}>
-					<h1 className={camingoDosProCdSemiBold.className}>
-						{event.headline}
-					</h1>
+					<Link
+						href={
+							"/events/" +
+							generateUrlName(event.headline) +
+							"?q=" +
+							event.id
+						}
+					>
+						<h1 className={camingoDosProCdSemiBold.className}>
+							{event.headline}
+						</h1>
+					</Link>
+					{event.registrationLink?.length > 0 ? (
+						<a href={event.registrationLink}>{t("register")}</a>
+					) : null}
 					<div
 						className={style.description}
 						dangerouslySetInnerHTML={{
@@ -117,7 +136,9 @@ function Page() {
 			) : (
 				<div className={style.container}>
 					<div className={style.header}>
-						<h1 onClick={() => resetDisplayedEvents()}>{t("headerText")}</h1>
+						<h1 onClick={() => resetDisplayedEvents()}>
+							{t("headerText")}
+						</h1>
 						<CalendarOverlay
 							events={events ?? []}
 							locale={locale}

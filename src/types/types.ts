@@ -13,6 +13,7 @@ export interface Event {
 	year: number;
 	headline: string;
 	description: string;
+	registrationLink: string;
 	image: string;
 	active: boolean;
 }

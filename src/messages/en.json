@@ -36,6 +36,7 @@
 	},
 	"events": {
 		"headerText": "Upcoming Events",
-		"noEvents": "No upcoming Events"
+		"noEvents": "No upcoming Events",
+		"register": "Register"
 	}
 }

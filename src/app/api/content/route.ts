@@ -108,10 +108,16 @@ export async function POST(request: Request): Promise<Response> {
 				JSON.stringify({ data }),
 				{ status: 200, headers: { "Content-Type": "application/json" } }
 			);
+		} else if (pageName == "OneEvent") {
+			const event = await eventModel.findOne({id: body.id});
+			return new Response(
+				JSON.stringify(event),
+				{ status: 200, headers: { "Content-Type": "application/json" } }
+			);
 		} else {
 			return new Response(
 				JSON.stringify({ error: "Invalid page name" }),
-				{ status: 200, headers: { "Content-Type": "application/json" } }
+				{ status: 400, headers: { "Content-Type": "application/json" } }
 			);
 		}
 	} catch (error) {

@@ -36,6 +36,7 @@
 	},
 	"events": {
 		"headerText": "Gaidāmie pasākumi",
-		"noEvents": "Nav gaidāmu notikumu"
+		"noEvents": "Nav gaidāmu notikumu",
+		"register": "Reģistrēties"
 	}
 }
