@@ -86,6 +86,7 @@ function Page() {
 			active: false,
 			author: "",
 			featured: false,
+			dateAdded: new Date().toString()
 		};
 
 		setArticleOptions((prevOptions) => [
@@ -114,7 +115,10 @@ function Page() {
 					active: selectedArticle.active,
 					year: selectedArticle.year,
 					featured: selectedArticle.featured,
+					dateAdded: selectedArticle.dateAdded ?? null
 				};
+
+				console.log(articleObject);
 				// If ID exists, update the existing headline
 				const updatedArticle = await fetch(`/api/admin/articles`, {
 					method: "PUT",
@@ -202,6 +206,7 @@ function Page() {
 							author: "",
 							active: false,
 							featured: false,
+							dateAdded: "",
 							[field]: value,
 					  };
 			});
@@ -238,6 +243,7 @@ function Page() {
 								active: false,
 								author: "",
 								featured: false,
+								dateAdded: "",
 								image: uploadedImageObject.url,
 						  };
 				});

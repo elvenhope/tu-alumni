@@ -12,7 +12,8 @@ const articleSchema = new mongoose.Schema({
 	year: { type: Number, required: false },
 	active: { type: Boolean, required: true },
 	featured: { type: Boolean, default: false, required: true },
-	aboutUs: { type: Boolean, default: false},
+	aboutUs: { type: Boolean, default: false },
+	dateAdded: { type: String, required: true }
 }, { strict: false })
 
 export default mongoose.models.Article || mongoose.model<Article>("Article", articleSchema,);

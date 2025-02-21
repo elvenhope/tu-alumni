@@ -114,6 +114,12 @@ export async function POST(request: Request): Promise<Response> {
 				JSON.stringify(event),
 				{ status: 200, headers: { "Content-Type": "application/json" } }
 			);
+		} else if (pageName == "News") {
+			const articles = await articleModel.find({ aboutUs: { $ne: true }, active: { $exists: true } });
+			return new Response(
+				JSON.stringify({ articles }),
+				{ status: 200, headers: { "Content-Type": "application/json" } }
+			);
 		} else {
 			return new Response(
 				JSON.stringify({ error: "Invalid page name" }),

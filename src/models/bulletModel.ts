@@ -6,6 +6,6 @@ const bulletSchema = new mongoose.Schema({
 	description: { type: String, required: true },
 	image: { type: String, require: true },
 	active: { type: Boolean, required: true },
-})
+}, {strict: false})
 
 export default mongoose.models.BulletPoint || mongoose.model<BulletPoint>("BulletPoint", bulletSchema);

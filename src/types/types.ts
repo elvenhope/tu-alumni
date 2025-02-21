@@ -56,6 +56,7 @@ export interface Article {
 	active: boolean;
 	aboutUs?: boolean;
 	featured: boolean;
+	dateAdded: string;
 }
 
 export interface GalleryImagesObject {

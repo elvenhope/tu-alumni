@@ -66,6 +66,7 @@ export async function POST(req: Request) {
 				month: body.month,
 				year: body.year,
 				active: body.active,
+				dateAdded: new Date().toString()
 			});
 
 			return NextResponse.json(newArticle, { status: 201 });
@@ -83,7 +84,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
 	try {
 		await connectToDB();
-		const { id, headline, description, image, author, day, month, year, active } =
+		const { id, headline, description, image, author, day, month, year, active, dateAdded } =
 			await req.json();
 
 		// Validate required fields
@@ -94,10 +95,18 @@ export async function PUT(req: Request) {
 			);
 		}
 
+		let dateToAdd;
+
+		if(dateAdded == null) {
+			dateToAdd = new Date().toString();
+		} else {
+			dateToAdd = dateAdded;
+		}
+
 		// Find and update the article
 		const updatedArticle = await Article.findOneAndUpdate(
 			{ id: id }, // Find document by `_id`
-			{ headline, description, image, author, day, month, year, active }, // Update fields
+			{ headline, description, image, author, day, month, year, active, dateAdded: dateToAdd}, // Update fields
 			{ new: true } // Return the updated document
 		);
 
