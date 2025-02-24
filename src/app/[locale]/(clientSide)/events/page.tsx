@@ -10,6 +10,7 @@ import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { IoCalendarOutline } from "react-icons/io5";
 import CalendarOverlay from "@/src/components/clientSide/eventPage/CalendarOverlay";
 import { Link } from "@/src/i18n/routing";
+import { generateUrlName } from "@/src/lib/generateUrlName";
 
 function Page() {
 	const t = useTranslations("events");
@@ -64,14 +65,6 @@ function Page() {
 
 	function resetDisplayedEvents() {
 		setDisplayedEvents(events);
-	}
-
-	function generateUrlName(headline: string): string {
-		return headline
-			.toLowerCase() // Convert to lowercase
-			.trim() // Remove leading and trailing spaces
-			.replace(/[^a-z0-9\s-]/g, "") // Remove special characters except spaces and hyphens
-			.replace(/\s+/g, "-"); // Replace spaces with hyphens
 	}
 
 	function eventDesign(event: Event, index: number) {

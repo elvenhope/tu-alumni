@@ -52,7 +52,7 @@ function ClientHeader() {
 					<Link href="/">{t("home")}</Link>
 					<Link href="/about_us">{t("about")}</Link>
 					<Link href="/events">{t("events")}</Link>
-					<Link href="/">{t("news")}</Link>
+					<Link href="/news">{t("news")}</Link>
 					{showChat ? <Link href="/">{t("chat")}</Link> : null}
 					{!showChat ? (
 						<Link href="/login">{t("log-in")}</Link>
@@ -77,7 +77,7 @@ function ClientHeader() {
 					<Link href="/">{t("home")}</Link>
 					<Link href="/about_us">{t("about")}</Link>
 					<Link href="/events">{t("events")}</Link>
-					<Link href="/">{t("news")}</Link>
+					<Link href="/news">{t("news")}</Link>
 					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}
 					{!showChat ? <Link href="/login">{t("log-in")}</Link> : null}
 				</div>

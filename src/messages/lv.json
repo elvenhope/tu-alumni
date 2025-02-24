@@ -31,12 +31,13 @@
 		"point2": "Mēs esam bijušo studentu grupa, kas ir absolvējuši to pašu skolu.",
 		"point3": "Mēs esam bijušo studentu grupa, kas ir absolvējuši to pašu skolu."
 	},
-	"aboutUs": {
-		
-	},
+	"aboutUs": {},
 	"events": {
 		"headerText": "Gaidāmie pasākumi",
 		"noEvents": "Nav gaidāmu notikumu",
 		"register": "Reģistrēties"
+	},
+	"news": {
+		"newest": "Jaunākais"
 	}
 }

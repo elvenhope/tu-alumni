@@ -2,15 +2,19 @@
 
 import { Article } from "@/src/types/types";
 import React, { useEffect, useState } from "react";
-import style from "@/src/styles/clientSide/NewsPage.module.scss"
+import style from "@/src/styles/clientSide/NewsPage.module.scss";
 import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import loadingSpinnerStyle from "@/src/styles/misc/loadingSpinner.module.scss";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/routing";
+import { generateUrlName } from "@/src/lib/generateUrlName";
 
 function Page() {
 	const [articles, setArticles] = useState<Array<Article>>([]);
 	const [newestArticles, setNewestArticles] = useState<Array<Article>>([]);
 	const [loading, setLoading] = useState(true);
+	const t = useTranslations("news");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -30,9 +34,9 @@ function Page() {
 					new Date(b.dateAdded).getTime() -
 					new Date(a.dateAdded).getTime()
 			);
-			
-			setNewestArticles(sortedArticles.slice(0, 5))
-			setLoading(false)
+
+			setNewestArticles(sortedArticles.slice(0, 5));
+			setLoading(false);
 		};
 
 		fetchData();
@@ -46,42 +50,132 @@ function Page() {
 		);
 	}
 
-	if(loading) {
+	if (loading) {
 		return LoadingSpinner();
 	}
-
 
 	return (
 		<>
 			<div className={style.container}>
 				<div className={style.newestSection}>
-					<h1>NEWEST</h1>
+					<h1>{t("newest")}</h1>
 					<div className={style.newestContent}>
 						<div className={style.numberOne}>
-							<div className={style.thumbnailContainer}>
-								<Image src={newestArticles[0].image} alt="Newest Article Image" fill={true}
-								style={{objectFit: "contain"}}/>
-							</div>
-							<h1 className={camingoDosProCdSemiBold.className}>{newestArticles[0].headline}</h1>
-							<div className={style.description} dangerouslySetInnerHTML={{__html: newestArticles[0].description}}>
-							</div>
+							<Link
+								href={
+									"/news/" +
+									generateUrlName(
+										newestArticles[0].headline
+									) +
+									"?q=" +
+									newestArticles[0].id
+								}
+							>
+								<div className={style.thumbnailContainer}>
+									<Image
+										src={newestArticles[0].image}
+										alt="Newest Article Image"
+										fill={true}
+										style={{ objectFit: "contain" }}
+									/>
+								</div>
+								<h1
+									className={
+										camingoDosProCdSemiBold.className
+									}
+								>
+									{newestArticles[0].headline}
+								</h1>
+							</Link>
+							<div
+								className={style.description}
+								dangerouslySetInnerHTML={{
+									__html: newestArticles[0].description,
+								}}
+							></div>
 						</div>
 						<div className={style.listing}>
 							{newestArticles.slice(1, 5).map((article) => {
 								return (
-									<div className={style.item} key={article.id}>
-										<div className={style.itemThumbnail}>
-											<Image src={article.image} fill={true} style={{objectFit: "contain", objectPosition: "center"}} alt="Article Image"/>
-										</div>
-										<div className={style.itemContent}>
-											<h1>{article.headline}</h1>
-											<div className={style.description} dangerouslySetInnerHTML={{__html: article.description}}></div>
-										</div>
+									<div
+										className={style.item}
+										key={article.id}
+									>
+										<Link
+											href={
+												"/news/" +
+												generateUrlName(
+													article.headline
+												) +
+												"?q=" +
+												article.id
+											}
+										>
+											<div
+												className={style.itemThumbnail}
+											>
+												<Image
+													src={article.image}
+													fill={true}
+													style={{
+														objectFit: "contain",
+														objectPosition:
+															"center",
+													}}
+													alt="Article Image"
+												/>
+											</div>
+											<div className={style.itemContent}>
+												<h1>{article.headline}</h1>
+												<div
+													className={
+														style.description
+													}
+													dangerouslySetInnerHTML={{
+														__html: article.description,
+													}}
+												></div>
+											</div>
+										</Link>
 									</div>
-								)
+								);
 							})}
 						</div>
 					</div>
+				</div>
+				<div className={style.generalSection}>
+					{articles.slice(5).map((article) => {
+						return (
+							<>
+								<div
+									className={style.articleBlock}
+									key={article.id}
+								>
+									<div className={style.thumbnailContainer}>
+										<Image
+											src={article.image}
+											alt="Newest Article Image"
+											fill={true}
+											style={{ objectFit: "contain" }}
+										/>
+									</div>
+									<h1
+										className={
+											camingoDosProCdSemiBold.className
+										}
+									>
+										{article.headline}
+									</h1>
+									<div
+										className={style.description}
+										dangerouslySetInnerHTML={{
+											__html: article.description,
+										}}
+									></div>
+								</div>
+							</>
+						);
+					})}
 				</div>
 			</div>
 		</>
