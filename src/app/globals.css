@@ -49,3 +49,7 @@ body {
 .bm-menu-wrap {
   top: 0;
 }
+
+.no-scroll {
+  overflow: hidden;
+}

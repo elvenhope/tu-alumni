@@ -8,7 +8,10 @@ const publicPages = [
 	'/',
 	'/login',
 	'/about_us',
-	'/events'
+	'/events',
+	'/events/.+',
+	'/news',
+	'/news/.+'
 	// (/secret requires auth)
 ];
 

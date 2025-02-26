@@ -8,6 +8,7 @@ import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
+import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {
 	const searchParams = useSearchParams();
@@ -18,7 +19,10 @@ function Page() {
 
 	const t = useTranslations("news");
 
+	const { setLoading } = useLoading();
+
 	useEffect(() => {
+		setLoading(true);
 		const fetchData = async () => {
 			const response = await fetch("/api/content", {
 				method: "POST",
@@ -33,6 +37,7 @@ function Page() {
 			});
 			const data = await response.json();
 			setArticle(data);
+			setLoading(false);
 		};
 
 		fetchData();

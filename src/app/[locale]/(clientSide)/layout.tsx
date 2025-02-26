@@ -6,7 +6,8 @@ import { routing } from "@/src/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import ClientFooter from "@/src/components/clientSide/ClientFooter";
-
+import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
+import { LoadingProvider } from "@/src/components/misc/LoadingContext";
 
 async function ClientSideLayout({
 	children,

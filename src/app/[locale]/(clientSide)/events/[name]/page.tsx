@@ -8,6 +8,7 @@ import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
+import { useLoading } from "@/src/components/misc/LoadingContext";
 
 
 
@@ -20,7 +21,10 @@ function Page() {
 
 	const t = useTranslations("events");
 
+	const { setLoading } = useLoading();
+
 	useEffect(() => {
+		setLoading(true);
 		const fetchData = async () => {
 			const response = await fetch("/api/content", {
 				method: "POST",
@@ -31,6 +35,7 @@ function Page() {
 			});
 			const data = await response.json();
 			setEvent(data);
+			setLoading(false);
 		};
 
 		fetchData();

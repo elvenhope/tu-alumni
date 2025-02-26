@@ -3,7 +3,6 @@
 import { EventsPageContent, Event } from "@/src/types/types";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useEffect, useRef, useState } from "react";
-import loadingSpinnerStyle from "@/src/styles/misc/loadingSpinner.module.scss";
 import style from "@/src/styles/clientSide/EventPage.module.scss";
 import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
@@ -11,16 +10,19 @@ import { IoCalendarOutline } from "react-icons/io5";
 import CalendarOverlay from "@/src/components/clientSide/eventPage/CalendarOverlay";
 import { Link } from "@/src/i18n/routing";
 import { generateUrlName } from "@/src/lib/generateUrlName";
+import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
+import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {
 	const t = useTranslations("events");
 	const [content, setContent] = useState<EventsPageContent>();
-	const [loading, setLoading] = useState(true);
 	const [events, setEvents] = useState<Event[]>();
 	const [displayedEvents, setDisplayedEvents] = useState<Event[]>();
 	const locale = useLocale();
+	const { setLoading } = useLoading();
 
 	useEffect(() => {
+		setLoading(true)
 		const fetchData = async () => {
 			const response = await fetch("/api/content", {
 				method: "POST",
@@ -39,13 +41,6 @@ function Page() {
 		fetchData();
 	}, []);
 
-	function LoadingSpinner() {
-		return (
-			<div className={loadingSpinnerStyle.loadingContainer}>
-				<div className={loadingSpinnerStyle.spinner}></div>
-			</div>
-		);
-	}
 
 	function formatEventDate(event: Event) {
 		const { day, month, year } = event;
@@ -124,10 +119,7 @@ function Page() {
 
 	return (
 		<>
-			{loading ? (
-				LoadingSpinner()
-			) : (
-				<div className={style.container}>
+			<div className={style.container}>
 					<div className={style.header}>
 						<h1 onClick={() => resetDisplayedEvents()}>
 							{t("headerText")}
@@ -161,7 +153,6 @@ function Page() {
 						)}
 					</div>
 				</div>
-			)}
 		</>
 	);
 }

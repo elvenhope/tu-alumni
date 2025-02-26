@@ -4,19 +4,23 @@ import { AboutUsContent } from "@/src/types/types";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/AboutUsPage.module.scss";
-import loadingSpinnerStyle from "@/src/styles/misc/loadingSpinner.module.scss";
 import Image from "next/image";
+import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
+import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {
 	const t = useTranslations("aboutUs");
 	const [content, setContent] = useState<AboutUsContent>();
 	const [selectedGallery, setSelectedGallery] = useState<string>();
 	const [imagesToDisplay, setImagesToDisplay] = useState<string[]>();
-	const [loading, setLoading] = useState(true);
-	const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+	const { isLoading, setLoading } = useLoading();
+	const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+		null
+	);
 
-
+	
 	useEffect(() => {
+		setLoading(true);
 		const fetchData = async () => {
 			const response = await fetch("/api/content", {
 				method: "POST",
@@ -148,40 +152,28 @@ function Page() {
 		);
 	}
 
-	function LoadingSpinner() {
-		return (
-			<div className={loadingSpinnerStyle.loadingContainer}>
-				<div className={loadingSpinnerStyle.spinner}></div>
-			</div>
-		);
-	}
-
 	return (
 		<>
-			{loading ? (
-				LoadingSpinner()
-			) : (
-				<div className={style.container}>
-					{displayMainArticle()}
-					{displayGalleries()}
-					<div className={style.galleryImagesContainer}>
-						{imagesToDisplay?.map((image, index) => (
-							<div
-								key={index}
-								className={style.galleryImage}
-								onClick={() => openLightbox(index)}
-							>
-								<Image
-									src={image}
-									fill={true}
-									style={{ objectFit: "cover" }}
-									alt="Gallery Image"
-								/>
-							</div>
-						))}
-					</div>
+			<div className={style.container}>
+				{displayMainArticle()}
+				{displayGalleries()}
+				<div className={style.galleryImagesContainer}>
+					{imagesToDisplay?.map((image, index) => (
+						<div
+							key={index}
+							className={style.galleryImage}
+							onClick={() => openLightbox(index)}
+						>
+							<Image
+								src={image}
+								fill={true}
+								style={{ objectFit: "cover" }}
+								alt="Gallery Image"
+							/>
+						</div>
+					))}
 				</div>
-			)}
+			</div>
 
 			{/* Lightbox Modal */}
 			{selectedImageIndex !== null && imagesToDisplay && (
