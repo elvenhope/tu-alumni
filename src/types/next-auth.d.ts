@@ -4,10 +4,9 @@ declare module "next-auth/jwt" {
 	/** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
 	interface JWT {
 		id: string,
+		_id: string,
 		role: string,
 		exp: number,
-		firstName: string,
-		rememberMe: boolean
 	}
 }
 
@@ -17,51 +16,15 @@ declare module "next-auth" {
 	 */
 	interface User {
 		id: string,
-		firstName: string,
-		lastName: string,
-		password: string,
+		_id: string,
 		role: string,
-		phoneNumber?: string,
-		graduatedMajor?: string,
-		graduatedYear?: string,
-		email: string,
-		location?: string,
-		jobExperienceDescription?: string,
-		website?: string,
-		socialFacebook?: string,
-		socialInstagram?: string,
-		socialLinkedin?: string,
-		interests?: string,
-		whoAmI?: string,
-		whatIWantToAchieve?: string,
-		whatICanOfferYou?: string,
-		whereCanYouFindMe?: string,
-		hashtags?: Array<string>,
 	}
 	interface Session {
 		user: {
 			/** The user's postal address. */
 			id: string,
-			firstName: string,
-			lastName: string,
-			password: string,
+			_id: string,
 			role: string,
-			phoneNumber?: string,
-			graduatedMajor?: string,
-			graduatedYear?: string,
-			email: string,
-			location?: string,
-			jobExperienceDescription?: string,
-			website?: string,
-			socialFacebook?: string,
-			socialInstagram?: string,
-			socialLinkedin?: string,
-			interests?: string,
-			whoAmI?: string,
-			whatIWantToAchieve?: string,
-			whatICanOfferYou?: string,
-			whereCanYouFindMe?: string,
-			hashtags?: Array<string>,
 		}
 	}
 	interface Account {

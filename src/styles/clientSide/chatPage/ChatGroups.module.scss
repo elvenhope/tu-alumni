@@ -1,0 +1,163 @@
+.container {
+	width: calc(100% - 10px);
+	background-color: #233774;
+	flex-grow: 1;
+	padding: 50px 15px 15px 15px;
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 84px);
+}
+
+.headingText {
+	font-size: 2.6rem;
+	color: white;
+}
+
+.groupButtons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.groupButton {
+	border: none;
+	background: none;
+	color: white;
+	font-size: 1.3rem;
+	cursor: pointer;
+}
+
+.groupButton:hover {
+	color: rgba(255, 255, 255, 0.659);
+}
+
+.modalOverlay {
+	background: rgba(0, 0, 0, 0.75);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1
+}
+
+.modalContent {
+	background: white;
+	padding: 20px;
+	border-radius: 10px;
+	width: 400px;
+	max-width: 90%;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	position: relative;
+}
+
+.noGroupsFound {
+	color: white;
+	font-size: 1.2rem;
+	margin: 20px auto;
+	text-align: center;
+}
+
+.groupList {
+	overflow-y: scroll;
+	scrollbar-width: thin;
+	/* For Firefox */
+	scrollbar-color: white #233774;
+	/* Thumb and track color */
+	scrollbar-width: thin;
+}
+
+.groupList::-webkit-scrollbar {
+	width: 8px;
+}
+
+.groupList::-webkit-scrollbar-thumb {
+	background-color: white;
+	border-radius: 10px;
+	border: 2px solid rbga(255, 255, 255, 0.3);
+}
+
+.groupList::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 10px;
+}
+
+.groupList::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+.groupItem {
+	width: 100%;
+	border-radius: 16px;
+	background-color: white;
+
+	display: flex;
+	margin: 20px 0;
+	padding: 10px;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	/* Smooth animation */
+	cursor: pointer;
+}
+
+.groupItem:hover {
+	transform: scale(0.98);
+	/* Shrink the item to 98% of its original size */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	/* Optional: Adds a slight shadow to indicate hover */
+}
+
+
+
+.groupProfile {
+	margin-right: 20px;
+	display: flex;
+	align-items: center;
+
+	img {
+		border-radius: 50%;
+	}
+}
+
+.groupDetails {
+	.groupName {
+		margin-bottom: 20px;
+		margin-top: 0;
+	}
+
+	.groupDescription {
+		color: #00000066;
+		display: -webkit-box;
+		text-overflow: ellipsis;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+		max-height: 100%;
+		margin-top: 10px;
+		-webkit-box-orient: vertical;
+	}
+}
+
+@media (max-width: 900px) {
+	.container {
+		width: 100%;
+		padding: 0;
+	}
+	.groupItem {
+		width: 95%;
+	}
+
+	.headingText {
+		color: white;
+	}
+
+	.groupButtons {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+		margin-bottom: 10px;
+	}
+}

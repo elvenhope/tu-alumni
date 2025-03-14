@@ -8,7 +8,6 @@ import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import { generateUrlName } from "@/src/lib/generateUrlName";
-import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {

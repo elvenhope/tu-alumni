@@ -1,0 +1,102 @@
+.container {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	padding: 20px 10px 10px 20px;
+	box-shadow: 5px 10px 5px -5px rgba(0, 0, 0, 0.17),
+		-5px 10px 5px -5px rgba(0, 0, 0, 0.17);
+	z-index: 1;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	h1 {
+		font-size: 2.5rem;
+		color: #233774;
+		margin: 0;
+		line-height: 54px;
+	}
+}
+
+.content {
+	flex-grow: 1;
+	display: flex;
+}
+
+.interface {
+	margin-top: auto;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+
+	display: flex;
+	align-items: center;
+
+	gap: 10px;
+
+	.input {
+		width: 100%;
+		background-color: #E2E6ED;
+		border-radius: 50px;
+
+		display: flex;
+		align-items: center;
+		padding: 7px 20px;
+
+		justify-content: space-between;
+
+		.textInput {
+			width: 90%;
+			/* Adjust as needed */
+			// padding: 10px 15px;
+			background-color: #E2E6ED;
+			/* Light grayish-blue background */
+			border: none;
+			// border-radius: 20px;
+			/* Rounded borders */
+			font-size: 16px;
+			color: rgba(0, 0, 0, 0.5);
+			/* 50% transparent black text */
+			outline: none;
+			/* Remove default focus outline */
+		}
+	}
+}
+
+.funBtn {
+	cursor: pointer;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.funBtn:hover {
+	transform: scale(1.2);
+}
+
+.menuBtnContainer {
+	position: relative;
+}
+
+.menuBtn {
+	display: none;
+	position: relative !important;
+	right: 0 !important;
+	top: 0 !important;
+}
+
+.menuBtnBars {
+	background: #233774 !important;
+}
+
+.menuBtnBars:hover {
+	background: #121c3a !important;
+}
+
+@media (max-width: 900px) {
+	.menuBtn {
+		display: block;
+	}
+}

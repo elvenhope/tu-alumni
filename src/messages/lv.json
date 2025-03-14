@@ -39,5 +39,17 @@
 	},
 	"news": {
 		"newest": "Jaunākais"
+	},
+	"chat": {
+		"chatHeader": {
+			"noUser": "ielādējas lietotājs..."
+		},
+		"chatGroups": {
+			"groups": "Grupas",
+			"createGroup": "Izveidot grupu",
+			"joinGroup": "Pievienoties grupai",
+			"memberList": "Biedru saraksts",
+			"noGroupsFound": "Nav atrasta neviena grupai"
+		}
 	}
 }

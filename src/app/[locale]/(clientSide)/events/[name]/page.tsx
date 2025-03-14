@@ -2,15 +2,13 @@
 
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import style from "@/src/styles/clientSide/OneEventPage.module.scss"
-import { Event } from "@/src/types/types"
+import style from "@/src/styles/clientSide/OneEventPage.module.scss";
+import { Event } from "@/src/types/types";
 import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import { useLoading } from "@/src/components/misc/LoadingContext";
-
-
 
 function Page() {
 	const searchParams = useSearchParams();
@@ -31,7 +29,11 @@ function Page() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({pageName: "OneEvent", id: eventId, type: "event" }),
+				body: JSON.stringify({
+					pageName: "OneEvent",
+					id: eventId,
+					type: "event",
+				}),
 			});
 			const data = await response.json();
 			setEvent(data);
@@ -41,14 +43,14 @@ function Page() {
 		fetchData();
 	}, []);
 
-	if(!event) {
+	if (!event) {
 		return (
 			<>
 				<div>
 					<h1>Something went wrong!</h1>
 				</div>
 			</>
-		)
+		);
 	}
 
 	return (
@@ -65,9 +67,11 @@ function Page() {
 						{String(event.month).padStart(2, "0")} /{" "}
 						{String(event.year).padStart(2, "0")}
 					</h1>
-					<Link href={event.registrationLink}>
-						<h2>{t("register")}</h2>
-					</Link>
+					{event.registrationLink ? (
+						<Link href={event.registrationLink}>
+							<h2>{t("register")}</h2>
+						</Link>
+					) : null}
 				</div>
 				<div className={style.pictureContainer}>
 					<div className={style.pictureDiv}>
@@ -77,9 +81,11 @@ function Page() {
 								{String(event.month).padStart(2, "0")} /{" "}
 								{String(event.year).padStart(2, "0")}
 							</h1>
-							<Link href={event.registrationLink}>
-								<h2>{t("register")}</h2>
-							</Link>
+							{event.registrationLink ? (
+								<Link href={event.registrationLink}>
+									<h2>{t("register")}</h2>
+								</Link>
+							) : null}
 						</div>
 						<Image
 							src={event.image}

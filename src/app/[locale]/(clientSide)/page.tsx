@@ -1,17 +1,12 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { signIn, signOut } from "next-auth/react";
 import style from "@/src/styles/clientSide/HomePage.module.scss";
 import heroImage from "@/assets/images/heroImage.png";
 import Image from "next/image";
 import { camingoDosProCdExtraBold, camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
 import { useTranslations } from "next-intl";
-import boardIcon from "@/assets/images/boardIcon.svg";
-import hatIcon from "@/assets/images/hatIcon.svg";
-import peopleIcon from "@/assets/images/peopleIcon.svg";
 import { HomePageContent } from "@/src/types/types";
-import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 
 export default function Page() {
@@ -53,6 +48,7 @@ export default function Page() {
 						style={{
 							objectFit: "cover", // cover, contain, none
 						}}
+						priority={true}
 					/>
 				</div>
 			</div>

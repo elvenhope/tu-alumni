@@ -6,9 +6,11 @@ import type {
 import type { NextAuthOptions } from "next-auth"
 import { getServerSession } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import connectToDB from "@/src/lib/connectToDB";
+import User from "@/src/models/userModel";
 
-// You'll need to import and pass this
-// to `NextAuth` in `app/api/auth/[...nextauth]/route.ts`
+
 export const config = {
 	providers: [
 		CredentialsProvider({
@@ -19,47 +21,38 @@ export const config = {
 				rememberMe: { label: "Remember Me", type: "checkbox" },
 			},
 			async authorize(credentials, req) {
-				// Replace this with your DB call
-				// const user = await fetchUserFromDatabase(credentials);
-				const user = {
-					"id": "12345",
-					"firstName": "John",
-					"lastName": "Doe",
-					"password": "123",
-					"role": "admin",
-					"phoneNumber": "+1234567890",
-					"graduatedMajor": "Computer Science",
-					"graduatedYear": "2022",
-					"email": "john.doe@example.com",
-					"location": "New York, NY",
-					"jobExperienceDescription": "Software Developer at XYZ Corp",
-					"website": "https://johndoe.com",
-					"socialFacebook": "https://facebook.com/johndoe",
-					"socialInstagram": "https://instagram.com/johndoe",
-					"socialLinkedin": "https://linkedin.com/in/johndoe",
-					"interests": "Coding, Music, Hiking",
-					"whoAmI": "A passionate developer",
-					"whatIWantToAchieve": "To become a full-stack developer",
-					"whatICanOfferYou": "Expertise in web development",
-					"whereCanYouFindMe": "Online or at tech meetups",
-					"hashtags": ["#developer", "#tech", "#coding"]
+				if (!credentials) {
+					return null;
 				}
+				const { email, password } = credentials;
 
+				await connectToDB();
+				
+				const user = await User.findOne({ email }).exec();
 				if (user) {
-					return user;
+					const compareHash = await bcrypt.compare(password, user.password);
+
+					if (email == user.email && compareHash) {
+						return user;
+					} else {
+						return null;
+					}
 				} else {
 					return null;
 				}
 			},
 		}),
 	],
+	session: {
+		strategy: "jwt",
+	},
 	callbacks: {
 		async session({ session, token }) {
 			// Include the user's role in the session
 			if (token) {
 				session.user.id = token.id;
 				session.user.role = token.role;
-				session.user.firstName = token.firstName;
+				session.user._id = token._id;
 				session.expires = new Date(token.exp * 1000).toISOString();
 			}
 
@@ -69,7 +62,7 @@ export const config = {
 			if (user && account) {
 				token.id = user.id; // Pass id to the token
 				token.role = user.role; // Pass role to the token
-				token.firstName = user.firstName;
+				token._id = user._id; // Pass _id to the token
 				// Set session duration based on "rememberMe" flag
 				token.rememberMe = account.rememberMe;
 				token.exp = account.rememberMe

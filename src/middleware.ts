@@ -65,7 +65,9 @@ export default async function middleware(req: NextRequest) {
 		return NextResponse.redirect(new URL('/', req.url));
 	}
 
-
+	if (adjustedPathname.startsWith("/api/chat") && !token) {
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	}
 
 	if (isPublicPage) {
 		return intlMiddleware(req);

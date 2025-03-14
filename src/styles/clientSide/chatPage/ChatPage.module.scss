@@ -1,0 +1,27 @@
+.chatPage_container {
+	display: flex;
+	width: 100%;
+}
+
+.section1 {
+	width: 33%;
+	max-width: 477px;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+.section2 {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	flex-grow: 1;
+}
+
+@media screen and (max-width: 900px) {
+	.chatPage_container {
+		flex-direction: column;
+	}
+	.section1 {
+		display: none;
+	}
+}

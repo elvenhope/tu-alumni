@@ -7,14 +7,7 @@ import { useLoading } from "@/src/components/misc/LoadingContext";
 function LoadingSpinner() {
 	const { isLoading } = useLoading();
 
-	useEffect(() => {
-		console.log("Spinner " + isLoading);
-	}, [isLoading])
-
 	return (
-		// <div className={style.loadingContainer}>
-		// 	<div className={style.spinner}></div>
-		// </div>
 		<div
 			className={style.loading}
 			style={{ display: isLoading ? "block" : "none" }}

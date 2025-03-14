@@ -1,0 +1,88 @@
+.container {
+	display: flex;
+	width: 100%;
+	padding: 20px 10px 10px 20px;
+	box-shadow: 5px 10px 5px -10px rgba(0, 0, 0, 0.17),
+			-5px 10px 5px -5px rgba(0, 0, 0, 0.17);
+	z-index: 1;
+	background-color: white;
+}
+
+.headerButtonsContainer {
+	flex: 0 0 60%;
+	display: flex;
+	flex: 1;
+	border-right: 2px solid black;
+	align-items: center;
+}
+
+.headerButtons {
+	display: flex;
+	justify-content: center;
+}
+
+.logoDiv {
+	width: 100%;
+	position: relative;
+	max-width: 123px;
+	aspect-ratio: 3 / 1;
+	margin-right: 10px;
+}
+
+.headerIcon {
+	margin: 0 10px;
+}
+
+.userProfile {
+	flex: 0 0 40%;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.userProfileText {
+	padding-right: 10px;
+	text-align: end;
+	.userName {
+		font-size: 13px;
+		color: #002F43;
+	}
+}
+
+.userProfile img {
+	border: 3px solid #002F4399;
+	border-radius: 50%;
+}
+
+.noUser {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-size: 40px;
+	color: #233774;
+	position: absolute;
+	top: 40%;
+	left: calc(50% - 113px);
+}
+
+@media (max-width: 900px) {
+	.container {
+		margin-top: 15px;
+		margin-bottom: 15px;
+		flex-direction: column;
+		box-shadow: none;
+	}
+	.headerButtonsContainer {
+		border-right: none;
+		flex-direction: column;
+	}
+
+	.headerButtons {
+		margin-top: 20px;
+	}
+	.userProfile {
+		margin-top: 10px;
+		justify-content: center;
+	}
+}

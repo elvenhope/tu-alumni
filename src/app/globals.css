@@ -53,3 +53,7 @@ body {
 .no-scroll {
   overflow: hidden;
 }
+
+* {
+  box-sizing: border-box;
+}

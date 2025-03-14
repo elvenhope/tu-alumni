@@ -54,7 +54,7 @@ function EventEditor({selectOptions}: props) {
 		const tmpEvent = {
 			headline: "Untitled",
 			description: "",
-			registrationLink: "",
+			registrationLink: null,
 			month: 1,
 			day: 1,
 			year: 2025,
@@ -97,18 +97,32 @@ function EventEditor({selectOptions}: props) {
 					body: JSON.stringify(eventObject),
 				});
 
+				const updatedEventData = await updatedEvent.json();
+
 				if (!updatedEvent.ok) {
+					toast.error(updatedEventData.error, {
+						position: "bottom-right",
+						autoClose: 10000,
+						hideProgressBar: false,
+						closeOnClick: false,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+						theme: "light",
+						transition: Bounce,
+					});
 					throw new Error(
-						`Failed to update Event: ${updatedEvent.statusText}`
+						`Failed to create Event: ${updatedEvent.statusText}`
 					);
 				}
 
 				console.log("Event updated successfully");
+				window.location.reload();
 			} else {
 				if (!selectedEvent.image) {
 					toast.error("Image is required for new events!", {
 						position: "bottom-right",
-						autoClose: 5000,
+						autoClose: 10000,
 						hideProgressBar: false,
 						closeOnClick: false,
 						pauseOnHover: true,
@@ -138,21 +152,32 @@ function EventEditor({selectOptions}: props) {
 						body: JSON.stringify(eventObject),
 					});
 
+					const newEventData = await newEvent.json();
+
 					if (!newEvent.ok) {
+						toast.error(newEventData.error, {
+							position: "bottom-right",
+							autoClose: 10000,
+							hideProgressBar: false,
+							closeOnClick: false,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							theme: "light",
+							transition: Bounce,
+						});
 						throw new Error(
 							`Failed to create Event: ${newEvent.statusText}`
 						);
 					}
 
-					const data = await newEvent.json();
-					console.log("Event created successfully:", data);
-					setSelectedEvent(data); // Update the selected Event with the newly created one
+					console.log("Event created successfully:", newEventData);
+					setSelectedEvent(newEventData); // Update the selected Event with the newly created one
+					window.location.reload();
 				}
 			}
 		} catch (error) {
 			console.error("Error saving Event:", error);
-		} finally {
-			window.location.reload();
 		}
 	}
 	function EventEditor() {
@@ -172,7 +197,7 @@ function EventEditor({selectOptions}: props) {
 							description: "",
 							image: "",
 							active: false,
-							registrationLink: "",
+							registrationLink: null,
 							[field]: value,
 					  };
 			});
@@ -206,7 +231,7 @@ function EventEditor({selectOptions}: props) {
 								year: 2025,
 								headline: "",
 								description: "",
-								registrationLink: "",
+								registrationLink: null,
 								active: false,
 								image: uploadedImageObject.url,
 						  };

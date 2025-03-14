@@ -41,5 +41,17 @@
 	},
 	"news": {
 		"newest": "Newest"
+	},
+	"chat": {
+		"chatHeader": {
+			"noUser": "Loading User..."
+		},
+		"chatGroups": {
+			"groups": "Groups",
+			"createGroup": "Create Group",
+			"joinGroup": "Join Groups",
+			"memberList": "Member List",
+			"noGroupsFound": "No Groups Found"
+		}
 	}
 }

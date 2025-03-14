@@ -10,7 +10,6 @@ import { IoCalendarOutline } from "react-icons/io5";
 import CalendarOverlay from "@/src/components/clientSide/eventPage/CalendarOverlay";
 import { Link } from "@/src/i18n/routing";
 import { generateUrlName } from "@/src/lib/generateUrlName";
-import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {
@@ -103,7 +102,7 @@ function Page() {
 							{event.headline}
 						</h1>
 					</Link>
-					{event.registrationLink?.length > 0 ? (
+					{event?.registrationLink ? (
 						<a href={event.registrationLink}>{t("register")}</a>
 					) : null}
 					<div

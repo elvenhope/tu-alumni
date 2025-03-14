@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/AboutUsPage.module.scss";
 import Image from "next/image";
-import LoadingSpinner from "@/src/components/misc/LoadingSpinner";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {

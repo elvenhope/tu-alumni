@@ -24,11 +24,13 @@ function ClientHeader() {
 	return (
 		<header className={style.header}>
 			<div className={style.logoDiv}>
-				<Image
-					src={locale === "lv" ? logoWhiteLV : logoWhiteEN}
-					alt="logo"
-					fill={true}
-				/>
+				<Link href={"/"}>
+					<Image
+						src={locale === "lv" ? logoWhiteLV : logoWhiteEN}
+						alt="logo"
+						fill={true}
+					/>
+				</Link>
 			</div>
 			<div className={style.mobileDiv}>
 				<Menu
@@ -53,7 +55,7 @@ function ClientHeader() {
 					<Link href="/about_us">{t("about")}</Link>
 					<Link href="/events">{t("events")}</Link>
 					<Link href="/news">{t("news")}</Link>
-					{showChat ? <Link href="/">{t("chat")}</Link> : null}
+					{showChat ? <Link href="/chat">{t("chat")}</Link> : null}
 					{!showChat ? (
 						<Link href="/login">{t("log-in")}</Link>
 					) : null}
@@ -78,8 +80,10 @@ function ClientHeader() {
 					<Link href="/about_us">{t("about")}</Link>
 					<Link href="/events">{t("events")}</Link>
 					<Link href="/news">{t("news")}</Link>
-					{showChat ? <Link href="/">{t("chat")}</Link> : <></>}
-					{!showChat ? <Link href="/login">{t("log-in")}</Link> : null}
+					{showChat ? <Link href="/chat">{t("chat")}</Link> : <></>}
+					{!showChat ? (
+						<Link href="/login">{t("log-in")}</Link>
+					) : null}
 				</div>
 			</div>
 		</header>

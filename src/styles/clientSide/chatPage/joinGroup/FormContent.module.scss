@@ -1,0 +1,186 @@
+.modalContent {
+	width: 600px;
+}
+
+
+/* Container */
+.container {
+	padding: 16px;
+	font-family: Arial, sans-serif;
+}
+
+/* Search Bar */
+.searchBar {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 16px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background-color: #E2E6ED;
+	color: black;
+	font-size: 14px;
+}
+
+.searchBar::placeholder {
+	color: rgba(0, 0, 0, 0.5);
+}
+
+/* Tag Filter */
+.tagContainer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.tagButton {
+	padding: 6px 12px;
+	font-size: 14px;
+	border-radius: 20px;
+	border: none;
+	cursor: pointer;
+	background-color: #ddd;
+	color: black;
+	transition: background 0.3s ease;
+}
+
+.tagButton.active {
+	background-color: #007bff;
+	color: white;
+}
+
+/* Group List - Fixed Height & Scrollable */
+.groupList {
+	max-height: 400px;
+	/* Set a max height */
+	overflow-y: auto;
+	/* Enable vertical scrolling */
+	border-radius: 8px;
+	padding: 8px;
+	scrollbar-width: thin;
+	/* For Firefox */
+	scrollbar-color: #233774 white;
+	/* Thumb and track color */
+	scrollbar-width: thin;
+}
+
+/* Custom scrollbar */
+.groupList::-webkit-scrollbar {
+	width: 8px;
+}
+
+.groupList::-webkit-scrollbar-track {
+	background: #007bff;
+	border-radius: 8px;
+}
+
+.groupList::-webkit-scrollbar-thumb {
+	background: #007bff;
+	border-radius: 8px;
+}
+
+.groupList::-webkit-scrollbar-thumb:hover {
+	background: #0056b3;
+}
+
+/* Group Item */
+.groupItem {
+	display: flex;
+	align-items: center;
+	padding: 16px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background: white;
+	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+	margin-bottom: 8px;
+}
+
+/* Group Picture */
+.groupPicture {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	margin-right: 16px;
+}
+
+/* Group Details */
+.groupDetails {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.groupTitle {
+	font-size: 18px;
+	font-weight: bold;
+	margin: 0;
+}
+
+.groupDescription {
+	font-size: 14px;
+	color: #666;
+	margin: 4px 0;
+	display: -webkit-box;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	max-height: 100%;
+	-webkit-box-orient: vertical;
+}
+
+/* Member Avatars */
+.memberAvatars {
+	display: flex;
+	margin-top: 8px;
+}
+
+.memberAvatar {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 2px solid white;
+	margin-right: -6px;
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Join Button */
+.joinButton {
+	padding: 8px 16px;
+	background-color: #233774;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.3s ease;
+}
+
+.joinButton:hover {
+	background-color: #0056b3;
+}
+
+@media (max-width: 900px) {
+	.groupItem {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.groupPicture {
+		margin: 0;
+	}
+
+	.groupTitle {
+		text-align: center;
+	}
+
+	.groupDetails {
+		margin-top: 10px;
+	}
+
+	.joinButton {
+		margin-top: 10px;
+	}
+
+	.memberAvatars {
+		justify-content: center;
+	}
+}

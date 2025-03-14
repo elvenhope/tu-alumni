@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { User } from "@/src/types/types";
 
 const userSchema = new mongoose.Schema({
 	id: {
@@ -21,6 +22,10 @@ const userSchema = new mongoose.Schema({
 	role: {
 		type: String,
 		required: true
+	},
+	profileImage: {
+		type: String,
+		required: false
 	},
 	phoneNumber: {
 		type: String,
@@ -87,8 +92,6 @@ const userSchema = new mongoose.Schema({
 		type: [String],
 		required: false
 	}
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
-const UserModel = mongoose.model('User', userSchema);
-
-module.exports = UserModel;
+export default mongoose.models.User || mongoose.model<User>("User", userSchema);

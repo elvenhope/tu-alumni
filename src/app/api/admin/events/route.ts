@@ -30,10 +30,17 @@ export async function POST(req: Request) {
 		body.id = uuidv4();
 
 		// Create a new event
-		const newEvent = await eventModel.create(body);
-		return NextResponse.json(newEvent, { status: 201 });
+		try {
+			const newEvent = await eventModel.create(body);
+			return NextResponse.json(newEvent, { status: 201 });
+		} catch (error) {
+			return NextResponse.json(
+				{ error: "Failed to create event, " + error },
+				{ status: 403 }
+			);
+		}
+		
 	} catch (error) {
-		console.error("Error creating event:", error);
 		return NextResponse.json(
 			{ error: "Internal Server Error" },
 			{ status: 500 }
@@ -49,7 +56,7 @@ export async function PUT(req: Request) {
 			await req.json();
 
 		// Validate required fields
-		if (!id || !day || !month || !year || !headline || !registrationLink || !description || !image || active === null) {
+		if (!id || !day || !month || !year || !headline || !description || !image || active === null) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
