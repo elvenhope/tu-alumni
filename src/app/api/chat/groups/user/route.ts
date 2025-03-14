@@ -77,3 +77,45 @@ export async function PUT(req: NextRequest) {
 		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
 	}
 }
+
+
+export async function POST(req: NextRequest) {
+	try {
+		// 🔹 Connect to MongoDB
+		await connectToDB();
+
+		// 🔹 Get authenticated user session
+		const session = await getServerSession(config);
+		if (!session || !session.user) {
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		}
+
+		// 🔹 Parse request body
+		const { groupId } = await req.json();
+		if (!groupId) {
+			return NextResponse.json({ error: "Group ID is required" }, { status: 400 });
+		}
+
+		const userObjectId = session.user._id;
+
+		// 🔹 Find the group
+		const group = await Group.findOne({ id: groupId });
+		if (!group) {
+			return NextResponse.json({ error: "Group not found" }, { status: 404 });
+		}
+
+		// 🔹 Check if user is already a member
+		if (group.users.includes(userObjectId)) {
+			return NextResponse.json({ error: "User is already in the group" }, { status: 409 });
+		}
+
+		// 🔹 Add user to group
+		group.users.push(userObjectId);
+		await group.save();
+
+		return NextResponse.json({ message: "User added to group successfully" }, { status: 200 });
+	} catch (error) {
+		console.error("Error adding user to group:", error);
+		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+	}
+}

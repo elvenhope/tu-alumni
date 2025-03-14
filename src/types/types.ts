@@ -77,8 +77,8 @@ export interface EventsPageContent {
 }
 
 export interface User {
-	_id: string,
-	id: string,
+	_id?: string,
+	id?: string,
 	firstName: string,
 	lastName: string,
 	password: string,

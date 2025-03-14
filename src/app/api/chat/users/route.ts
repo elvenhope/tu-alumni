@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 		}
 		// If email and password are provided, fetch the user by email and password
 		else if (email && password) {
-			const hashedPassword = bcrypt.hashSync(password, 12);
+			const hashedPassword = await bcrypt.hash(password, 12);
 			user = await User.findOne({ email, password: hashedPassword }).select("-__v");
 		}
 

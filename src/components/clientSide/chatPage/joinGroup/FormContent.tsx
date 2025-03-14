@@ -7,7 +7,11 @@ import Image from "next/image";
 import defaultUserImage from "@/assets/images/defaultImage.jpg";
 import defaultGroupImage from "@/assets/images/defaultgroup.png";
 
-export default function FormContent() {
+interface props {
+	onSubmit: (arg0: string) => void;
+}
+
+export default function FormContent({ onSubmit }: props) {
 	const [groups, setGroups] = useState<Group[]>([]);
 	const [tags, setTags] = useState<string[]>([]);
 	const [search, setSearch] = useState("");
@@ -121,7 +125,7 @@ export default function FormContent() {
 						</div>
 
 						{/* Join Button */}
-						<button className={styles.joinButton}>Join</button>
+						<button className={styles.joinButton} onClick={() => {onSubmit(group.id)}}>Join</button>
 					</div>
 				))}
 			</div>

@@ -34,6 +34,7 @@ function AdminHeader() {
 		{ value: "/admin/articles", label: "Articles" },
 		{ value: "/admin/about_us", label: "About Us" },
 		{ value: "/admin/events", label: "Events" },
+		{ value: "/admin/users", label: "Users"}
 	];
 
 	return (

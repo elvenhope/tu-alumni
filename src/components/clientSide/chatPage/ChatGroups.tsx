@@ -13,6 +13,7 @@ import defaultGroupImage from "@/assets/images/defaultgroup.png";
 import Image from "next/image";
 import { useUserStore } from "@/src/store/userStore";
 import JoinGroupModal from "./joinGroup/JoinGroupModal";
+import { Bounce, toast } from "react-toastify";
 
 function ChatGroups() {
 	const t = useTranslations("chat.chatGroups");
@@ -50,6 +51,41 @@ function ChatGroups() {
 			fetchGroups();
 		} catch (error) {
 			console.error("Error creating group:", error);
+		}
+	}
+
+	async function handleJoinGroup(groupId: string) {
+		setCreateChatModalIsOpen(false);
+
+		try {
+			const response = await fetch("/api/chat/groups/user", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ groupId }),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				throw new Error(data.error || "Failed to Join group");
+			}
+
+			fetchGroups();
+		} catch (error) {
+			console.error("Error Join group:", error);
+			toast.error("Error Join group:" + error, {
+				position: "bottom-right",
+				autoClose: 10000,
+				hideProgressBar: false,
+				closeOnClick: false,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "light",
+				transition: Bounce,
+			});
 		}
 	}
 
@@ -125,10 +161,16 @@ function ChatGroups() {
 				</div>
 				<div className={style.groupList}>
 					{groups.length === 0 ? (
-						<p className={style.noGroupsFound}>{t("noGroupsFound")}</p>
+						<p className={style.noGroupsFound}>
+							{t("noGroupsFound")}
+						</p>
 					) : (
 						groups.map((group) => (
-							<div key={group.id} className={style.groupItem} onClick={() => setSelectedGroup(group)}>
+							<div
+								key={group.id}
+								className={style.groupItem}
+								onClick={() => setSelectedGroup(group)}
+							>
 								<div className={style.groupProfile}>
 									<Image
 										src={group.image || defaultGroupImage}
@@ -138,10 +180,22 @@ function ChatGroups() {
 									/>
 								</div>
 								<div className={style.groupDetails}>
-									<h3 className={style.groupName + " " + camingoDosProCdSemiBold.className}>
+									<h3
+										className={
+											style.groupName +
+											" " +
+											camingoDosProCdSemiBold.className
+										}
+									>
 										{group.name}
 									</h3>
-									<h4 className={style.groupDescription + " " + camingoDosProCdSemiBold.className}>
+									<h4
+										className={
+											style.groupDescription +
+											" " +
+											camingoDosProCdSemiBold.className
+										}
+									>
 										{group.description}
 									</h4>
 								</div>
@@ -155,7 +209,11 @@ function ChatGroups() {
 				onClose={() => setCreateChatModalIsOpen(false)}
 				onCreateGroup={handleCreateGroup}
 			/>
-			<JoinGroupModal isOpen={joinChatModalIsOpen} onClose={() => setJoinChatModalIsOpen(false)} onJoinGroup={() => {console.log("Hello!")}}/>
+			<JoinGroupModal
+				isOpen={joinChatModalIsOpen}
+				onClose={() => setJoinChatModalIsOpen(false)}
+				onJoinGroup={handleJoinGroup}
+			/>
 		</>
 	);
 }

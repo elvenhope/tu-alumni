@@ -7,9 +7,7 @@ import style2 from "@/src/styles/clientSide/chatPage/joinGroup/FormContent.modul
 interface JoinGroupModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onJoinGroup: (values: {
-		groupId: string;
-	}) => void;
+	onJoinGroup: (arg0: string) => void;
 }
 
 const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
@@ -29,7 +27,7 @@ const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
 			overlayClassName={style.modalOverlay}
 		>
 			<h2>Join a New Group</h2>
-			<FormContent />
+			<FormContent onSubmit={onJoinGroup}/>
 		</Modal>
 	);
 };

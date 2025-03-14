@@ -5,6 +5,7 @@
 	& > div {
 		display: flex;
 		margin-bottom: 20px;
+		flex-direction: column;
 
 		label {
 			max-width: 90px;
@@ -14,6 +15,10 @@
 		input, textarea {
 			padding: 10px;
 			width: 100%;
+		}
+
+		button {
+			margin-top: 10px;
 		}
 	}
 }
