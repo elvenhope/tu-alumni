@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 				return NextResponse.json({ error: "Unauthorized to access this user's data" }, { status: 403 });
 			}
 
-			user = await User.findOne({ id }).select("-__v"); // Exclude Mongoose version key
+			user = await User.findOne({ id }).select("-__v -password -_id").lean(); // Exclude Mongoose version key
 		}
 		// If email and password are provided, fetch the user by email and password
 		else if (email && password) {

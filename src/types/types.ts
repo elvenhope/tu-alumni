@@ -110,3 +110,12 @@ export interface Group {
 	users: User[],
 	tags: string[],
 }
+
+export interface Message {
+	id?: string,
+	content: string,
+	authorId: string,
+	authorFirstName: string,
+	authorLastName: string,
+	authorImage: string
+}

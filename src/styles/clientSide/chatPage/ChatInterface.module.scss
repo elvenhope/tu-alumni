@@ -24,7 +24,42 @@
 
 .content {
 	flex-grow: 1;
+	overflow-y: scroll;
+}
+
+.message {
+	margin-top: 10px;
+	width: 100%;
 	display: flex;
+	gap: 10px;
+
+	.msgContent {
+		width: 50%;
+		border-radius: 10px;
+		padding: 10px;
+
+		.authorName {
+			color: #8B9CB9;
+		}
+
+		p {
+			color: white;
+		}
+	}
+
+	.content_other {
+		flex-direction: row;
+		background-color: #233774;
+	}
+
+	.content_self {
+		background-color: #002F43;
+	}
+}
+
+.message_self {
+	flex-direction: row-reverse;
+	margin-left: auto;
 }
 
 .interface {

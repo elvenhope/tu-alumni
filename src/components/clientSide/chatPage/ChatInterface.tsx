@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/src/store/userStore";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/chatPage/ChatInterface.module.scss";
 import { camingoDosProCdSemiBold } from "../../misc/fonts";
 import { CiCirclePlus } from "react-icons/ci";
@@ -14,22 +14,67 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/src/i18n/routing";
 import ChatHeader from "./ChatHeader";
 import ChatGroups from "./ChatGroups";
+import { useSocketStore } from "@/src/store/socketStore";
+import { useLoading } from "@/src/components/misc/LoadingContext";
+import { useThrottledMessages } from "@/src/lib/useThrottledMessages";
+import { Message } from "@/src/types/types";
 
 export default function ChatInterface() {
-	const { selectedGroup } = useUserStore();
-
-	
+	const { selectedGroup, user } = useUserStore();
+	const {
+		localMessages,
+		sendMessage,
+		initSocket,
+		updateSocket,
+		socket,
+		isConnected,
+		clearLocalMessages
+	} = useSocketStore();
+	const { setLoading } = useLoading();
 	const t = useTranslations("header");
 	const enLocale = "en";
 	const lvLocale = "lv";
 	const pathname = usePathname();
+	const [message, setMessage] = useState("");
+
+	// Set loading based on connection status
+	useEffect(() => {
+		setLoading(!isConnected);
+	}, [isConnected, setLoading]);
+
+	useEffect(() => {
+		if (!selectedGroup?.id) return;
+
+		if (!socket) {
+			// Initialize the socket if none exists
+			initSocket({
+				host: "http://tu-alumni-party.elvenhope.partykit.dev",
+				room: selectedGroup.id,
+			});
+		} else {
+			clearLocalMessages();
+			// Update the socket by disconnecting and reinitializing
+			updateSocket({
+				host: "http://tu-alumni-party.elvenhope.partykit.dev",
+				room: selectedGroup.id,
+			});
+		}
+	}, [selectedGroup?.id]);
+
+
+	// Use our custom hook to throttle updates to the message list
+	const throttledMessages = useThrottledMessages(localMessages, 300);
 
 	function theMenuBtn() {
 		return (
 			<div className={style.menuBtnContainer}>
 				<Menu
-					burgerButtonClassName={burgerStyle.bmBurgerButton + " " + style.menuBtn}
-					burgerBarClassName={burgerStyle.bmBurgerBars + " " + style.menuBtnBars}
+					burgerButtonClassName={
+						burgerStyle.bmBurgerButton + " " + style.menuBtn
+					}
+					burgerBarClassName={
+						burgerStyle.bmBurgerBars + " " + style.menuBtnBars
+					}
 					crossClassName={burgerStyle.bmCross}
 					menuClassName={burgerStyle.bmMenu}
 					overlayClassName={burgerStyle.bmOverlay}
@@ -45,12 +90,34 @@ export default function ChatInterface() {
 							ENG
 						</Link>
 					</div>
-
 					<ChatHeader />
 					<ChatGroups />
 				</Menu>
 			</div>
 		);
+	}
+
+	const handleSend = () => {
+		if (message.trim() !== "" && user) {
+			sendMessage({ type: "local", message, user });
+			setMessage("");
+		}
+	};
+
+	function returnProperStyle(curMessage: Message) {
+		if(curMessage.authorId == user?.id) {
+			return " " + style.content_self
+		} else {
+			return " " + style.content_other;
+		}
+	}
+
+	function messageSelfOrOtherClass(curMessage: Message) {
+		if (curMessage.authorId == user?.id) {
+			return " " + style.message_self;
+		} else {
+			return "";
+		}
 	}
 
 	return (
@@ -62,7 +129,40 @@ export default function ChatInterface() {
 					</h1>
 					{theMenuBtn()}
 				</div>
-				<div className={style.content}></div>
+				<div className={style.content}>
+					{throttledMessages.map((curMessage) => (
+						<div
+							className={style.message + messageSelfOrOtherClass(curMessage)}
+							key={curMessage.id}
+						>
+							<Image
+								src={curMessage.authorImage}
+								width={60}
+								height={60}
+								alt="User Avatar"
+								style={{ borderRadius: "50px" }}
+							/>
+							<div
+								className={
+									style.msgContent +
+									returnProperStyle(curMessage)
+								}
+							>
+								<p
+									className={
+										style.authorName +
+										" " +
+										camingoDosProCdSemiBold.className
+									}
+								>
+									{curMessage.authorFirstName + " "}
+									{curMessage.authorLastName}
+								</p>
+								<p>{curMessage.content}</p>
+							</div>
+						</div>
+					))}
+				</div>
 				<div className={style.interface}>
 					<div className={style.funBtn}>
 						<CiCirclePlus size={40} color="#233774" />
@@ -72,6 +172,11 @@ export default function ChatInterface() {
 							type="text"
 							placeholder="Type a message"
 							className={style.textInput}
+							value={message}
+							onChange={(e) => setMessage(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") handleSend();
+							}}
 						/>
 						<Image
 							src={emojiSelector}
@@ -85,6 +190,7 @@ export default function ChatInterface() {
 						size={55}
 						color="#233774"
 						className={style.funBtn}
+						onClick={handleSend}
 					/>
 				</div>
 			</div>

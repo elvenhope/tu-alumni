@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import ChatHeader from "@/src/components/clientSide/chatPage/ChatHeader";
 import style from "@/src/styles/clientSide/chatPage/ChatPage.module.scss";

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/chatPage/ChatGroups.module.scss";
 import {
 	camingoDosProCdRegular,
@@ -14,6 +14,8 @@ import Image from "next/image";
 import { useUserStore } from "@/src/store/userStore";
 import JoinGroupModal from "./joinGroup/JoinGroupModal";
 import { Bounce, toast } from "react-toastify";
+import usePartySocket from "partysocket/react";
+import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function ChatGroups() {
 	const t = useTranslations("chat.chatGroups");
@@ -21,8 +23,38 @@ function ChatGroups() {
 	const [createChatModalIsOpen, setCreateChatModalIsOpen] = useState(false);
 	const [joinChatModalIsOpen, setJoinChatModalIsOpen] = useState(false);
 	const [groups, setGroups] = useState<Group[]>([]);
+	const { setLoading } = useLoading();
 
 	const { selectedGroup, setSelectedGroup } = useUserStore();
+
+	const host =
+		process.env.NODE_ENV == "development"
+			? "http://127.0.0.1:1999"
+			: "tu-alumni.vercel.app";
+
+
+	// const socket = usePartySocket({
+	// 	host: host,
+	// 	room: "online",
+	// 	// in addition, you can provide socket lifecycle event handlers
+	// 	// (equivalent to using ws.addEventListener in an effect hook)
+
+	// 	onOpen() {
+	// 		console.log("connected");
+	// 	},
+
+	// 	async onMessage(e) {
+	// 		// console.log(e.data);
+	// 		console.log("Client: " + e.data);
+	// 	},
+	// 	onClose() {
+	// 		console.log("closed");
+	// 	},
+	// 	onError(e) {
+	// 		console.log(e);
+	// 	},
+	// });
+
 
 	async function handleCreateGroup(values: {
 		name: string;
