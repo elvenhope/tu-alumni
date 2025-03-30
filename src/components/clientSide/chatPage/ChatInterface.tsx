@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/src/store/userStore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "@/src/styles/clientSide/chatPage/ChatInterface.module.scss";
 import { camingoDosProCdSemiBold } from "../../misc/fonts";
 import { CiCirclePlus } from "react-icons/ci";
@@ -19,6 +19,8 @@ import { useLoading } from "@/src/components/misc/LoadingContext";
 import { useThrottledMessages } from "@/src/lib/useThrottledMessages";
 import { Message } from "@/src/types/types";
 import defaultImage from "@/assets/images/defaultImage.jpg";
+import ChatMembers from "@/src/components/clientSide/chatPage/ChatMembers";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 
 export default function ChatInterface() {
 	const { selectedGroup, user } = useUserStore();
@@ -38,9 +40,12 @@ export default function ChatInterface() {
 	const lvLocale = "lv";
 	const pathname = usePathname();
 	const [message, setMessage] = useState("");
+	const [emojiOpen, setEmojiOpen] = useState(false);
 
-	//const host = "http://tu-alumni-party.elvenhope.partykit.dev";
-	const host = "http://localhost:1999";
+	const host =
+		process.env.NODE_ENV == "development"
+			? "http://localhost:1999"
+			: "http://tu-alumni-party.elvenhope.partykit.dev";
 	// Set loading based on connection status
 	useEffect(() => {
 		setLoading(!isConnected);
@@ -71,6 +76,13 @@ export default function ChatInterface() {
 	// Use our custom hook to throttle updates to the message list
 	const throttledMessages = useThrottledMessages(localMessages, 300);
 
+	const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+	// Scroll to bottom whenever messages update
+	useEffect(() => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [throttledMessages]);
+
 	function theMenuBtn() {
 		return (
 			<div className={style.menuBtnContainer}>
@@ -97,6 +109,7 @@ export default function ChatInterface() {
 						</Link>
 					</div>
 					<ChatHeader />
+					<ChatMembers />
 					<ChatGroups />
 				</Menu>
 			</div>
@@ -136,6 +149,10 @@ export default function ChatInterface() {
 		}
 	}
 
+	function emojiClickHandler(emojiData: EmojiClickData, event: MouseEvent) {
+		setMessage((prev) => prev + emojiData.emoji);
+	}
+
 	return (
 		<>
 			<div className={style.container}>
@@ -148,7 +165,10 @@ export default function ChatInterface() {
 				<div className={style.content}>
 					{throttledMessages.map((curMessage) => (
 						<div
-							className={style.message + messageSelfOrOtherClass(curMessage)}
+							className={
+								style.message +
+								messageSelfOrOtherClass(curMessage)
+							}
 							key={curMessage.id}
 						>
 							<Image
@@ -178,6 +198,7 @@ export default function ChatInterface() {
 							</div>
 						</div>
 					))}
+					<div ref={messagesEndRef} />
 				</div>
 				<div className={style.interface}>
 					<div className={style.funBtn}>
@@ -200,6 +221,12 @@ export default function ChatInterface() {
 							width={40}
 							height={40}
 							className={style.funBtn}
+							onClick={() => setEmojiOpen(!emojiOpen)}
+						/>
+						<EmojiPicker
+							open={emojiOpen}
+							onEmojiClick={emojiClickHandler}
+							className={style.emojiPicker}
 						/>
 					</div>
 					<IoSend

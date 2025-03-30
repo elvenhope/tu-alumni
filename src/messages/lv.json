@@ -50,6 +50,11 @@
 			"joinGroup": "Pievienoties grupai",
 			"memberList": "Biedru saraksts",
 			"noGroupsFound": "Nav atrasta neviena grupai"
+		},
+		"chatMembers": {
+			"admins": "Administrators",
+			"members": "biedrs",
+			"noMembersFound": "Nav atrasts neviens dalībnieks"
 		}
 	}
 }

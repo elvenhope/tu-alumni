@@ -25,6 +25,7 @@
 .content {
 	flex-grow: 1;
 	overflow-y: scroll;
+	margin-bottom: 20px;
 }
 
 .message {
@@ -84,6 +85,8 @@
 
 		justify-content: space-between;
 
+		position: relative;
+
 		.textInput {
 			width: 90%;
 			/* Adjust as needed */
@@ -99,6 +102,13 @@
 			outline: none;
 			/* Remove default focus outline */
 		}
+	}
+
+	.emojiPicker {
+		position: absolute;
+		bottom: 60px;
+		right: 20px;
+		z-index: 3;
 	}
 }
 

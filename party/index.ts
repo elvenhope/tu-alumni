@@ -13,8 +13,8 @@ export default class Server implements Party.Server {
 	// 	console.log(`
 	// 		Connected:
 	// 		id: ${ conn.id }
-  	// 		room: ${ this.room.id }
-  	// 		url: ${ new URL(ctx.request.url).pathname }`
+	// 		room: ${ this.room.id }
+	// 		url: ${ new URL(ctx.request.url).pathname }`
 	// 	);
 
 	// 	// let's send a message to the connection
@@ -53,8 +53,9 @@ export default class Server implements Party.Server {
 			const messagesToSend = [...messageBuffer];
 			messageBuffer.length = 0; // Clear local buffer
 
-			//const websiteURL =  "http://localhost:3000/api/saveMessages";
-			const websiteURL =  "https://tu-alumni.vercel.app/api/saveMessages";
+			const websiteURL = process.env.NODE_ENV == "development" ? 
+				"http://localhost:3000/api/saveMessages" : 
+				"https://tu-alumni.vercel.app/api/saveMessages";
 
 			await fetch(websiteURL, {
 				method: "POST",
@@ -62,7 +63,7 @@ export default class Server implements Party.Server {
 				body: JSON.stringify({ messages: messagesToSend }),
 			});
 
-			console.log("Sent 500 messages to API");
+			console.log("Sent 100 messages to API");
 		} catch (error) {
 			console.error("Failed to send messages to API:", error);
 		}

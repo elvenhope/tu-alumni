@@ -17,3 +17,20 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json({ error: "Failed to fetch groups" }, { status: 500 });
 	}
 }
+
+export async function POST(req: NextRequest) {
+	try {
+		const { id } = await req.json(); // Get POST data
+		// 🔹 Connect to MongoDB
+		await connectToDB();
+
+		// 🔹 Fetch groups where the user is a member
+		const groups = await Group.find({id: id}).populate("users", "id firstName lastName role profileImage");
+
+		// 🔹 Return the groups
+		return NextResponse.json({ groups });
+	} catch (error) {
+		console.error("Error fetching groups:", error);
+		return NextResponse.json({ error: "Failed to fetch groups" }, { status: 500 });
+	}
+}

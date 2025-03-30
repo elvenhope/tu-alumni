@@ -16,6 +16,7 @@ import JoinGroupModal from "./joinGroup/JoinGroupModal";
 import { Bounce, toast } from "react-toastify";
 import usePartySocket from "partysocket/react";
 import { useLoading } from "@/src/components/misc/LoadingContext";
+import useMemberStore from "@/src/store/memberStore";
 
 function ChatGroups() {
 	const t = useTranslations("chat.chatGroups");
@@ -26,6 +27,7 @@ function ChatGroups() {
 	const { setLoading } = useLoading();
 
 	const { selectedGroup, setSelectedGroup } = useUserStore();
+	const { setDisplayed, isDisplayed } = useMemberStore();
 
 	const host =
 		process.env.NODE_ENV == "development"
@@ -187,6 +189,7 @@ function ChatGroups() {
 							" " +
 							camingoDosProCdRegular.className
 						}
+						onClick={() => {setDisplayed(!isDisplayed);}}
 					>
 						{t("memberList")}
 					</button>

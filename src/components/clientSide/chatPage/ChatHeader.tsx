@@ -14,6 +14,7 @@ import { useLoading } from "@/src/components/misc/LoadingContext";
 import defaultImage from "@/assets/images/defaultImage.jpg";
 import { useUserStore } from "@/src/store/userStore";
 import { camingoDosProCdSemiBold } from "../../misc/fonts";
+import { Link } from "@/src/i18n/routing";
 
 
 function ChatHeader() {
@@ -44,12 +45,14 @@ function ChatHeader() {
 			<div className={style.container}>
 				<div className={style.headerButtonsContainer}>
 					<div className={style.logoDiv}>
+						<Link href={`/`}>
 						<Image
 							src={locale === "lv" ? logoBlueLV : logoBlueEN}
 							alt="logo"
 							fill={true}
 							style={{ objectFit: "contain" }}
 						/>
+						</Link>
 					</div>
 					<div className={style.headerButtons}>
 						<IoHomeOutline

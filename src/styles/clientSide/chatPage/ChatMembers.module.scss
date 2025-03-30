@@ -1,0 +1,61 @@
+.container {
+	padding: 5px;
+	background-color: white;
+}
+
+.header {
+	display: flex;
+	color: #002F43;
+	border-bottom: 2px solid #002F43;
+	height: 84px;
+	align-items: center;
+	padding: 10px;
+}
+
+.headerTitle {
+	display: flex;
+	justify-content: space-between;
+	text-transform: uppercase;
+	h2 {
+		margin: 0;
+	}
+}
+
+.headerDescription {
+	color: #002F43;
+	border-bottom: 2px solid #002F43;
+	padding: 10px;
+
+	p {
+		margin: 0;
+	}
+}
+
+.roleTitle {
+	h1 {
+		text-align: center;
+		font-size: 1.5rem;
+		color: #233774;
+	}
+}
+
+.membersList {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+}
+
+.member {
+	display: flex;
+	gap: 10px;
+
+	.memberAvatar {
+		img {
+			border-radius: 50%;
+		}
+	}
+
+	.memberName {
+		color: #00577D;
+	}
+}

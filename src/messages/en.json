@@ -52,6 +52,11 @@
 			"joinGroup": "Join Groups",
 			"memberList": "Member List",
 			"noGroupsFound": "No Groups Found"
+		},
+		"chatMembers": {
+			"admins": "Admins",
+			"members": "Members",
+			"noMembersFound": "No Members Found"
 		}
 	}
 }
