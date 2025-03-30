@@ -18,6 +18,7 @@ import { useSocketStore } from "@/src/store/socketStore";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 import { useThrottledMessages } from "@/src/lib/useThrottledMessages";
 import { Message } from "@/src/types/types";
+import defaultImage from "@/assets/images/defaultImage.jpg";
 
 export default function ChatInterface() {
 	const { selectedGroup, user } = useUserStore();
@@ -28,7 +29,8 @@ export default function ChatInterface() {
 		updateSocket,
 		socket,
 		isConnected,
-		clearLocalMessages
+		clearLocalMessages,
+		fetchLocalMessages,
 	} = useSocketStore();
 	const { setLoading } = useLoading();
 	const t = useTranslations("header");
@@ -37,6 +39,8 @@ export default function ChatInterface() {
 	const pathname = usePathname();
 	const [message, setMessage] = useState("");
 
+	//const host = "http://tu-alumni-party.elvenhope.partykit.dev";
+	const host = "http://localhost:1999";
 	// Set loading based on connection status
 	useEffect(() => {
 		setLoading(!isConnected);
@@ -48,16 +52,18 @@ export default function ChatInterface() {
 		if (!socket) {
 			// Initialize the socket if none exists
 			initSocket({
-				host: "http://tu-alumni-party.elvenhope.partykit.dev",
+				host: host,
 				room: selectedGroup.id,
 			});
+			fetchLocalMessages(selectedGroup.id);
 		} else {
 			clearLocalMessages();
 			// Update the socket by disconnecting and reinitializing
 			updateSocket({
-				host: "http://tu-alumni-party.elvenhope.partykit.dev",
+				host: host,
 				room: selectedGroup.id,
 			});
+			fetchLocalMessages(selectedGroup.id);
 		}
 	}, [selectedGroup?.id]);
 
@@ -98,8 +104,18 @@ export default function ChatInterface() {
 	}
 
 	const handleSend = () => {
-		if (message.trim() !== "" && user) {
-			sendMessage({ type: "local", message, user });
+		if (message.trim() !== "" && user && user.id && selectedGroup) {
+			const newMessage: Message = {
+				content: message,
+				authorFirstName: user.firstName,
+				authorLastName: user.lastName,
+				authorId: user.id,
+				authorImage: user.profileImage ?? defaultImage.src,
+				targetGroupId: selectedGroup.id,
+				timestamp: new Date().toISOString(),
+				// (other properties as needed)
+			};
+			sendMessage({ type: "local", message: newMessage, user });
 			setMessage("");
 		}
 	};

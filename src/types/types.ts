@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export interface Headline {
 	id?: string,
 	headline: string;
@@ -117,5 +119,14 @@ export interface Message {
 	authorId: string,
 	authorFirstName: string,
 	authorLastName: string,
-	authorImage: string
+	authorImage: string,
+	targetGroupId: string,
+	timestamp: string
+}
+
+// Define the shape of incoming WebSocket messages
+export interface WebSocketMessage {
+	type: "local"; // Extendable for more message types
+	message: Message;
+	user: User;
 }

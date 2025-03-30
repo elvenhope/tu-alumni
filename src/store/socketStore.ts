@@ -1,16 +1,8 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import PartySocket from "partysocket";
-import { Message, User } from "@/src/types/types";
-import defaultImage from "@/assets/images/defaultImage.jpg";
+import { Message, User, WebSocketMessage } from "@/src/types/types";
 
-// Define the shape of incoming WebSocket messages
-interface WebSocketMessage {
-	type: "local"; // Extendable for more message types
-	message: string;
-	user: User;
-	id?: string;
-}
 
 // Define PartySocket options (excluding event handlers)
 export interface PartySocketOptions {
@@ -32,7 +24,9 @@ interface SocketStore {
 	sendMessage: (data: WebSocketMessage) => void;
 	disconnect: (code?: number, reason?: string) => void;
 	clearLocalMessages: () => void;
+	fetchLocalMessages: (groupId: string) => Promise<void>;
 }
+
 
 export const useSocketStore = create<SocketStore>()(
 	devtools((set, get) => ({
@@ -45,34 +39,29 @@ export const useSocketStore = create<SocketStore>()(
 		initSocket: (options: PartySocketOptions) => {
 			const socket = new PartySocket(options);
 
-			socket.onopen = () => {
+			socket.onopen = async () => {
+
 				console.log("Connected to WebSocket!");
 				set({ isConnected: true });
+				
 			};
 
 			socket.onmessage = (e: MessageEvent) => {
 				try {
 					const data: WebSocketMessage = JSON.parse(e.data);
-					const parsedData = JSON.parse(data.message);
-					const newMessage: Message = {
-						id: data.id,
-						content: parsedData.message,
-						authorFirstName: parsedData.user.firstName,
-						authorLastName: parsedData.user.lastName,
-						authorId: parsedData.user.id,
-						authorImage: parsedData.user.profileImage ?? defaultImage
-						// (other properties as needed)
-					};
+					if (data.user.id) {
+						const newMessage: Message = data.message;
 
-					if (data.type === "local") {
-						set((state) => ({
-							localMessages: [...state.localMessages, newMessage],
-						}));
+						if (data.type === "local") {
+							set((state) => ({
+								localMessages: [...state.localMessages, newMessage],
+							}));
+						}
 					}
 				} catch (err) {
 					console.error("Invalid WebSocket message:", err);
 				}
-			};
+			}
 
 			socket.onclose = () => {
 				console.log("Socket closed");
@@ -92,7 +81,7 @@ export const useSocketStore = create<SocketStore>()(
 		},
 
 		updateSocket: (options: PartySocketOptions) => {
-			const { socket, initSocket } = get();
+			const { socket } = get();
 			if (socket) {
 				console.log("Updating socket properties:", options);
 				// Mark that an update is in progress
@@ -121,6 +110,32 @@ export const useSocketStore = create<SocketStore>()(
 				socket.close(code, reason);
 				console.log("Disconnected!");
 				set({ socket: null, isConnected: false });
+			}
+		},
+
+		fetchLocalMessages: async (groupId: string) => {
+			try {
+				const response = await fetch("/api/chat/message", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ groupId: groupId }),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to fetch messages");
+				}
+
+				const data = await response.json();
+
+				// Assuming 'data.messages' contains the fetched messages
+				if (data.messages) {
+					// Handle the messages (e.g., store them in a state or update UI)
+					set({ localMessages: data.messages });
+				}
+			} catch (error) {
+				console.error("Error fetching messages:", error);
 			}
 		},
 
