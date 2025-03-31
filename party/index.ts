@@ -53,9 +53,9 @@ export default class Server implements Party.Server {
 			const messagesToSend = [...messageBuffer];
 			messageBuffer.length = 0; // Clear local buffer
 
-			const websiteURL = process.env.NODE_ENV == "development" ? 
-				"http://localhost:3000/api/saveMessages" : 
-				"https://tu-alumni.vercel.app/api/saveMessages";
+			// const websiteURL = "http://localhost:3000/api/saveMessages";
+
+			const websiteURL = "https://tu-alumni.vercel.app/api/saveMessages";
 
 			await fetch(websiteURL, {
 				method: "POST",
