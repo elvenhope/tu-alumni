@@ -55,6 +55,10 @@
 			"admins": "Administrators",
 			"members": "biedrs",
 			"noMembersFound": "Nav atrasts neviens dalībnieks"
+		},
+		"userCard": {
+			"jobExperience": "Darba pieredze",
+			"contacts": "Kontakti"
 		}
 	}
 }

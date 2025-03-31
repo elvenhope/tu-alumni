@@ -1,0 +1,77 @@
+.container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	border-radius: 15px;
+	overflow: hidden;
+	background-color: white;
+}
+
+.header {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 277 / 92;
+
+	.userPicture {
+		img {
+			border-radius: 50%;
+		}
+		position: absolute;
+		bottom: -30%;
+		left: 10%;
+		width: 20%;
+		aspect-ratio: 1;
+	}
+}
+
+.content {
+	padding: 30px;
+}
+
+
+.userInfo {
+	h1 {
+		margin: 0;
+		text-align: end;
+		color: #233774;
+	}
+
+	
+}
+
+.section {
+	h1 {
+		text-transform: uppercase;
+		text-align: center;
+		color: #233774;
+	}
+	p {
+		color: #002f43CC;
+	}
+}
+
+.userContactInfo {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 10px;
+	> div {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.contactEntry {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		p {
+			margin: 0;
+			color: #002f43CC;
+		};
+	}
+}
+
+@media (max-width: 768px) {
+	.userContactInfo {
+		grid-template-columns: 1fr;
+	}
+}

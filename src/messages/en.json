@@ -57,6 +57,10 @@
 			"admins": "Admins",
 			"members": "Members",
 			"noMembersFound": "No Members Found"
+		},
+		"userCard": {
+			"jobExperience": "Job Experience",
+			"contacts": "Contacts"
 		}
 	}
 }

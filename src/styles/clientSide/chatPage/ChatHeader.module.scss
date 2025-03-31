@@ -6,6 +6,10 @@
 			-5px 10px 5px -5px rgba(0, 0, 0, 0.17);
 	z-index: 1;
 	background-color: white;
+	> a {
+		text-decoration: none;
+		flex: 0 0 40%;
+	}
 }
 
 .headerButtonsContainer {
@@ -34,7 +38,6 @@
 }
 
 .userProfile {
-	flex: 0 0 40%;
 	display: flex;
 	justify-content: flex-end;
 }

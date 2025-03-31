@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect } from "react";
 import style from "@/src/styles/clientSide/chatPage/ChatHeader.module.scss";
@@ -16,7 +16,6 @@ import { useUserStore } from "@/src/store/userStore";
 import { camingoDosProCdSemiBold } from "../../misc/fonts";
 import { Link } from "@/src/i18n/routing";
 
-
 function ChatHeader() {
 	const locale = useLocale();
 	const { data: session } = useSession();
@@ -25,33 +24,34 @@ function ChatHeader() {
 	const t = useTranslations("chat.chatHeader");
 
 	useEffect(() => {
-		if(!session) {
+		if (!session) {
 			setLoading(true);
 		} else {
 			fetchUser(session.user.id);
 			setLoading(false);
 		}
-	}, [session])
+	}, [session]);
 
-	if(!user) {
-		return (<>
-			<h1 className={style.noUser}>{t("noUser")}</h1>
-		</>);
+	if (!user) {
+		return (
+			<>
+				<h1 className={style.noUser}>{t("noUser")}</h1>
+			</>
+		);
 	}
-	
-	
+
 	return (
 		<>
 			<div className={style.container}>
 				<div className={style.headerButtonsContainer}>
 					<div className={style.logoDiv}>
 						<Link href={`/`}>
-						<Image
-							src={locale === "lv" ? logoBlueLV : logoBlueEN}
-							alt="logo"
-							fill={true}
-							style={{ objectFit: "contain" }}
-						/>
+							<Image
+								src={locale === "lv" ? logoBlueLV : logoBlueEN}
+								alt="logo"
+								fill={true}
+								style={{ objectFit: "contain" }}
+							/>
 						</Link>
 					</div>
 					<div className={style.headerButtons}>
@@ -72,27 +72,29 @@ function ChatHeader() {
 						/>
 					</div>
 				</div>
-				<div className={style.userProfile}>
-					<div className={style.userProfileText}>
-						<p
-							className={
-								camingoDosProCdSemiBold.className +
-								" " +
-								style.userName
-							}
-						>
-							{user.firstName + " " + user.lastName}
-						</p>
+				<Link href={"/chat/user"}>
+					<div className={style.userProfile}>
+						<div className={style.userProfileText}>
+							<p
+								className={
+									camingoDosProCdSemiBold.className +
+									" " +
+									style.userName
+								}
+							>
+								{user.firstName + " " + user.lastName}
+							</p>
+						</div>
+						<div className={style.userProfileImage}>
+							<Image
+								src={user.profileImage || defaultImage}
+								alt="user profile image"
+								width={50}
+								height={50}
+							/>
+						</div>
 					</div>
-					<div className={style.userProfileImage}>
-						<Image
-							src={user.profileImage || defaultImage}
-							alt="user profile image"
-							width={50}
-							height={50}
-						/>
-					</div>
-				</div>
+				</Link>
 			</div>
 		</>
 	);

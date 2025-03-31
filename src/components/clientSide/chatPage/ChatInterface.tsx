@@ -21,6 +21,7 @@ import { Message } from "@/src/types/types";
 import defaultImage from "@/assets/images/defaultImage.jpg";
 import ChatMembers from "@/src/components/clientSide/chatPage/ChatMembers";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import UserCardModal from "./userPage/UserCardModal";
 
 export default function ChatInterface() {
 	const { selectedGroup, user } = useUserStore();
@@ -39,8 +40,9 @@ export default function ChatInterface() {
 	const enLocale = "en";
 	const lvLocale = "lv";
 	const pathname = usePathname();
-	const [message, setMessage] = useState("");
-	const [emojiOpen, setEmojiOpen] = useState(false);
+	const [message, setMessage] = useState<string>("");
+	const [emojiOpen, setEmojiOpen] = useState<boolean>(false);
+	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
 	const host =
 		process.env.NODE_ENV == "development"
@@ -177,6 +179,9 @@ export default function ChatInterface() {
 								height={60}
 								alt="User Avatar"
 								style={{ borderRadius: "50px" }}
+								onClick={() =>
+									setSelectedUserId(curMessage.authorId)
+								}
 							/>
 							<div
 								className={
@@ -237,6 +242,11 @@ export default function ChatInterface() {
 					/>
 				</div>
 			</div>
+			<UserCardModal
+				isOpen={!!selectedUserId}
+				onClose={() => setSelectedUserId(null)}
+				userId={selectedUserId}
+			/>
 		</>
 	);
 }

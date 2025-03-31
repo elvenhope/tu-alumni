@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
 		// If an ID is provided, fetch the user by ID
 		if (id) {
 			// Check if the token ID matches the user ID to ensure the request is authorized
-			if (token.id !== id) {
-				return NextResponse.json({ error: "Unauthorized to access this user's data" }, { status: 403 });
-			}
+			// if (token.id !== id) {
+			// 	return NextResponse.json({ error: "Unauthorized to access this user's data" }, { status: 403 });
+			// }
 
 			user = await User.findOne({ id }).select("-__v -password -_id").lean(); // Exclude Mongoose version key
 		}
@@ -44,5 +44,41 @@ export async function POST(req: NextRequest) {
 	} catch (error) {
 		console.error("Error fetching user:", error);
 		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+	}
+}
+
+export async function PUT(req: Request) {
+	// Retrieve the userId and updated data from the request body
+	const { userId, ...updatedData } = await req.json();
+
+	// Validate if userId exists
+	if (!userId) {
+		return NextResponse.json({ message: "User ID is required" }, { status: 400 });
+	}
+
+	if(updatedData.password) {
+		// Hash the password before saving
+		const hashedPassword = await bcrypt.hash(updatedData.password, 12);
+		updatedData.password = hashedPassword;
+	}
+
+	// Remove the role field from the updatedData to prevent modification
+	delete updatedData.role;
+
+	// Connect to the database
+	try {
+		await connectToDB();
+
+		// Find and update the user by ID
+		const updatedUser = await User.findOneAndUpdate({ id: userId }, updatedData);
+
+		if (!updatedUser) {
+			return NextResponse.json({ message: "User not found" }, { status: 404 });
+		}
+
+		// Return the updated user data
+		return NextResponse.json(updatedUser, { status: 200 });
+	} catch (error) {
+		return NextResponse.json({ message: "Failed to update user data", error }, { status: 500 });
 	}
 }

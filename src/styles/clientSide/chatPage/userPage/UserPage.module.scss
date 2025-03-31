@@ -1,0 +1,24 @@
+.container {
+	background-color: #233774;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.mainContent {
+	max-width: 50%;
+	width: 100%;
+}
+
+
+.header {
+	margin-bottom: 20px;
+}
+
+.editButton {
+	color: white;
+	font-size: 1.5rem;
+}
