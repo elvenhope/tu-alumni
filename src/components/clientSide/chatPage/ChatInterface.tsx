@@ -174,7 +174,7 @@ export default function ChatInterface() {
 							key={curMessage.id}
 						>
 							<Image
-								src={curMessage.authorImage}
+								src={curMessage.authorImage ?? defaultImage}
 								width={60}
 								height={60}
 								alt="User Avatar"
