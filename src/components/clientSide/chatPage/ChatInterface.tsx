@@ -125,7 +125,7 @@ export default function ChatInterface() {
 				authorFirstName: user.firstName,
 				authorLastName: user.lastName,
 				authorId: user.id,
-				authorImage: user.profileImage ?? defaultImage.src,
+				authorImage: user.profileImage || null,
 				targetGroupId: selectedGroup.id,
 				timestamp: new Date().toISOString(),
 				// (other properties as needed)

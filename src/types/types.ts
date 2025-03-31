@@ -119,7 +119,7 @@ export interface Message {
 	authorId: string,
 	authorFirstName: string,
 	authorLastName: string,
-	authorImage: string,
+	authorImage: string | null,
 	targetGroupId: string,
 	timestamp: string
 }
