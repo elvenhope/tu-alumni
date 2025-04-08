@@ -9,7 +9,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { IoHomeOutline } from "react-icons/io5";
 import { BsEnvelope } from "react-icons/bs";
 import { GoPeople } from "react-icons/go";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 import defaultImage from "@/assets/images/defaultImage.jpg";
 import { useUserStore } from "@/src/store/userStore";
@@ -84,6 +84,7 @@ function ChatHeader() {
 							>
 								{user.firstName + " " + user.lastName}
 							</p>
+							<button onClick={() => signOut()}>Sign out</button>
 						</div>
 						<div className={style.userProfileImage}>
 							<Image

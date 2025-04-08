@@ -158,7 +158,7 @@ export default function ChatInterface() {
 	}
 
 	function messageModerationBtns(curMessage: Message) {
-		if (user && user.role === "Admin") {
+		if (user && (user.role === "Admin" || user.id === curMessage.authorId)) {
 			return (
 				<div className={style.moderationBtns}>
 					<div

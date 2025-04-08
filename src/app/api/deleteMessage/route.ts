@@ -10,8 +10,6 @@ export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(config); // Adjust to match your setup
 
-		console.log(session)
-
 		const host =
 			process.env.NODE_ENV == "development"
 				? "http://127.0.0.1:1999"
@@ -25,8 +23,6 @@ export async function POST(req: NextRequest) {
 
 		const messageId = message.id;
 		const groupId = message.targetGroupId;
-
-		console.log(messageId, groupId);
 
 		if (!messageId) {
 			return NextResponse.json("Missing message Id", { status: 400 });
@@ -63,7 +59,7 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json("Message not found", { status: 404 });
 		}
 
-		const isAdmin = session.user.role === "Admin";
+		const isAdmin = session.user.role.toLowerCase() === "admin";
 		const isAuthor = session.user.id === messageObject.authorId;
 
 		if (!isAdmin && !isAuthor) {
