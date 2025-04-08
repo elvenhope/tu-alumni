@@ -47,6 +47,14 @@ export async function PUT(req: Request) {
 			return NextResponse.json({ error: "User ID is required" }, { status: 400 });
 		}
 
+		if (body.password == ""){
+			body.password = null;
+		}
+
+		if(body.password && body.password.length > 0) {
+			body.password = await bcrypt.hash(body.password, 12);
+		}
+
 		await connectToDB();
 		const updatedUser = await User.findByIdAndUpdate(body._id, body, { new: true });
 

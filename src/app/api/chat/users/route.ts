@@ -56,10 +56,14 @@ export async function PUT(req: Request) {
 		return NextResponse.json({ message: "User ID is required" }, { status: 400 });
 	}
 
-	if(updatedData.password) {
+	if(updatedData.password && updatedData.password.length > 0) {
 		// Hash the password before saving
 		const hashedPassword = await bcrypt.hash(updatedData.password, 12);
 		updatedData.password = hashedPassword;
+	}
+
+	if(updatedData.password == "") {
+		delete updatedData.password;
 	}
 
 	// Remove the role field from the updatedData to prevent modification
