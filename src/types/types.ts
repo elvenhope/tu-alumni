@@ -126,7 +126,7 @@ export interface Message {
 
 // Define the shape of incoming WebSocket messages
 export interface WebSocketMessage {
-	type: "local"; // Extendable for more message types
+	type: "local" | "update"; // Extendable for more message types
 	message: Message;
-	user: User;
+	user?: User;
 }

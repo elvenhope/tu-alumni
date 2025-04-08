@@ -60,6 +60,12 @@ export default async function middleware(req: NextRequest) {
 	// Use `getToken` to check for a valid session
 	const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
+	const currentTime = Date.now() / 1000; // Get the current time in seconds
+	if (token && token.exp < currentTime) {
+		// If token is expired, redirect to the login page
+		return NextResponse.redirect(new URL('/login', req.url));
+	}
+
 	// Redirect signed-in users away from the login page
 	if (token && adjustedPathname === "/login") {
 		return NextResponse.redirect(new URL('/', req.url));

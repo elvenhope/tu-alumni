@@ -1,4 +1,4 @@
-import { WebSocketMessage } from "@/src/types/types";
+import { Message, WebSocketMessage } from "@/src/types/types";
 import type * as Party from "partykit/server";
 import { v4 as uuidv4 } from "uuid";
 
@@ -20,6 +20,30 @@ export default class Server implements Party.Server {
 	// 	// let's send a message to the connection
 	// 	// conn.send("hello from server");
 	// }
+
+	async onRequest(request: Party.Request) {
+		// Handle DELETE requests to remove a message
+		if (request.method === "DELETE") {
+			// Extract the messageId and groupId from the request payload
+			const { message } = await request.json<{ message: Message }>();
+
+			// Validate that the groupId matches the room
+			if (message.targetGroupId !== this.room.id) {
+				return new Response("Invalid group ID", { status: 400 });
+			}
+
+			// Broadcast the deletion message to all clients in the room
+			this.room.broadcast(JSON.stringify({
+				type: "update",
+				message: message
+			}));
+
+			return new Response("Message deleted", { status: 200 });
+		}
+
+		// Return 405 for unsupported methods
+		return new Response("Method not allowed", { status: 405 });
+	}
 
 	async onMessage(newPackage: string, sender: Party.Connection) {
 		//console.log(`connection ${sender.id} sent message: ${newPackage}`);

@@ -38,6 +38,7 @@
 		width: 50%;
 		border-radius: 10px;
 		padding: 10px;
+		position: relative;
 
 		.authorName {
 			color: #8B9CB9;
@@ -45,6 +46,20 @@
 
 		p {
 			color: white;
+		}
+	}
+
+	.msgContent:hover .moderationBtns {
+		display: flex;
+	}
+
+	.moderationBtns {
+		display: none;
+		position: absolute;
+		top: 0;
+		right: 20px;
+		.button {
+			cursor: pointer;
 		}
 	}
 
@@ -61,6 +76,27 @@
 .message_self {
 	flex-direction: row-reverse;
 	margin-left: auto;
+}
+
+.moderationPopUpToast {
+	margin-top: 10px;
+	display: flex;
+	gap: 10px;
+
+	.toastBtnDelete {
+		color: white;
+		background-color: #233774;
+		padding: 5px 10px;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	.toastBtnCancel {
+		padding: 5px 10px;
+		border: 1px solid gray;
+		border-radius: 5px;
+		cursor: pointer;
+	}
 }
 
 .interface {

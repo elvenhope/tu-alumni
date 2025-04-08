@@ -51,6 +51,11 @@
 			"memberList": "Biedru saraksts",
 			"noGroupsFound": "Nav atrasta neviena grupai"
 		},
+		"chatInterface": {
+			"deleteMsg": "Vai tiešām vēlaties dzēst šo ziņojumu?",
+			"delete": "Dzēst",
+			"cancel": "Atcelt"
+		},
 		"chatMembers": {
 			"admins": "Administrators",
 			"members": "biedrs",

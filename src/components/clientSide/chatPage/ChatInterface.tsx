@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/src/store/userStore";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import style from "@/src/styles/clientSide/chatPage/ChatInterface.module.scss";
 import { camingoDosProCdSemiBold } from "../../misc/fonts";
 import { CiCirclePlus } from "react-icons/ci";
@@ -22,6 +22,8 @@ import defaultImage from "@/assets/images/defaultImage.jpg";
 import ChatMembers from "@/src/components/clientSide/chatPage/ChatMembers";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import UserCardModal from "./userPage/UserCardModal";
+import { TiDelete } from "react-icons/ti";
+import { toast } from "react-toastify";
 
 export default function ChatInterface() {
 	const { selectedGroup, user } = useUserStore();
@@ -37,6 +39,7 @@ export default function ChatInterface() {
 	} = useSocketStore();
 	const { setLoading } = useLoading();
 	const t = useTranslations("header");
+	const chat_t = useTranslations("chat.chatInterface");
 	const enLocale = "en";
 	const lvLocale = "lv";
 	const pathname = usePathname();
@@ -73,7 +76,6 @@ export default function ChatInterface() {
 			fetchLocalMessages(selectedGroup.id);
 		}
 	}, [selectedGroup?.id]);
-
 
 	// Use our custom hook to throttle updates to the message list
 	const throttledMessages = useThrottledMessages(localMessages, 300);
@@ -136,8 +138,8 @@ export default function ChatInterface() {
 	};
 
 	function returnProperStyle(curMessage: Message) {
-		if(curMessage.authorId == user?.id) {
-			return " " + style.content_self
+		if (curMessage.authorId == user?.id) {
+			return " " + style.content_self;
 		} else {
 			return " " + style.content_other;
 		}
@@ -155,6 +157,73 @@ export default function ChatInterface() {
 		setMessage((prev) => prev + emojiData.emoji);
 	}
 
+	function messageModerationBtns(curMessage: Message) {
+		if (user && user.role === "Admin") {
+			return (
+				<div className={style.moderationBtns}>
+					<div
+						className={style.button}
+						onClick={() => showDeleteConfirmation(curMessage)}
+					>
+						<TiDelete size={30} color="#c44b4b" />
+					</div>
+				</div>
+			);
+		}
+		return null;
+	}
+
+	function showDeleteConfirmation(curMessage: Message) {
+		toast(
+			({ closeToast }) => (
+				<div>
+					<p>{chat_t("deleteMsg")}</p>
+					<div className={style.moderationPopUpToast}>
+						<button
+							onClick={() =>
+								handleDeleteMessage(curMessage, closeToast)
+							}
+							className={style.toastBtnDelete}
+						>
+							{chat_t("delete")}
+						</button>
+						<button
+							onClick={closeToast}
+							className={style.toastBtnCancel}
+						>
+							{chat_t("cancel")}
+						</button>
+					</div>
+				</div>
+			),
+			{ autoClose: false }
+		);
+	}
+
+	async function handleDeleteMessage(
+		curMessage: Message,
+		closeToast: () => void
+	) {
+		try {
+			const res = await fetch(`/api/deleteMessage`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ message: curMessage }),
+			});
+
+			if (res.ok) {
+				toast.success("Message deleted");
+			} else {
+				const err = await res.text();
+				toast.error("Error: " + err);
+			}
+		} catch (err) {
+			toast.error("Error deleting message");
+		} finally {
+			closeToast();
+		}
+	}
+
 	return (
 		<>
 			<div className={style.container}>
@@ -165,44 +234,49 @@ export default function ChatInterface() {
 					{theMenuBtn()}
 				</div>
 				<div className={style.content}>
-					{throttledMessages.map((curMessage) => (
-						<div
-							className={
-								style.message +
-								messageSelfOrOtherClass(curMessage)
-							}
-							key={curMessage.id}
-						>
-							<Image
-								src={curMessage.authorImage ?? defaultImage}
-								width={60}
-								height={60}
-								alt="User Avatar"
-								style={{ borderRadius: "50px" }}
-								onClick={() =>
-									setSelectedUserId(curMessage.authorId)
-								}
-							/>
+					{throttledMessages.map((curMessage) => {
+						if (!curMessage?.id) return null;
+
+						return (
 							<div
 								className={
-									style.msgContent +
-									returnProperStyle(curMessage)
+									style.message +
+									messageSelfOrOtherClass(curMessage)
 								}
+								key={curMessage.id}
 							>
-								<p
+								<Image
+									src={curMessage.authorImage ?? defaultImage}
+									width={60}
+									height={60}
+									alt="User Avatar"
+									style={{ borderRadius: "50px" }}
+									onClick={() =>
+										setSelectedUserId(curMessage.authorId)
+									}
+								/>
+								<div
 									className={
-										style.authorName +
-										" " +
-										camingoDosProCdSemiBold.className
+										style.msgContent +
+										returnProperStyle(curMessage)
 									}
 								>
-									{curMessage.authorFirstName + " "}
-									{curMessage.authorLastName}
-								</p>
-								<p>{curMessage.content}</p>
+									{messageModerationBtns(curMessage)}
+									<p
+										className={
+											style.authorName +
+											" " +
+											camingoDosProCdSemiBold.className
+										}
+									>
+										{curMessage.authorFirstName + " "}
+										{curMessage.authorLastName}
+									</p>
+									<p>{curMessage.content}</p>
+								</div>
 							</div>
-						</div>
-					))}
+						);
+					})}
 					<div ref={messagesEndRef} />
 				</div>
 				<div className={style.interface}>

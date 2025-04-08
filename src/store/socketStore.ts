@@ -49,7 +49,7 @@ export const useSocketStore = create<SocketStore>()(
 			socket.onmessage = (e: MessageEvent) => {
 				try {
 					const data: WebSocketMessage = JSON.parse(e.data);
-					if (data.user.id) {
+					if (data?.user?.id && data.type === "local") {
 						const newMessage: Message = data.message;
 
 						if (data.type === "local") {
@@ -57,6 +57,10 @@ export const useSocketStore = create<SocketStore>()(
 								localMessages: [...state.localMessages, newMessage],
 							}));
 						}
+					} else if (data.type === "update") {
+						set((state) => ({
+							localMessages: state.localMessages.filter((msg) => msg.id !== data.message.id),
+						}));
 					}
 				} catch (err) {
 					console.error("Invalid WebSocket message:", err);
