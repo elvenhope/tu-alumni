@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 		const userId = session.user._id; // Get the user ID from the session
 
 		// 🔹 Fetch groups where the user is a member
-		const groups = await Group.find({ users: userId }).populate("users", "id firstName lastName role");
+		const groups = await Group.find({ users: userId }).populate("users", "id firstName lastName role profileImage");
 
 		// 🔹 Return the groups
 		return NextResponse.json({ groups });
@@ -41,7 +41,7 @@ export async function PUT(req: NextRequest) {
 		}
 
 		// 🔹 Parse request body
-		const { name, description, tags } = await req.json();
+		const { name, description, tags, image } = await req.json();
 		if (!name || !description || !tags || !Array.isArray(tags)) {
 			return NextResponse.json({ error: "Invalid request data" }, { status: 400 });
 		}
@@ -65,6 +65,7 @@ export async function PUT(req: NextRequest) {
 			name,
 			description,
 			tags,
+			image,
 			users: [userObjectId], // Add the creator as the first member
 		});
 

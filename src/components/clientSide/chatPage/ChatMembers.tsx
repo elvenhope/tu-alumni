@@ -38,8 +38,10 @@ function ChatMembers() {
 									<div className={style.memberAvatar}>
 										<Image
 											src={
-												member.profileImage ??
-												defaultImage
+												member.profileImage != "" &&
+												member.profileImage
+													? member.profileImage
+													: defaultImage
 											}
 											alt="avatar"
 											width={50}
@@ -74,8 +76,7 @@ function ChatMembers() {
 									<div className={style.memberAvatar}>
 										<Image
 											src={
-												member.profileImage ??
-												defaultImage
+												member.profileImage != "" && member.profileImage ? member.profileImage : defaultImage
 											}
 											alt="avatar"
 											width={50}

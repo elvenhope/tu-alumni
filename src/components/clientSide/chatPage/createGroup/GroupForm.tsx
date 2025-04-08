@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import style from "@/src/styles/clientSide/chatPage/createGroup/GroupForm.module.scss";
+import { useLoading } from "@/src/components/misc/LoadingContext";
+import Image from "next/image";
+import { toast, Bounce } from "react-toastify";
 
 interface GroupFormProps {
 	onSubmit: (values: {
 		name: string;
 		description: string;
 		tags: string[];
+		image?: string;
 	}) => void;
 	onCancel: () => void;
 }
 
 const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, onCancel }) => {
+	const { isLoading, setLoading } = useLoading();
+	const [imageUrl, setImageUrl] = useState<string | null>(null);
+
 	const formik = useFormik({
 		initialValues: {
 			name: "",
@@ -27,10 +34,42 @@ const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, onCancel }) => {
 		onSubmit: (values) => {
 			const formattedTags = values.tags
 				.split(",")
-				.map((tag) => tag.trim());
-			onSubmit({ ...values, tags: formattedTags });
+				.map((tag) => tag.trim())
+				.filter((tag) => tag !== "");
+
+			onSubmit({
+				...values,
+				tags: formattedTags,
+				image: imageUrl || undefined,
+			});
 		},
 	});
+
+	const handleFileChange = async (file: File | null) => {
+		if (!file) return;
+		setLoading(true);
+
+		const formData = new FormData();
+		formData.append("file", file);
+
+		const response = await fetch("/api/upload", {
+			method: "POST",
+			body: formData,
+		});
+
+		if (!response.ok) {
+			toast.error("Failed to upload image", {
+				theme: "light",
+				transition: Bounce,
+			});
+			setLoading(false);
+			return;
+		}
+
+		const uploaded = await response.json();
+		setImageUrl(uploaded.url);
+		setLoading(false);
+	};
 
 	return (
 		<form onSubmit={formik.handleSubmit} className={style.formContainer}>
@@ -59,7 +98,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, onCancel }) => {
 					onChange={formik.handleChange}
 					value={formik.values.description}
 					className={
-						formik.touched.name && formik.errors.name
+						formik.touched.description && formik.errors.description
 							? style.inputError
 							: ""
 					}
@@ -83,8 +122,45 @@ const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, onCancel }) => {
 			</div>
 
 			<div className={style.formGroup}>
-				<button type="submit" className={style.submitButton}>
-					Create
+				<label>Image (optional):</label>
+				<input
+					type="file"
+					accept="image/png, image/jpeg, image/jpg, image/webp"
+					onChange={(e) =>
+						handleFileChange(
+							e.target.files ? e.target.files[0] : null
+						)
+					}
+				/>
+			</div>
+
+			{imageUrl && (
+				<div className={style.curImageContainer}>
+					<p>Image preview:</p>
+					<div
+						style={{
+							position: "relative",
+							width: "100%",
+							height: "150px",
+						}}
+					>
+						<Image
+							src={imageUrl}
+							alt="Group preview"
+							fill
+							style={{ objectFit: "contain" }}
+						/>
+					</div>
+				</div>
+			)}
+
+			<div className={style.formGroup}>
+				<button
+					type="submit"
+					className={style.submitButton}
+					disabled={isLoading}
+				>
+					{isLoading ? "Uploading..." : "Create"}
 				</button>
 			</div>
 		</form>

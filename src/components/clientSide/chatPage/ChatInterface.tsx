@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/src/store/userStore";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "@/src/styles/clientSide/chatPage/ChatInterface.module.scss";
 import { camingoDosProCdSemiBold } from "../../misc/fonts";
 import { CiCirclePlus } from "react-icons/ci";
@@ -47,10 +47,14 @@ export default function ChatInterface() {
 	const [emojiOpen, setEmojiOpen] = useState<boolean>(false);
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
+	// Ref for emoji picker container
+	const emojiPickerRef = useRef<HTMLDivElement>(null);
+
 	const host =
 		process.env.NODE_ENV == "development"
 			? "http://localhost:1999"
 			: "http://tu-alumni-party.elvenhope.partykit.dev";
+
 	// Set loading based on connection status
 	useEffect(() => {
 		setLoading(!isConnected);
@@ -86,6 +90,29 @@ export default function ChatInterface() {
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [throttledMessages]);
+
+	// Close emoji picker when clicking outside of it
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				emojiPickerRef.current &&
+				!emojiPickerRef.current.contains(event.target as Node)
+			) {
+				setEmojiOpen(false);
+			}
+		};
+
+		if (emojiOpen) {
+			document.addEventListener("mousedown", handleClickOutside);
+		} else {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
+
+		// Cleanup listener on unmount
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [emojiOpen]);
 
 	function theMenuBtn() {
 		return (
@@ -158,7 +185,10 @@ export default function ChatInterface() {
 	}
 
 	function messageModerationBtns(curMessage: Message) {
-		if (user && (user.role === "Admin" || user.id === curMessage.authorId)) {
+		if (
+			user &&
+			(user.role === "Admin" || user.id === curMessage.authorId)
+		) {
 			return (
 				<div className={style.moderationBtns}>
 					<div
@@ -236,7 +266,6 @@ export default function ChatInterface() {
 				<div className={style.content}>
 					{throttledMessages.map((curMessage) => {
 						if (!curMessage?.id) return null;
-
 						return (
 							<div
 								className={
@@ -250,7 +279,10 @@ export default function ChatInterface() {
 									width={60}
 									height={60}
 									alt="User Avatar"
-									style={{ borderRadius: "50px" }}
+									style={{
+										borderRadius: "50px",
+										objectFit: "cover",
+									}}
 									onClick={() =>
 										setSelectedUserId(curMessage.authorId)
 									}
@@ -302,11 +334,15 @@ export default function ChatInterface() {
 							className={style.funBtn}
 							onClick={() => setEmojiOpen(!emojiOpen)}
 						/>
-						<EmojiPicker
-							open={emojiOpen}
-							onEmojiClick={emojiClickHandler}
-							className={style.emojiPicker}
-						/>
+						{emojiOpen && (
+							<div ref={emojiPickerRef}>
+								<EmojiPicker
+									open={emojiOpen}
+									onEmojiClick={emojiClickHandler}
+									className={style.emojiPicker}
+								/>
+							</div>
+						)}
 					</div>
 					<IoSend
 						size={55}

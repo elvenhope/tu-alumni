@@ -62,10 +62,11 @@ function ChatGroups() {
 		name: string;
 		description: string;
 		tags: string[];
+		image?: string;
 	}) {
 		setCreateChatModalIsOpen(false);
 
-		const { name, description, tags } = values;
+		const { name, description, tags, image } = values;
 
 		try {
 			const response = await fetch("/api/chat/groups/user", {
@@ -73,7 +74,7 @@ function ChatGroups() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ name, description, tags }),
+				body: JSON.stringify({ name, description, tags, image}),
 			});
 
 			const data = await response.json();
@@ -212,6 +213,7 @@ function ChatGroups() {
 										alt={group.name}
 										className={style.groupImage}
 										height={77}
+										width={77}
 									/>
 								</div>
 								<div className={style.groupDetails}>

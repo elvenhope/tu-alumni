@@ -75,6 +75,10 @@ export default async function middleware(req: NextRequest) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 
+	if (adjustedPathname.startsWith("/api/admin") && (!token || token.role !== "Admin")) {
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	}
+
 	if (isPublicPage) {
 		return intlMiddleware(req);
 	} else {

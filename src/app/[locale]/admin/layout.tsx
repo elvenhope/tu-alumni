@@ -18,7 +18,7 @@ async function AdminSideLayout({
 
 	const messages = await getMessages();
 
-	if(!session || session?.user?.role !== "admin") {
+	if(!session || session?.user?.role !== "Admin") {
 		redirect("/");
 	}
 
