@@ -5,6 +5,8 @@ import style from "@/src/styles/adminSide/adminHome.module.scss";
 import DescriptionEditor from "@/src/components/misc/descriptionEditor";
 import Select from "react-select";
 import Image from "next/image";
+import { useLoading } from "../../misc/LoadingContext";
+import { set } from "mongoose";
 
 interface props {
 	selectOptions: Array<{ value: Gallery; label: string }>;
@@ -14,6 +16,7 @@ function GalleryEditor({ selectOptions }: props) {
 	const [selectedGallery, setSelectedGallery] = useState<Gallery>();
 	const [GallerySelectOptions, setGallerySelectOptions] =
 		useState<Array<{ value: Gallery; label: string }>>(selectOptions);
+	const { setLoading } = useLoading();
 
 
 	useEffect(() => {
@@ -179,6 +182,7 @@ function GalleryEditor({ selectOptions }: props) {
 
 		const handleFileChange = async (file: File | null) => {
 			if (file) {
+				setLoading(true);
 				const formData = new FormData();
 				formData.append("file", file);
 
@@ -189,8 +193,10 @@ function GalleryEditor({ selectOptions }: props) {
 				});
 
 				if (!response.ok) {
+					setLoading(false);
 					throw new Error("Failed to upload file");
 				}
+				setLoading(false);
 
 				// Extract the uploaded image URL from the response
 				const uploadedImageObject = await response.json();

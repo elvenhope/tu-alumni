@@ -11,6 +11,7 @@ import { FaRegEnvelope, FaLinkedin, FaFacebookF } from "react-icons/fa";
 import { IoIosGlobe } from "react-icons/io";
 import { GrInstagram } from "react-icons/gr";
 import { User } from "@/src/types/types";
+import { Link } from "@/src/i18n/routing";
 
 interface Props {
 	user: User | null;
@@ -19,14 +20,21 @@ interface Props {
 function UserCard({ user }: Props) {
 	const t = useTranslations("chat.userCard");
 
-	function renderContactEntry(icon: JSX.Element, value?: string) {
+	function renderContactEntry(icon: JSX.Element, value?: string, isLink?: boolean) {
 		if (!value) return null;
-		return (
+		
+		const content = (
 			<div className={style.contactEntry}>
 				{icon}
 				<p>{value}</p>
 			</div>
 		);
+
+		return isLink ? (
+			<Link href={value} target="_blank" className={style.contactLink}>
+				{content}
+			</Link>
+		) : content;
 	}
 
 	return (
@@ -44,7 +52,7 @@ function UserCard({ user }: Props) {
 						src={user?.profileImage || defaultImage}
 						alt="user"
 						fill={true}
-						style={{ objectFit: "contain" }}
+						style={{ objectFit: "cover" }}
 					/>
 				</div>
 			</div>
@@ -77,21 +85,25 @@ function UserCard({ user }: Props) {
 							)}
 							{renderContactEntry(
 								<IoIosGlobe size={"25px"} color="#233574" />,
-								user?.website
+								user?.website,
+								true
 							)}
 						</div>
 						<div>
 							{renderContactEntry(
 								<GrInstagram size={"25px"} color="#233574" />,
-								user?.socialInstagram
+								user?.socialInstagram,
+								true
 							)}
 							{renderContactEntry(
 								<FaFacebookF size={"25px"} color="#233574" />,
-								user?.socialFacebook
+								user?.socialFacebook,
+								true
 							)}
 							{renderContactEntry(
 								<FaLinkedin size={"25px"} color="#233574" />,
-								user?.socialLinkedin
+								user?.socialLinkedin,
+								true
 							)}
 						</div>
 					</div>

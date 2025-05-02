@@ -50,15 +50,17 @@ export default function ChatInterface() {
 	// Ref for emoji picker container
 	const emojiPickerRef = useRef<HTMLDivElement>(null);
 
-	const host =
-		process.env.NODE_ENV == "development"
-			? "http://localhost:1999"
-			: "http://tu-alumni-party.elvenhope.partykit.dev";
+	// const host =
+	// 	process.env.NODE_ENV == "development"
+	// 		? "http://localhost:1999"
+	// 		: "http://tu-alumni-party.elvenhope.partykit.dev";
 
-	// Set loading based on connection status
-	useEffect(() => {
-		setLoading(!isConnected);
-	}, [isConnected, setLoading]);
+	const host = "http://tu-alumni-party.elvenhope.partykit.dev";
+
+		// Set loading based on connection status
+		useEffect(() => {
+			setLoading(!isConnected);
+		}, [isConnected, setLoading]);
 
 	useEffect(() => {
 		if (!selectedGroup?.id) return;

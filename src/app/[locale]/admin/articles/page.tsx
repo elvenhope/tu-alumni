@@ -9,12 +9,14 @@ import style from "@/src/styles/adminSide/adminHome.module.scss";
 import DescriptionEditor from "@/src/components/misc/descriptionEditor";
 import Image from "next/image";
 import Select from "react-select";
+import { useLoading } from "@/src/components/misc/LoadingContext";
 
 
 function Page() {
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [selectedArticle, setSelectedArticle] = useState<Article>();
 	const [articleOptions, setArticleOptions] = useState<Array<{ value: Article; label: string }>>([]);
+	const { setLoading } = useLoading();
 
 	useEffect(() => {
 		const fetchInfo = async () => {
@@ -214,6 +216,7 @@ function Page() {
 
 		const handleFileChange = async (file: File | null) => {
 			if (file) {
+				setLoading(true);
 				const formData = new FormData();
 				formData.append("file", file);
 
@@ -224,8 +227,10 @@ function Page() {
 				});
 
 				if (!response.ok) {
+					setLoading(false);
 					throw new Error("Failed to upload file");
 				}
+				setLoading(false);
 
 				// Extract the uploaded image URL from the response
 				const uploadedImageObject = await response.json();

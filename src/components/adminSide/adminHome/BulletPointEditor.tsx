@@ -6,6 +6,7 @@ import Image from "next/image";
 import DescriptionEditor from "@/src/components/misc/descriptionEditor";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
 import Select from "react-select";
+import { useLoading } from "../../misc/LoadingContext";
 
 interface props {
 	selectOptions: Array<{ value: BulletPoint; label: string }>;
@@ -16,6 +17,9 @@ function BulletPointEditor({ selectOptions }: props) {
 		useState<BulletPoint>();
 	const [bulletPointSelectOptions, setBulletPointSelectOptions] =
 		useState<Array<{ value: BulletPoint; label: string }>>(selectOptions);
+
+	const { setLoading } = useLoading();
+	
 	function newBulletPointSelected(
 		newValue: SingleValue<{ value: BulletPoint; label: string }>
 	) {
@@ -159,6 +163,7 @@ function BulletPointEditor({ selectOptions }: props) {
 
 		const handleFileChange = async (file: File | null) => {
 			if (file) {
+				setLoading(true);
 				const formData = new FormData();
 				formData.append("file", file);
 
@@ -169,8 +174,10 @@ function BulletPointEditor({ selectOptions }: props) {
 				});
 
 				if (!response.ok) {
+					setLoading(false);
 					throw new Error("Failed to upload file");
 				}
+				setLoading(false);
 
 				// Extract the uploaded image URL from the response
 				const uploadedImageObject = await response.json();

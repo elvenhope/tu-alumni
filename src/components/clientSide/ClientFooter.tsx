@@ -16,7 +16,6 @@ function ClientFooter() {
 			? "https://batis.turiba.lv/absolventuklubs"
 			: "https://batis.turiba.lv/absolventuklubs/club.asp";
 
-
 	return (
 		<footer className={style.footer}>
 			<div className={style.footerContent}>
@@ -42,33 +41,50 @@ function ClientFooter() {
 				</div>
 				<div className={style.contentColumn}>
 					<h3>{t("information")}</h3>
-					<p>{t("aboutUs")}</p>
-					<p>{t("events")}</p>
-					<p>{t("media")}</p>
-					<p>{t("news")}</p>
-					<p>{t("privacyPolicy")}</p>
+					<Link href="/about_us" className={style.footerLink}>
+						{t("aboutUs")}
+					</Link>
+					<Link href="/events" className={style.footerLink}>
+						{t("events")}
+					</Link>
+					{/* <Link href="/media" className={style.footerLink}>
+						{t("media")}
+					</Link> */}
+					<Link href="/news" className={style.footerLink}>
+						{t("news")}
+					</Link>
+					{/* <Link href="/privacy-policy" className={style.footerLink}>
+						{t("privacyPolicy")}
+					</Link> */}
 				</div>
 				<div className={style.contentColumn}>
 					<h3>{t("forClubMembers")}</h3>
-					<p>{t("memberProfile")}</p>
-					<p>{t("chat")}</p>
-					<p>{t("giftAndDiscounts")}</p>
+					<Link href="/chat/user" className={style.footerLink}>
+						{t("memberProfile")}
+					</Link>
+					<Link href="/chat" className={style.footerLink}>
+						{t("chat")}
+					</Link>
 				</div>
 				<div className={style.contentColumn}>
 					<h3>{t("contactUs")}</h3>
-					<p>
+					{/* <a href="tel:+00000000000" className={style.footerLink}>
 						<TbPhoneRinging /> (+000) 00 000 000
-					</p>
-					<p>
+					</a>
+					<a href="mailto:example@gmail.com" className={style.footerLink}>
 						<FaRegEnvelope /> example@gmail.com
-					</p>
+					</a> */}
 				</div>
 			</div>
 			<div className={style.footerBottom}>
 				<p>&copy; 2021 Business University Turiba</p>
 				<div>
-					<p>{t("privacyPolicy")}</p>
-					<p>{t("termsAndConditions")}</p>
+					<Link href="/privacy-policy" className={style.footerLink}>
+						{t("privacyPolicy")}
+					</Link>
+					<Link href="/terms-and-conditions" className={style.footerLink}>
+						{t("termsAndConditions")}
+					</Link>
 				</div>
 			</div>
 		</footer>

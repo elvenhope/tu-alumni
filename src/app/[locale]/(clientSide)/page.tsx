@@ -8,6 +8,8 @@ import { camingoDosProCdExtraBold, camingoDosProCdSemiBold } from "@/src/compone
 import { useTranslations } from "next-intl";
 import { HomePageContent } from "@/src/types/types";
 import { useLoading } from "@/src/components/misc/LoadingContext";
+import { Link } from "@/src/i18n/routing";
+import { generateUrlName } from "@/src/lib/generateUrlName";
 
 export default function Page() {
 	const t = useTranslations("homePage");
@@ -116,47 +118,66 @@ export default function Page() {
 					content.events.map((eventObject, index) => {
 						return (
 							<div key={index} className={style.event}>
-								<div className={style.eventImageContainer}>
-									<div className={style.eventImage}>
-										<Image
-											src={eventObject.image}
-											alt="event image"
-											fill={true}
-											style={{
-												objectFit: "cover", // cover, contain, none
-											}}
-										/>
+								<Link
+									href={
+										"/events/" +
+										generateUrlName(eventObject.headline) +
+										"?q=" +
+										eventObject.id
+									}
+								>
+									<div className={style.eventImageContainer}>
+										<div className={style.eventImage}>
+											<Image
+												src={eventObject.image}
+												alt="event image"
+												fill={true}
+												style={{
+													objectFit: "cover", // cover, contain, none
+												}}
+											/>
+										</div>
+										<div
+											className={
+												style.eventDate +
+												" " +
+												camingoDosProCdSemiBold.className
+											}
+										>
+											<p>
+												{String(
+													eventObject.day
+												).padStart(2, "0")}{" "}
+												/{" "}
+												{String(
+													eventObject.month
+												).padStart(2, "0")}
+											</p>
+										</div>
 									</div>
-									<div
-										className={
-											style.eventDate +
-											" " +
-											camingoDosProCdSemiBold.className
-										}
-									>
-										<p>
-											{String(eventObject.day).padStart(
-												2,
-												"0"
-											)}{" "}
-											/{" "}
-											{String(eventObject.month).padStart(
-												2,
-												"0"
-											)}
-										</p>
-									</div>
-								</div>
+								</Link>
 								<div className={style.eventContent}>
-									<p
-										className={
-											camingoDosProCdSemiBold.className +
-											" " +
-											style.eventTitle
+									<Link
+										href={
+											"/events/" +
+											generateUrlName(
+												eventObject.headline
+											) +
+											"?q=" +
+											eventObject.id
 										}
+										className={style.eventLink}
 									>
-										{eventObject.headline}
-									</p>
+										<p
+											className={
+												camingoDosProCdSemiBold.className +
+												" " +
+												style.eventTitle
+											}
+										>
+											{eventObject.headline}
+										</p>
+									</Link>
 									<div
 										className={style.eventDescription}
 										dangerouslySetInnerHTML={{

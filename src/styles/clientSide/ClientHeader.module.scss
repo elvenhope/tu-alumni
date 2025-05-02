@@ -2,6 +2,9 @@
 	background-color: #233774;
 	display: flex;
 	padding: 10px 0px;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
 }
 
 .logoDiv {

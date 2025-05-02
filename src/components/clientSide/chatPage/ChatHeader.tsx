@@ -55,11 +55,13 @@ function ChatHeader() {
 						</Link>
 					</div>
 					<div className={style.headerButtons}>
-						<IoHomeOutline
-							size={"35px"}
-							color="#233574"
-							className={style.headerIcon}
-						/>
+						<Link href={"/"}>
+							<IoHomeOutline
+								size={"35px"}
+								color="#233574"
+								className={style.headerIcon}
+							/>
+						</Link>
 						<BsEnvelope
 							size={"35px"}
 							color="#233574"

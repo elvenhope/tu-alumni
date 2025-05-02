@@ -8,8 +8,18 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	gap: 70px;
+	padding-bottom: 10px;
+
 	.contentColumn {
 		padding-left: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		a {
+			color: white;
+			text-decoration: none;
+		}
 	}
 }
 
@@ -18,11 +28,17 @@
 	display: flex;
 	justify-content: center;
 	position: relative;
+
 	div {
 		position: absolute;
 		display: flex;
 		right: 0;
 		gap: 10px;
+
+		a {
+			color: white;
+			text-decoration: none;
+		}
 	}
 }
 
@@ -70,29 +86,36 @@
 	.logoAndFormDiv {
 		grid-column: 1 / -1;
 	}
+
 	.logoDiv {
 		max-height: unset;
 		width: 100%;
 		max-width: 346px;
 	}
+
 	.footer {
 		.footerContent {
 			grid-template-columns: 1fr 1fr;
 			gap: 0;
+
 			.contentColumn {
 				padding: 0;
+
 			}
 		}
+
 		.footerBottom {
 			text-align: center;
 			justify-content: center;
 			flex-direction: column;
+
 			div {
 				position: unset;
 				display: flex;
 				justify-content: center;
 			}
 		}
+
 		flex-direction: column;
 	}
 }

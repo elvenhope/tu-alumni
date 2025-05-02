@@ -24,9 +24,12 @@ function Page() {
 				<Link href="/chat/user/edit" className={style.editButton}>
 					Edit
 				</Link>
+				<Link href="/chat" className={style.editButton}>
+					Back
+				</Link>
 			</div>
 			<div className={style.mainContent}>
-				<UserCard user={user}/>
+				<UserCard user={user} />
 			</div>
 		</div>
 	);

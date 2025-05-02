@@ -3,6 +3,10 @@ import { getToken } from "next-auth/jwt"; // For JWT token extraction
 import connectToDB from "@/src/lib/connectToDB";
 import User from "@/src/models/userModel";
 import bcrypt from "bcryptjs";
+import Message from "@/src/models/messageModel"; // Add this import at the top
+import redis from "@/src/lib/redisInstance";
+
+const redisClient = await redis(); // Initialize the Redis client
 
 export async function POST(req: NextRequest) {
 	try {
@@ -57,7 +61,6 @@ export async function PUT(req: Request) {
 	}
 
 	if(updatedData.password && updatedData.password.length > 0) {
-		// Hash the password before saving
 		const hashedPassword = await bcrypt.hash(updatedData.password, 12);
 		updatedData.password = hashedPassword;
 	}
@@ -66,23 +69,63 @@ export async function PUT(req: Request) {
 		delete updatedData.password;
 	}
 
-	// Remove the role field from the updatedData to prevent modification
 	delete updatedData.role;
 
-	// Connect to the database
 	try {
 		await connectToDB();
 
-		// Find and update the user by ID
-		const updatedUser = await User.findOneAndUpdate({ id: userId }, updatedData);
-
-		if (!updatedUser) {
+		// First get the current user to compare profile images
+		const currentUser = await User.findOne({ id: userId });
+		
+		if (!currentUser) {
 			return NextResponse.json({ message: "User not found" }, { status: 404 });
 		}
 
-		// Return the updated user data
+		// Check if profile image has changed
+		if (updatedData.profileImage && updatedData.profileImage !== currentUser.profileImage) {
+			console.log("Updating profile image in messages...");
+
+			// Update Redis messages
+			const messageKeys = await redisClient.keys('chat:messages:*');
+			for (const key of messageKeys) {
+				const messages = await redisClient.lRange(key, 0, -1);
+				const updatedMessages = messages.map(messageStr => {
+					const message = JSON.parse(messageStr);
+					if (message.authorId === userId) {
+						return JSON.stringify({
+							...message,
+							authorImage: updatedData.profileImage
+						});
+					}
+					return messageStr;
+				});
+
+				// Only update if there were changes
+				if (updatedMessages.some((msg, idx) => msg !== messages[idx])) {
+					await redisClient.del(key);
+					if (updatedMessages.length > 0) {
+						await redisClient.rPush(key, updatedMessages);
+					}
+				}
+			}
+
+			// Update MongoDB messages
+			await Message.updateMany(
+				{ authorId: userId },
+				{ authorImage: updatedData.profileImage }
+			);
+		}
+
+		// Update the user
+		const updatedUser = await User.findOneAndUpdate(
+			{ id: userId },
+			updatedData,
+			{ new: true } // Return the updated document
+		);
+
 		return NextResponse.json(updatedUser, { status: 200 });
 	} catch (error) {
+		console.error("Error updating user:", error);
 		return NextResponse.json({ message: "Failed to update user data", error }, { status: 500 });
 	}
 }

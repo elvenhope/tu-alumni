@@ -5,6 +5,7 @@ import DescriptionEditor from "@/src/components/misc/descriptionEditor";
 import { Event } from "@/src/types/types";
 import Image from "next/image";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
+import { useLoading } from "../../misc/LoadingContext";
 
 interface props {
 	selectOptions: Array<{ value: Event; label: string }>;
@@ -14,6 +15,8 @@ function EventEditor({selectOptions}: props) {
 	const [selectedEvent, setSelectedEvent] = useState<Event>();
 	const [eventSelectOptions, setEventSelectOptions] =
 		useState<Array<{ value: Event; label: string }>>(selectOptions);
+	
+	const { setLoading } = useLoading();
 
 
 	useEffect(() => {
@@ -205,6 +208,7 @@ function EventEditor({selectOptions}: props) {
 
 		const handleFileChange = async (file: File | null) => {
 			if (file) {
+				setLoading(true);
 				const formData = new FormData();
 				formData.append("file", file);
 
@@ -215,8 +219,10 @@ function EventEditor({selectOptions}: props) {
 				});
 
 				if (!response.ok) {
+					setLoading(false);
 					throw new Error("Failed to upload file");
 				}
+				setLoading(false);
 
 				// Extract the uploaded image URL from the response
 				const uploadedImageObject = await response.json();

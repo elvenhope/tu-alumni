@@ -178,11 +178,14 @@
 			flex: 1;
 			display: flex;
 			flex-direction: column;
-
-			.eventTitle {
-				font-size: 33px;
-				margin-bottom: 20px;
-				margin-top: 0;
+			.eventLink {
+				text-decoration: none;
+				.eventTitle {
+						font-size: 33px;
+						margin-bottom: 20px;
+						margin-top: 0;
+						color: #00587E;
+					}
 			}
 
 			.eventDescription {

@@ -21,7 +21,9 @@ const EditUserPage = () => {
 	const { setLoading } = useLoading();
 
 	// Local state for imageUrl. Initialize from user if available.
-	const [imageUrl, setImageUrl] = useState<string>(user?.profileImage || "");
+	const [imageUrl, setImageUrl] = useState<string>(
+		"https://i.ibb.co/9H795H6v/381120c1d1246968152252a939da30a0.jpg"
+	);
 
 	// Fetch user if not already available
 	useEffect(() => {
