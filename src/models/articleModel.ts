@@ -1,19 +1,33 @@
 import mongoose from "mongoose";
-import { Article } from "@/src/types/types";
+import { Article } from "../types/types";
 
-const articleSchema = new mongoose.Schema({
-	id: { type: String, required: true, unique: true },
-	headline: { type: String, required: true },
-	description: { type: String, required: true },
-	image: { type: String, required: false },
-	author: { type: String, required: false },
-	day: { type: Number, required: false },
-	month: { type: Number, required: false },
-	year: { type: Number, required: false },
-	active: { type: Boolean, required: true },
-	featured: { type: Boolean, default: false, required: true },
-	aboutUs: { type: Boolean, default: false },
-	dateAdded: { type: String, required: true }
-}, { strict: false })
+const localizedStringSchema = {
+	en: { type: String, required: true },
+	lv: { type: String, required: true },
+};
 
-export default mongoose.models.Article || mongoose.model<Article>("Article", articleSchema,);
+const articleSchema = new mongoose.Schema(
+	{
+		// _id is auto-managed by MongoDB; if you want custom id, uncomment below:
+		id: { type: String, required: true, unique: true },
+		headline: { type: localizedStringSchema, required: true },
+		description: { type: localizedStringSchema, required: true },
+		author: {
+			en: { type: String, default: "" },
+			lv: { type: String, default: "" },
+		},
+		image: { type: String, required: true },
+		day: { type: Number, required: false },
+		month: { type: Number, required: false },
+		year: { type: Number, required: false },
+		active: { type: Boolean, default: true },
+		aboutUs: { type: Boolean, default: false },
+		featured: { type: Boolean, default: false },
+		dateAdded: { type: String, required: true },
+
+		// Optional: timestamps
+	},
+	{ timestamps: true }
+);
+
+export default mongoose.models.Article || mongoose.model<Article>("Article", articleSchema);

@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname, Link } from "@/src/i18n/routing";
 import { stack as Menu } from "react-burger-menu";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 function ClientHeader() {
 	const t = useTranslations("header");
@@ -20,6 +21,16 @@ function ClientHeader() {
 	const pathname = usePathname();
 	const { data: session, status } = useSession();
 	const showChat = status === "authenticated";
+	const searchParams = useSearchParams();
+
+	const createHrefWithParams = (locale: string) => {
+		const params = new URLSearchParams(searchParams.toString());
+		return {
+			pathname,
+			query: params.toString() ? `${params.toString()}` : "",
+			locale,
+		};
+	};
 
 	return (
 		<header className={style.header}>
@@ -67,11 +78,11 @@ function ClientHeader() {
 				}
 			>
 				<div className={style.languageSwitcher}>
-					<Link href={pathname} locale={lvLocale}>
+					<Link href={createHrefWithParams("lv")} locale={lvLocale}>
 						LV
 					</Link>
 					<span>|</span>
-					<Link href={pathname} locale={enLocale}>
+					<Link href={createHrefWithParams("en")} locale={enLocale}>
 						ENG
 					</Link>
 				</div>

@@ -110,11 +110,7 @@ function LoginPage() {
 										Log In
 									</h1>
 									<p className={style.headerParagraph}>
-										Nullam vel nunc eget enim volutpat
-										pretium. Nullam orci dolor, hendrerit in
-										aliquet varius, facilisis non diam.
-										Fusce tristique mauris vel augue aliquam
-										fringilla.
+										
 									</p>
 									<div className={style.formGroup}>
 										<label htmlFor="email">Email</label>

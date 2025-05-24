@@ -24,6 +24,7 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import UserCardModal from "./userPage/UserCardModal";
 import { TiDelete } from "react-icons/ti";
 import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
 
 export default function ChatInterface() {
 	const { selectedGroup, user } = useUserStore();
@@ -49,6 +50,17 @@ export default function ChatInterface() {
 
 	// Ref for emoji picker container
 	const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+	const searchParams = useSearchParams();
+
+	const createHrefWithParams = (locale: string) => {
+		const params = new URLSearchParams(searchParams.toString());
+		return {
+			pathname,
+			query: params.toString() ? `${params.toString()}` : "",
+			locale,
+		};
+	};
 
 	// const host =
 	// 	process.env.NODE_ENV == "development"
@@ -132,15 +144,13 @@ export default function ChatInterface() {
 					itemListClassName={burgerStyle.bmItemList}
 					right={true}
 				>
-					<div className={style.languageSwitcher}>
-						<Link href={pathname} locale={lvLocale}>
-							LV
-						</Link>
-						<span style={{ color: "white" }}>|</span>
-						<Link href={pathname} locale={enLocale}>
-							ENG
-						</Link>
-					</div>
+					<Link href={createHrefWithParams("lv")} locale={lvLocale}>
+											LV
+										</Link>
+										<span>|</span>
+										<Link href={createHrefWithParams("en")} locale={enLocale}>
+											ENG
+										</Link>
 					<ChatHeader />
 					<ChatMembers />
 					<ChatGroups />

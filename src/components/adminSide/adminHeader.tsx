@@ -12,6 +12,7 @@ import burgerStyles from "@/src/styles/misc/burgerMenu.module.scss";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { useUserStore } from "@/src/store/userStore";
+import { useSearchParams } from "next/navigation";
 
 function AdminHeader() {
 	const enLocale = "en";
@@ -19,6 +20,16 @@ function AdminHeader() {
 	const locale = useLocale();
 	const pathname = usePathname();
 	const t = useTranslations("header");
+	const searchParams = useSearchParams();
+
+	const createHrefWithParams = (locale: string) => {
+		const params = new URLSearchParams(searchParams.toString());
+		return {
+			pathname,
+			query: params.toString() ? `${params.toString()}` : "",
+			locale,
+		};
+	};
 
 	const { data: session } = useSession();
 	const { user, fetchUser } = useUserStore();
@@ -60,11 +71,17 @@ function AdminHeader() {
 					right={true}
 				>
 					<div className={style.languageSwitcher}>
-						<Link href={pathname} locale={lvLocale}>
+						<Link
+							href={createHrefWithParams("lv")}
+							locale={lvLocale}
+						>
 							LV
 						</Link>
 						<span style={{ color: "white" }}>|</span>
-						<Link href={pathname} locale={enLocale}>
+						<Link
+							href={createHrefWithParams("en")}
+							locale={enLocale}
+						>
 							ENG
 						</Link>
 					</div>

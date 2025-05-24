@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/NewsPage.module.scss";
 import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import { generateUrlName } from "@/src/lib/generateUrlName";
 import { useLoading } from "@/src/components/misc/LoadingContext";
@@ -15,6 +15,7 @@ function Page() {
 	const [newestArticles, setNewestArticles] = useState<Array<Article>>([]);
 	const { isLoading, setLoading } = useLoading();
 	const t = useTranslations("news");
+	const locale = useLocale();
 
 	useEffect(() => {
 		setLoading(true);
@@ -41,8 +42,6 @@ function Page() {
 		};
 
 		fetchData();
-
-		console.log(isLoading);
 	}, []);
 
 	return (
@@ -58,7 +57,7 @@ function Page() {
 										href={
 											"/news/" +
 											generateUrlName(
-												newestArticles[0].headline
+												newestArticles[0].headline[locale]
 											) +
 											"?q=" +
 											newestArticles[0].id
@@ -79,14 +78,14 @@ function Page() {
 												camingoDosProCdSemiBold.className
 											}
 										>
-											{newestArticles[0].headline}
+											{newestArticles[0].headline[locale]}
 										</h1>
 									</Link>
 									<div
 										className={style.description}
 										dangerouslySetInnerHTML={{
 											__html: newestArticles[0]
-												.description,
+												.description[locale],
 										}}
 									></div>
 								</div>
@@ -102,7 +101,7 @@ function Page() {
 												href={
 													"/news/" +
 													generateUrlName(
-														article.headline
+														article.headline[locale]
 													) +
 													"?q=" +
 													article.id
@@ -130,13 +129,13 @@ function Page() {
 														style.itemContent
 													}
 												>
-													<h1>{article.headline}</h1>
+													<h1>{article.headline[locale]}</h1>
 													<div
 														className={
 															style.description
 														}
 														dangerouslySetInnerHTML={{
-															__html: article.description,
+															__html: article.description[locale],
 														}}
 													></div>
 												</div>
@@ -155,29 +154,44 @@ function Page() {
 										className={style.articleBlock}
 										key={article.id}
 									>
-										<div
-											className={style.thumbnailContainer}
-										>
-											<Image
-												src={article.image}
-												alt="Newest Article Image"
-												fill={true}
-												style={{ objectFit: "contain" }}
-											/>
-										</div>
-										<h1
-											className={
-												camingoDosProCdSemiBold.className
+										<Link
+											href={
+												"/news/" +
+												generateUrlName(
+													article.headline[locale]
+												) +
+												"?q=" +
+												article.id
 											}
 										>
-											{article.headline}
-										</h1>
-										<div
-											className={style.description}
-											dangerouslySetInnerHTML={{
-												__html: article.description,
-											}}
-										></div>
+											<div
+												className={
+													style.thumbnailContainer
+												}
+											>
+												<Image
+													src={article.image}
+													alt="Newest Article Image"
+													fill={true}
+													style={{
+														objectFit: "contain",
+													}}
+												/>
+											</div>
+											<h1
+												className={
+													camingoDosProCdSemiBold.className
+												}
+											>
+												{article.headline[locale]}
+											</h1>
+											<div
+												className={style.description}
+												dangerouslySetInnerHTML={{
+													__html: article.description[locale],
+												}}
+											></div>
+										</Link>
 									</div>
 								</>
 							);

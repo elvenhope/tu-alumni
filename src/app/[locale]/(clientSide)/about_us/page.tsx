@@ -1,7 +1,7 @@
 "use client";
 
 import { AboutUsContent } from "@/src/types/types";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import style from "@/src/styles/clientSide/AboutUsPage.module.scss";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { useLoading } from "@/src/components/misc/LoadingContext";
 
 function Page() {
 	const t = useTranslations("aboutUs");
+	const locale = useLocale();
 	const [content, setContent] = useState<AboutUsContent>();
 	const [selectedGallery, setSelectedGallery] = useState<string>();
 	const [imagesToDisplay, setImagesToDisplay] = useState<string[]>();
@@ -104,10 +105,10 @@ function Page() {
 					</div>
 				</div>
 				<div className={style.mainArticleText}>
-					<h1>{content.mainArticle.headline}</h1>
+					<h1>{content.mainArticle.headline[locale]}</h1>
 					<div
 						dangerouslySetInnerHTML={{
-							__html: content.mainArticle.description,
+							__html: content.mainArticle.description[locale],
 						}}
 					></div>
 				</div>

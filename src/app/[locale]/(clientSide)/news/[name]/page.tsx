@@ -6,7 +6,7 @@ import style from "@/src/styles/clientSide/OneEventPage.module.scss";
 import { Article } from "@/src/types/types";
 import Image from "next/image";
 import { camingoDosProCdSemiBold } from "@/src/components/misc/fonts";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 
@@ -18,6 +18,7 @@ function Page() {
 	const [article, setArticle] = useState<Article>();
 
 	const t = useTranslations("news");
+	const locale = useLocale();
 
 	const { setLoading } = useLoading();
 
@@ -72,7 +73,7 @@ function Page() {
 			<div className={style.container}>
 				<div className={style.header}>
 					<h1 className={camingoDosProCdSemiBold.className}>
-						{article.headline}
+						{article.headline[locale]}
 					</h1>
 				</div>
 				<div className={style.mobileSignUp}>
@@ -97,7 +98,7 @@ function Page() {
 					<div
 						className={style.description}
 						dangerouslySetInnerHTML={{
-							__html: article.description,
+							__html: article.description[locale],
 						}}
 					></div>
 				</div>

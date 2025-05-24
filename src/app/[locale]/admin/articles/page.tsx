@@ -1,7 +1,6 @@
-'use client';
+"use client";
 
-
-import { Article } from "@/src/types/types";
+import { Article, LocalizedText } from "@/src/types/types";
 import React, { useEffect, useState } from "react";
 import { SingleValue } from "react-select";
 import { Bounce, toast } from "react-toastify";
@@ -11,11 +10,18 @@ import Image from "next/image";
 import Select from "react-select";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 
+const LANGUAGES = [
+	{ value: "en", label: "English" },
+	{ value: "lv", label: "Latvian" },
+];
 
 function Page() {
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [selectedArticle, setSelectedArticle] = useState<Article>();
-	const [articleOptions, setArticleOptions] = useState<Array<{ value: Article; label: string }>>([]);
+	const [articleOptions, setArticleOptions] = useState<
+		Array<{ value: Article; label: string }>
+	>([]);
+	const [currentLang, setCurrentLang] = useState("en"); // Current editing language
 	const { setLoading } = useLoading();
 
 	useEffect(() => {
@@ -33,7 +39,7 @@ function Page() {
 
 				const articleOptions = ArticleData.map((article) => ({
 					value: article,
-					label: article.headline,
+					label: article.headline?.en || "Untitled",
 				}));
 
 				setArticleOptions(articleOptions);
@@ -52,8 +58,9 @@ function Page() {
 	}
 
 	async function removeArticle() {
+		if (!selectedArticle?.id) return;
 		const requestObject = {
-			id: selectedArticle?.id,
+			id: selectedArticle.id,
 		};
 
 		try {
@@ -78,22 +85,25 @@ function Page() {
 	}
 
 	function addArticle() {
-		const tmpArticle = {
-			headline: "Untitled",
-			description: "",
+		// Init all language fields empty
+		const emptyLocalizedText: LocalizedText = { en: "", lv: ""};
+
+		const tmpArticle: Article = {
+			headline: emptyLocalizedText,
+			description: emptyLocalizedText,
+			author: emptyLocalizedText,
 			month: 1,
 			day: 1,
 			year: 2025,
 			image: "",
 			active: false,
-			author: "",
 			featured: false,
-			dateAdded: new Date().toString()
+			dateAdded: new Date().toISOString(),
 		};
 
 		setArticleOptions((prevOptions) => [
 			...(prevOptions || []),
-			{ value: tmpArticle, label: tmpArticle.headline },
+			{ value: tmpArticle, label: tmpArticle.headline.en || "Untitled" },
 		]);
 
 		setSelectedArticle(tmpArticle);
@@ -117,11 +127,11 @@ function Page() {
 					active: selectedArticle.active,
 					year: selectedArticle.year,
 					featured: selectedArticle.featured,
-					dateAdded: selectedArticle.dateAdded ?? null
+					author: selectedArticle.author,
+					dateAdded: selectedArticle.dateAdded ?? null,
 				};
 
-				console.log(articleObject);
-				// If ID exists, update the existing headline
+				// Update existing article
 				const updatedArticle = await fetch(`/api/admin/articles`, {
 					method: "PUT",
 					headers: {
@@ -150,37 +160,39 @@ function Page() {
 						theme: "light",
 						transition: Bounce,
 					});
+					return;
 				}
-				{
-					const articleObject = {
-						headline: selectedArticle.headline,
-						description: selectedArticle.description,
-						month: selectedArticle.month,
-						day: selectedArticle.day,
-						image: selectedArticle.image,
-						active: selectedArticle.active,
-						year: selectedArticle.year,
-						featured: selectedArticle.featured,
-					};
-					// If no ID, create a new article
-					const newArticle = await fetch(`/api/admin/articles`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(articleObject),
-					});
 
-					if (!newArticle.ok) {
-						throw new Error(
-							`Failed to create headline: ${newArticle.statusText}`
-						);
-					}
+				const articleObject = {
+					headline: selectedArticle.headline,
+					description: selectedArticle.description,
+					month: selectedArticle.month,
+					day: selectedArticle.day,
+					image: selectedArticle.image,
+					active: selectedArticle.active,
+					year: selectedArticle.year,
+					featured: selectedArticle.featured,
+					author: selectedArticle.author,
+				};
 
-					const data = await newArticle.json();
-					console.log("Article created successfully:", data);
-					setSelectedArticle(data); // Update the selected headline with the newly created one
+				// Create new article
+				const newArticle = await fetch(`/api/admin/articles`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(articleObject),
+				});
+
+				if (!newArticle.ok) {
+					throw new Error(
+						`Failed to create article: ${newArticle.statusText}`
+					);
 				}
+
+				const data = await newArticle.json();
+				console.log("Article created successfully:", data);
+				setSelectedArticle(data);
 			}
 		} catch (error) {
 			console.error("Error saving Article:", error);
@@ -190,28 +202,50 @@ function Page() {
 	}
 
 	function ArticleEditor() {
-		const handleInputChange = (
-			field: keyof Omit<Article, "image">,
-			value: string | number | boolean
+		if (!selectedArticle) return "Something went wrong. Code 108!";
+
+		// Helper to update localized fields
+		const updateLocalizedField = (
+			field: keyof Pick<Article, "headline" | "description" | "author">,
+			value: string
 		) => {
 			setSelectedArticle((prev) => {
-				return prev
+				if (!prev) return prev;
+				return {
+					...prev,
+					[field]: {
+						...prev[field],
+						[currentLang]: value,
+					},
+				};
+			});
+		};
+
+		const handleInputChange = (
+			field: keyof Omit<
+				Article,
+				"image" | "headline" | "description" | "author"
+			>,
+			value: string | number | boolean
+		) => {
+			setSelectedArticle((prev) =>
+				prev
 					? { ...prev, [field]: value }
 					: {
 							id: "",
 							day: 1,
 							month: 1,
 							year: 2025,
-							headline: "",
-							description: "",
+							headline: { en: "", lv: ""},
+							description: { en: "", lv: ""},
+							author: { en: "", lv: ""},
 							image: "",
-							author: "",
 							active: false,
 							featured: false,
 							dateAdded: "",
 							[field]: value,
-					  };
-			});
+					  }
+			);
 		};
 
 		const handleFileChange = async (file: File | null) => {
@@ -220,7 +254,6 @@ function Page() {
 				const formData = new FormData();
 				formData.append("file", file);
 
-				// Make the POST request to the upload API
 				const response = await fetch("/api/upload", {
 					method: "POST",
 					body: formData,
@@ -232,57 +265,64 @@ function Page() {
 				}
 				setLoading(false);
 
-				// Extract the uploaded image URL from the response
 				const uploadedImageObject = await response.json();
 
-				setSelectedArticle((prev) => {
-					return prev
-						? { ...prev, image: uploadedImageObject.url }
-						: {
-								id: "",
-								day: 1,
-								month: 1,
-								year: 2025,
-								headline: "",
-								description: "",
-								active: false,
-								author: "",
-								featured: false,
-								dateAdded: "",
-								image: uploadedImageObject.url,
-						  };
-				});
+				setSelectedArticle((prev) =>
+					prev ? { ...prev, image: uploadedImageObject.url } : prev
+				);
 			}
 		};
-
-		if (!selectedArticle) {
-			return "Something went wrong. Code 108!";
-		}
 
 		return (
 			<div className={style.formDiv}>
 				<h2>Edit article</h2>
-				<form className={style.form}>
-					{selectedArticle?.image ? (
+				<form
+					className={style.form}
+					onSubmit={(e) => e.preventDefault()}
+				>
+					<div>
+						<label htmlFor="language-select">Language:</label>
+						<Select
+							instanceId="language-select"
+							options={LANGUAGES}
+							value={LANGUAGES.find(
+								(l) => l.value === currentLang
+							)}
+							onChange={(option) =>
+								setCurrentLang(option?.value || "en")
+							}
+						/>
+					</div>
+
+					{selectedArticle.image ? (
 						<div>
 							<label>Current Image:</label>
-							<div className={style.curImageContainer}>
+							<div
+								className={style.curImageContainer}
+								style={{
+									position: "relative",
+									width: "200px",
+									height: "150px",
+								}}
+							>
 								<Image
-									src={selectedArticle?.image}
+									src={selectedArticle.image}
 									fill={true}
 									alt={"Current Image"}
+									style={{ objectFit: "contain" }}
 								/>
 							</div>
 						</div>
 					) : null}
+
 					<div>
 						<label htmlFor="article_day">Day:</label>
 						<input
 							name="article_day"
 							type="number"
-							min="1"
-							max="31"
-							value={selectedArticle?.day || ""}
+							min={1}
+							max={31}
+							value={selectedArticle.day || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"day",
@@ -291,14 +331,15 @@ function Page() {
 							}
 						/>
 					</div>
+
 					<div>
 						<label htmlFor="article_month">Month:</label>
 						<input
 							name="article_month"
 							type="number"
-							min="1"
-							max="12"
-							value={selectedArticle?.month || ""}
+							min={1}
+							max={12}
+							value={selectedArticle.month || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"month",
@@ -307,13 +348,14 @@ function Page() {
 							}
 						/>
 					</div>
+
 					<div>
 						<label htmlFor="article_year">Year:</label>
 						<input
 							name="article_year"
 							type="number"
-							min="2025"
-							value={selectedArticle?.year || ""}
+							min={2025}
+							value={selectedArticle.year || ""}
 							onChange={(e) =>
 								handleInputChange(
 									"year",
@@ -322,36 +364,46 @@ function Page() {
 							}
 						/>
 					</div>
+
 					<div>
-						<label htmlFor="article">Headline:</label>
+						<label htmlFor="headline">
+							Headline ({currentLang}):
+						</label>
 						<input
-							name="article_article"
+							name="headline"
 							type="text"
-							value={selectedArticle?.headline || ""}
+							value={
+								selectedArticle.headline?.[currentLang] || ""
+							}
 							onChange={(e) =>
-								handleInputChange("headline", e.target.value)
+								updateLocalizedField("headline", e.target.value)
 							}
 						/>
 					</div>
+
 					<div>
-						<label htmlFor="article_article">Author:</label>
+						<label htmlFor="author">Author ({currentLang}):</label>
 						<input
-							name="article_article"
+							name="author"
 							type="text"
-							value={selectedArticle?.author || ""}
+							value={selectedArticle.author?.[currentLang] || ""}
 							onChange={(e) =>
-								handleInputChange("author", e.target.value)
+								updateLocalizedField("author", e.target.value)
 							}
 						/>
 					</div>
+
 					<div>
 						<DescriptionEditor
-							description={selectedArticle.description}
-							onUpdateDescription={(value) => {
-								handleInputChange("description", value);
-							}}
+							description={
+								selectedArticle.description?.[currentLang] || ""
+							}
+							onUpdateDescription={(value) =>
+								updateLocalizedField("description", value)
+							}
 						/>
 					</div>
+
 					<div>
 						<label htmlFor="active">Active:</label>
 						<input
@@ -363,10 +415,11 @@ function Page() {
 							}
 						/>
 					</div>
+
 					<div>
-						<label htmlFor="active">Featured:</label>
+						<label htmlFor="featured">Featured:</label>
 						<input
-							id="active"
+							id="featured"
 							type="checkbox"
 							checked={selectedArticle.featured}
 							onChange={(e) =>
@@ -374,6 +427,7 @@ function Page() {
 							}
 						/>
 					</div>
+
 					<div>
 						<label htmlFor="article_image">Image:</label>
 						<input
@@ -387,6 +441,7 @@ function Page() {
 							}
 						/>
 					</div>
+
 					<button
 						type="button"
 						onClick={saveArticle}

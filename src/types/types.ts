@@ -46,12 +46,16 @@ export interface Gallery {
 	storageName: string;
 }
 
+export interface LocalizedText {
+	[lang: string]: string;
+}
+
 export interface Article {
 	id?: string;
-	headline: string;
-	description: string;
+	headline: LocalizedText;   // Was string, now localized
+	description: LocalizedText;
 	image: string;
-	author?: string;
+	author?: LocalizedText;
 	day?: number;
 	month?: number;
 	year?: number;
@@ -60,6 +64,7 @@ export interface Article {
 	featured: boolean;
 	dateAdded: string;
 }
+  
 
 export interface GalleryImagesObject {
 	storageName: string;
