@@ -6,6 +6,7 @@ import Select, { SingleValue } from "react-select";
 import style from "@/src/styles/adminSide/adminHome.module.scss";
 import { Bounce, toast } from "react-toastify";
 import GalleryEditor from "@/src/components/adminSide/adminAboutUs/GalleryEditor";
+import { useLocale } from "next-intl";
 
 function Page() {
 	const [mainArticle, setMainArticle] = useState<Article>();
@@ -13,6 +14,8 @@ function Page() {
 	const [articleOptions, setArticleOptions] = useState<
 		Array<{ value: Article; label: string }>
 	>([]);
+
+	const locale = useLocale();
 
 
 	const [galleries, setGalleries] = useState<Gallery[]>([]);
@@ -32,7 +35,7 @@ function Page() {
 
 				const articleOptions = ArticleData.map((article) => ({
 					value: article,
-					label: article.headline,
+					label: article.headline[locale],
 				}));
 
 				setArticleOptions(articleOptions);
@@ -133,7 +136,7 @@ function Page() {
 						options={articleOptions}
 						onChange={newArticleSelected}
 						value={articleOptions.find(
-							(option) => option.label === mainArticle?.headline
+							(option) => option.label === mainArticle?.headline[locale]
 						)}
 						placeholder="Select the article to display on the page"
 					/>
