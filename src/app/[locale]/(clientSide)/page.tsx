@@ -22,6 +22,17 @@ export default function Page() {
 		headline: string;
 		description: string;
 	} | null>(null);
+	const [selectedIndex, setSelectedIndex] = useState(0);
+
+	useEffect(() => {
+		if (content.headlines.length === 0) return;
+
+		const interval = setInterval(() => {
+			setSelectedIndex((prev) => (prev + 1) % content.headlines.length);
+		}, 3000); // 5 seconds
+
+		return () => clearInterval(interval);
+	}, [content.headlines.length]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -91,44 +102,61 @@ export default function Page() {
 				</div>
 			</div>
 			<div className={style.headlineSection}>
-				{content.headlines.length > 0
-					? content.headlines.map((headlineObject, index) => {
-							return (
-								<div
-									key={index}
-									className={style.headline}
-									onClick={() => {
-										setSelectedHeadline({
-											headline: headlineObject.headline,
-											description:
-												headlineObject.description,
-										});
-										setModalOpen(true);
-									}}
-									style={{ cursor: "pointer" }}
-								>
-									<p
-										className={
-											camingoDosProCdSemiBold.className +
-											" " +
-											style.headlineTitle
-										}
-									>
-										{headlineObject.headline}
-									</p>
-									<p className={style.headlineAuthor}>
-										{headlineObject.author}
-									</p>
-									<div
-										className={style.headlineDescription}
-										dangerouslySetInnerHTML={{
-											__html: headlineObject.description,
-										}}
-									/>
-								</div>
-							);
-					  })
-					: null}
+				{/* Carousel Items */}
+				<div
+					className={style.carousel}
+					style={
+						{
+							"--items": content.headlines.length,
+							"--position": selectedIndex + 1,
+						} as React.CSSProperties
+					}
+				>
+					{content.headlines.map((headlineObject, index) => (
+						<div
+							key={index}
+							className={style.headline}
+							style={
+								{ "--offset": index + 1 } as React.CSSProperties
+							}
+							onClick={() => {
+								setSelectedHeadline({
+									headline: headlineObject.headline,
+									description: headlineObject.description,
+								});
+								setModalOpen(true);
+							}}
+						>
+							<p className={style.headlineTitle}>
+								{headlineObject.headline}
+							</p>
+							<p className={style.headlineAuthor}>
+								{headlineObject.author}
+							</p>
+							<div
+								className={style.headlineDescription}
+								dangerouslySetInnerHTML={{
+									__html: headlineObject.description
+										.replace(/<p>/g, "<span>")
+										.replace(/<\/p>/g, "</span><br>"),
+								}}
+							/>
+						</div>
+					))}
+				</div>
+				{/* Radio Inputs (hidden, but functional) */}
+				<div className={style.radioButtons}>
+					{content.headlines.map((_, index) => (
+						<input
+							key={`radio-${index}`}
+							type="radio"
+							name="headline-position"
+							checked={selectedIndex === index}
+							onChange={() => setSelectedIndex(index)}
+							className={style.radioInput}
+						/>
+					))}
+				</div>
 			</div>
 			<div className={style.eventSection}>
 				{content.events.length > 0

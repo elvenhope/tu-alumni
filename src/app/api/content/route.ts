@@ -36,7 +36,7 @@ export async function POST(request: Request): Promise<Response> {
 
 
 		if (pageName == "Home") {
-			const headlines: Headline[] = await headingModel.find({ active: true }).limit(5);
+			const headlines: Headline[] = await headingModel.find({ active: true });
 
 			const today = new Date();
 			const events: Event[] = await eventModel.find({
