@@ -94,7 +94,7 @@ export async function POST(request: Request): Promise<Response> {
 							{ month: { $gt: today.getMonth() + 1 } },
 							{
 								month: today.getMonth() + 1,
-								day: { $gt: today.getDate() }
+								day: { $gte: today.getDate() }
 							}
 						]
 					}
