@@ -23,6 +23,7 @@ function Page() {
 	>([]);
 	const [currentLang, setCurrentLang] = useState("en"); // Current editing language
 	const { setLoading } = useLoading();
+		
 
 	useEffect(() => {
 		const fetchInfo = async () => {
@@ -141,12 +142,26 @@ function Page() {
 				});
 
 				if (!updatedArticle.ok) {
+					const errorText = await updatedArticle.json();
 					throw new Error(
-						`Failed to update article: ${updatedArticle.statusText}`
+						`Failed to update article: ${errorText.error}`
 					);
-				}
+				} else {
+
+				toast.success("Article updated successfully!", {
+					position: "bottom-right",
+					autoClose: 10000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "light",
+					transition: Bounce,
+				});
 
 				console.log("Article updated successfully");
+				}
 			} else {
 				if (!selectedArticle.image) {
 					toast.error("Image is required for new articles!", {
@@ -185,19 +200,37 @@ function Page() {
 				});
 
 				if (!newArticle.ok) {
+					const errorText = await newArticle.json();
 					throw new Error(
-						`Failed to create article: ${newArticle.statusText}`
+						`Failed to create article: ${errorText.error}`
 					);
+				} else {
+					toast.success("Article created successfully!", {
+						position: "bottom-right",
+						autoClose: 3000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						theme: "light",
+						transition: Bounce,
+					});
+					const data = await newArticle.json();
+					console.log("Article created successfully:", data);
+					setSelectedArticle(data);
 				}
-
-				const data = await newArticle.json();
-				console.log("Article created successfully:", data);
-				setSelectedArticle(data);
 			}
 		} catch (error) {
-			console.error("Error saving Article:", error);
-		} finally {
-			window.location.reload();
+			toast.error(`Error: ${error}`, {
+				position: "bottom-right",
+				autoClose: 10000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: "light",
+				transition: Bounce,
+			});
 		}
 	}
 
@@ -395,8 +428,10 @@ function Page() {
 
 					<div>
 						<DescriptionEditor
+							key={selectedArticle?.dateAdded + ":" + currentLang}
 							description={
-								selectedArticle.description?.[currentLang] || ""
+								selectedArticle?.description?.[currentLang] ||
+								""
 							}
 							onUpdateDescription={(value) =>
 								updateLocalizedField("description", value)

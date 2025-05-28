@@ -13,6 +13,7 @@ import { useLoading } from "@/src/components/misc/LoadingContext";
 function Page() {
 	const [articles, setArticles] = useState<Array<Article>>([]);
 	const [newestArticles, setNewestArticles] = useState<Array<Article>>([]);
+	const [featuredArticles, setFeaturedArticles] = useState<Array<Article>>([]);
 	const { isLoading, setLoading } = useLoading();
 	const t = useTranslations("news");
 	const locale = useLocale();
@@ -37,7 +38,15 @@ function Page() {
 					new Date(a.dateAdded).getTime()
 			);
 
-			setNewestArticles(sortedArticles.slice(0, 5));
+			setFeaturedArticles(sortedArticles.filter(
+				(article: Article) => article.featured === true
+			));
+			setNewestArticles(
+				sortedArticles.filter(
+					(article: Article) => article.featured === false
+				)
+			);
+			// setNewestArticles(sortedArticles);
 			setLoading(false);
 		};
 
@@ -51,23 +60,25 @@ function Page() {
 					<div className={style.newestSection}>
 						<h1>{t("newest")}</h1>
 						<div className={style.newestContent}>
-							{newestArticles.length > 0 ? (
+							{featuredArticles.length > 0 ? (
 								<div className={style.numberOne}>
 									<Link
 										href={
 											"/news/" +
 											generateUrlName(
-												newestArticles[0].headline[locale]
+												featuredArticles[0].headline[
+													locale
+												]
 											) +
 											"?q=" +
-											newestArticles[0].id
+											featuredArticles[0].id
 										}
 									>
 										<div
 											className={style.thumbnailContainer}
 										>
 											<Image
-												src={newestArticles[0].image}
+												src={featuredArticles[0].image}
 												alt="Newest Article Image"
 												fill={true}
 												style={{ objectFit: "contain" }}
@@ -78,20 +89,24 @@ function Page() {
 												camingoDosProCdSemiBold.className
 											}
 										>
-											{newestArticles[0].headline[locale]}
+											{
+												featuredArticles[0].headline[
+													locale
+												]
+											}
 										</h1>
 									</Link>
 									<div
 										className={style.description}
 										dangerouslySetInnerHTML={{
-											__html: newestArticles[0]
+											__html: featuredArticles[0]
 												.description[locale],
 										}}
 									></div>
 								</div>
 							) : null}
 							<div className={style.listing}>
-								{newestArticles.slice(1, 5).map((article) => {
+								{featuredArticles.slice(1, 5).map((article) => {
 									return (
 										<div
 											className={style.item}
@@ -129,13 +144,22 @@ function Page() {
 														style.itemContent
 													}
 												>
-													<h1>{article.headline[locale]}</h1>
+													<h1>
+														{
+															article.headline[
+																locale
+															]
+														}
+													</h1>
 													<div
 														className={
 															style.description
 														}
 														dangerouslySetInnerHTML={{
-															__html: article.description[locale],
+															__html: article
+																.description[
+																locale
+															],
 														}}
 													></div>
 												</div>
@@ -147,7 +171,7 @@ function Page() {
 						</div>
 					</div>
 					<div className={style.generalSection}>
-						{articles.slice(5).map((article) => {
+						{newestArticles.map((article) => {
 							return (
 								<>
 									<div
@@ -188,7 +212,9 @@ function Page() {
 											<div
 												className={style.description}
 												dangerouslySetInnerHTML={{
-													__html: article.description[locale],
+													__html: article.description[
+														locale
+													],
 												}}
 											></div>
 										</Link>
