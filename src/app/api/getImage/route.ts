@@ -4,13 +4,20 @@ import { NextResponse } from "next/server";
 const folderId = process.env.GOOGLE_DRIVE_ROOT_FOLDER; // Root folder ID
 const apiKey = process.env.GOOGLE_DRIVE_API_KEY; // API Key
 
+
+const base64EncodedServiceAccount = apiKey;
+if (!base64EncodedServiceAccount) {
+	throw new Error("GOOGLE_DRIVE_API_KEY environment variable is not set");
+}
+const decodedServiceAccount = Buffer.from(base64EncodedServiceAccount, 'base64').toString('utf-8');
+const credentials = JSON.parse(decodedServiceAccount);
+
+
+console.log(apiKey)
+
 export async function fetchImagesFromCollection(collectionName: string) {
 	const auth = new google.auth.GoogleAuth({
-		credentials: {
-			client_email: "tu-alumni-image-getter@tu-alumni-450412.iam.gserviceaccount.com",
-			private_key: apiKey,
-			project_id: "tu-alumni-450412"
-		},
+		credentials: credentials,
 		scopes: [
 			"https://www.googleapis.com/auth/drive.file",
 			"https://www.googleapis.com/auth/drive",
