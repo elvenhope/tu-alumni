@@ -57,7 +57,7 @@ export async function PUT(req: Request) {
 			await req.json();
 
 		// Validate required fields
-		if (!id || !thumbnail || !day || !month || !year || !headline || !description || !active || !storageName) {
+		if (!id || !thumbnail || !day || !month || !year || !headline || !description || active == null || !storageName) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
