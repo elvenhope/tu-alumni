@@ -44,90 +44,52 @@
 			font-size: 20px;
 			text-align: center;
 			max-width: 300px;
-
-			// img {
-			// 	margin: auto;
-			// }
 		}
 	}
 }
 
 .headlineSection {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	position: relative;
 	padding: 80px 0;
-	perspective: 800px;
-
-	/* Hide radio inputs */
-	// .radioInput {
-	// 	display: none;
-	// }
-	.radioButtons {
-		display: flex;
-	}
-
-	.carousel {
-		position: relative;
-		width: 100%;
-		height: 400px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		--items: 5;
-		--position: 3;
-		margin-bottom: 20px;
-		overflow: hidden;
-		perspective: 800px;
-
-		// pointer-events: none;
-		.headline {
-			position: absolute;
-			width: 300px;
-			max-width: 90%;
-			height: 360px;
-			padding: 20px;
-			background-color: #CCEDF9;
-			color: #233774;
-			border-radius: 20px;
-			box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.41);
-			transition: transform 0.3s ease, z-index 0.3s;
-			text-align: center;
-			display: flex;
-			flex-direction: column;
-			transform: translateX(calc((var(--position) - var(--offset)) * -300px)) translateZ(calc(max(calc((var(--position) - var(--offset)) * -1), var(--position) - var(--offset)) * -100px));
-			z-index: calc(var(--items) - max(calc((var(--position) - var(--offset)) * -1), var(--position) - var(--offset)));
-			cursor: pointer;
-
-			.headlineTitle {
-				font-size: 22px;
-				color: #233774;
-				margin-bottom: 10px;
-			}
-
-			.headlineAuthor {
-				color: #23377480;
-				margin-bottom: 10px;
-			}
-
-			.headlineDescription {
-				text-align: justify;
-				color: #23377460;
-				display: -webkit-box;
-				text-overflow: ellipsis;
-				-webkit-line-clamp: 7;
-				overflow: hidden;
-				max-height: 100%;
-				height: 100%;
-				-webkit-box-orient: vertical;
-			}
-		}
-	}
-
 }
 
+.headline {
+	max-width: 90%;
+	margin: auto;
+	padding: 20px;
+	background-color: #CCEDF9;
+	color: #233774;
+	border-radius: 20px;
+	// box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.41);
+	transition: transform 0.3s ease, z-index 0.3s;
+	text-align: center;
+	display: block !important;
+	flex-direction: column;
+	cursor: pointer;
 
+	.headlineTitle {
+		font-size: 22px;
+		color: #233774;
+		margin-bottom: 40px;
+		height: 30px;
+	}
+
+	.headlineAuthor {
+		color: #23377480;
+		margin-bottom: 10px;
+	}
+
+	.headlineDescription {
+		text-align: justify;
+		color: #23377460;
+		display: -webkit-box;
+		text-overflow: ellipsis;
+		-webkit-line-clamp: 7;
+		overflow: hidden;
+		max-height: 100%;
+		height: 100%;
+		-webkit-box-orient: vertical;
+	}
+}
 
 .eventSection {
 	display: grid;

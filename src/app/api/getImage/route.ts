@@ -13,7 +13,7 @@ const decodedServiceAccount = Buffer.from(base64EncodedServiceAccount, 'base64')
 const credentials = JSON.parse(decodedServiceAccount);
 
 
-console.log(apiKey)
+// console.log(apiKey)
 
 export async function fetchImagesFromCollection(collectionName: string) {
 	const auth = new google.auth.GoogleAuth({

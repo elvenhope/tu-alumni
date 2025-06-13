@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "@/src/styles/clientSide/HomePage.module.scss";
 import heroImage from "@/assets/images/heroImage.png";
 import Image from "next/image";
@@ -10,7 +10,10 @@ import { HomePageContent } from "@/src/types/types";
 import { useLoading } from "@/src/components/misc/LoadingContext";
 import { Link } from "@/src/i18n/routing";
 import { generateUrlName } from "@/src/lib/generateUrlName";
-import Modal from "@/src/components/misc/Modal"; // Create this component (see below)
+import Modal from "@/src/components/misc/Modal";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 
 export default function Page() {
@@ -22,17 +25,36 @@ export default function Page() {
 		headline: string;
 		description: string;
 	} | null>(null);
-	const [selectedIndex, setSelectedIndex] = useState(0);
 
-	useEffect(() => {
-		if (content.headlines.length === 0) return;
-
-		const interval = setInterval(() => {
-			setSelectedIndex((prev) => (prev + 1) % content.headlines.length);
-		}, 3000); // 5 seconds
-
-		return () => clearInterval(interval);
-	}, [content.headlines.length]);
+	const settings = {
+		dots: true,
+		infinite: true,
+		slidesToShow: 3,
+		slidesToScroll: 3,
+		arrows: false,
+		autoplay: true,
+		speed: 500,
+		autoplaySpeed: 7000,
+		cssEase: "ease-out",
+		responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2,
+					infinite: true,
+					dots: true,
+				},
+			},
+			{
+				breakpoint: 480,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1,
+				},
+			},
+		],
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -51,6 +73,24 @@ export default function Page() {
 
 		fetchData();
 	}, []);
+
+	function renderHeadline(headlineObject: HomePageContent["headlines"][0]) {
+		return (
+			<>
+				<p className={style.headlineTitle}>{headlineObject.headline}</p>
+				<p className={style.headlineAuthor}>{headlineObject.author}</p>
+				<div
+					className={style.headlineDescription}
+					dangerouslySetInnerHTML={{
+						__html: headlineObject.description
+							.replace(/<p>/g, "<span>")
+							.replace(/<\/p>/g, "</span><br>"),
+					}}
+				/>
+			</>
+		);
+	}
+	  
 
 	return (
 		<>
@@ -102,61 +142,23 @@ export default function Page() {
 				</div>
 			</div>
 			<div className={style.headlineSection}>
-				{/* Carousel Items */}
-				<div
-					className={style.carousel}
-					style={
-						{
-							"--items": content.headlines.length,
-							"--position": selectedIndex + 1,
-						} as React.CSSProperties
-					}
-				>
-					{content.headlines.map((headlineObject, index) => (
+				<Slider {...settings}>
+					{content.headlines.map((item, index) => (
 						<div
 							key={index}
 							className={style.headline}
-							style={
-								{ "--offset": index + 1 } as React.CSSProperties
-							}
 							onClick={() => {
 								setSelectedHeadline({
-									headline: headlineObject.headline,
-									description: headlineObject.description,
+									headline: item.headline,
+									description: item.description,
 								});
 								setModalOpen(true);
 							}}
 						>
-							<p className={style.headlineTitle}>
-								{headlineObject.headline}
-							</p>
-							<p className={style.headlineAuthor}>
-								{headlineObject.author}
-							</p>
-							<div
-								className={style.headlineDescription}
-								dangerouslySetInnerHTML={{
-									__html: headlineObject.description
-										.replace(/<p>/g, "<span>")
-										.replace(/<\/p>/g, "</span><br>"),
-								}}
-							/>
+							{renderHeadline(item)}
 						</div>
 					))}
-				</div>
-				{/* Radio Inputs (hidden, but functional) */}
-				<div className={style.radioButtons}>
-					{content.headlines.map((_, index) => (
-						<input
-							key={`radio-${index}`}
-							type="radio"
-							name="headline-position"
-							checked={selectedIndex === index}
-							onChange={() => setSelectedIndex(index)}
-							className={style.radioInput}
-						/>
-					))}
-				</div>
+				</Slider>
 			</div>
 			<div className={style.eventSection}>
 				{content.events.length > 0
